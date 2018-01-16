@@ -35,7 +35,7 @@ class AuthenticationSection {
         private set
 
     @Setting(value = "bcrypt-rounds", comment = "How many rounds should BCrypt have? Valid values are 2-30")
-    var bcryptRounds = 15
+    var bcryptRounds = 10
         private set
 
     @Setting(value = "mark-user-logged-in-after-register", comment = "Whether to mark user logged in or not after successful registering")
