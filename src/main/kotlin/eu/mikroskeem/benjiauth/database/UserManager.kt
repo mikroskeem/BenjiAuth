@@ -77,6 +77,11 @@ class UserManager: LoginManager {
         }
     }
 
+    // Changes user password
+    fun changePassword(user: User, newPassword: String) {
+        dao.update(user.apply { password = BCrypt.hashpw(newPassword, genSalt()) })
+    }
+
     fun isLoggedIn(player: ProxiedPlayer): Long? = authenticatedUsers[player]
     fun setLoggedIn(player: ProxiedPlayer): Long = currentUnixTimestamp.apply { authenticatedUsers.put(player, this) }
 

@@ -44,6 +44,10 @@ public class User {
         return password;
     }
 
+    public void setPassword(@NotNull String password) {
+        this.password = password;
+    }
+
     @NotNull
     public Long getRegisterTimestamp() {
         return registerTimestamp;

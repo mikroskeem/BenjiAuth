@@ -31,4 +31,5 @@ val ProxiedPlayer.isLoggedIn: Boolean get() = loggedInSince != null
 
 fun ProxiedPlayer.login(password: String): Boolean = userManager.loginUser(this, password)
 fun ProxiedPlayer.register(password: String): User = userManager.registerUser(this, password)
+fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePassword(userManager.findUser(this.name)!!, newPassword)
 fun ProxiedPlayer.logout() = userManager.logoutUser(this)
