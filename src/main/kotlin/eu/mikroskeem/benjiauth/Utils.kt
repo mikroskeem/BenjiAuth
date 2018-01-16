@@ -13,6 +13,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
+import java.net.Inet4Address
+import java.net.InetSocketAddress
 import java.time.Instant
 import kotlin.reflect.KClass
 
@@ -34,3 +36,5 @@ fun findServer(name: String): ServerInfo? = proxy.serversCopy[name]
 fun ProxiedPlayer.movePlayer(target: ServerInfo) {
     this.connect(target)
 }
+
+fun InetSocketAddress.toIPString(): String = String(this.address.address)

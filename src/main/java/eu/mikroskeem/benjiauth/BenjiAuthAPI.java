@@ -9,9 +9,16 @@ package eu.mikroskeem.benjiauth;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * BenjiAuth plugin API
+ *
  * @author Mark Vainomaa
  */
 public interface BenjiAuthAPI {
+    /**
+     * Gets instance of {@link LoginManager}
+     *
+     * @return Instance of {@link LoginManager}
+     */
     @NotNull
     LoginManager getLoginManager();
 }

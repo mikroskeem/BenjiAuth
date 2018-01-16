@@ -37,7 +37,7 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
                 player.sendMessage(*TextComponent.fromLegacyText("passwords don't match!")) // TODO
             } else {
                 player.register(password)
-                if(config.authentication.loginAfterRegister) {
+                if(config.registration.loginAfterRegister) {
                     player.sendMessage(*TextComponent.fromLegacyText("user registered successfully")) // TODO
                 } else {
                     player.sendMessage(*TextComponent.fromLegacyText("user registered successfully, you may log in now")) // TODO

@@ -18,10 +18,6 @@ class AuthenticationSection {
     var username = UsernameSection()
         private set
 
-    @Setting(value = "password", comment = "Password configuration")
-    var password = PasswordSection()
-        private set
-
     @Setting(value = "commands", comment = "Commands configuration")
     var commands = CommandsSection()
         private set
@@ -30,15 +26,12 @@ class AuthenticationSection {
     var maxLoginRetries = 0
         private set
 
-    @Setting(value = "login-timeout", comment = "How much does player have time to register or login before getting kicked")
-    var authTimeout = 60
+    @Setting(value = "login-timeout", comment = "How much does player have time in seconds to register or login before getting kicked")
+    var authTimeout: Long = 60
         private set
 
-    @Setting(value = "bcrypt-rounds", comment = "How many rounds should BCrypt have? Valid values are 2-30")
-    var bcryptRounds = 10
-        private set
-
-    @Setting(value = "mark-user-logged-in-after-register", comment = "Whether to mark user logged in or not after successful registering")
-    var loginAfterRegister = true
+    @Setting(value = "session-timeout", comment = "How long should player session last (in minutes?). Player does not " +
+            "have to re-enter its password when one connects from same IP. Set to 0 to disable session support")
+    var sessionTimeout: Long = 0
         private set
 }

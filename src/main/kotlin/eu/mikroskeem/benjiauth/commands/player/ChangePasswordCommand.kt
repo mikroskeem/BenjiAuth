@@ -8,6 +8,7 @@ package eu.mikroskeem.benjiauth.commands.player
 
 import eu.mikroskeem.benjiauth.COMMAND_CPW
 import eu.mikroskeem.benjiauth.changePassword
+import eu.mikroskeem.benjiauth.checkPassword
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
 import net.md_5.bungee.api.CommandSender
@@ -33,10 +34,12 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
             val oldPassword = args[0]
             val newPassword = args[1]
 
-            // TODO: password check
-
-            player.changePassword(newPassword)
-            player.sendMessage(*TextComponent.fromLegacyText("password changed!")) // TODO
+            if(!player.checkPassword(oldPassword)) {
+                player.sendMessage(*TextComponent.fromLegacyText("invalid old password!")) // TODO
+            } else {
+                player.changePassword(newPassword)
+                player.sendMessage(*TextComponent.fromLegacyText("password changed!")) // TODO
+            }
         } else {
             sender.sendMessage(*TextComponent.fromLegacyText("usage: /changepassword <old> <new>")) // TODO
         }

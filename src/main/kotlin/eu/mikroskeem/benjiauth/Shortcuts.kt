@@ -8,8 +8,6 @@ package eu.mikroskeem.benjiauth
 
 import eu.mikroskeem.benjiauth.config.Benji
 import eu.mikroskeem.benjiauth.config.BenjiMessages
-import eu.mikroskeem.benjiauth.database.UserManager
-import eu.mikroskeem.benjiauth.database.models.User
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.PluginManager
@@ -19,17 +17,20 @@ import net.md_5.bungee.api.plugin.PluginManager
  */
 val proxy: ProxyServer get() = ProxyServer.getInstance()
 val pluginManager: PluginManager get() = proxy.pluginManager
-val plugin: BenjiAuth get() = pluginManager.getPlugin("BenjiAuth") as BenjiAuth
-val userManager: UserManager get() = plugin.userManager
+val plugin: BenjiAuthPlugin get() = pluginManager.getPlugin("BenjiAuth") as BenjiAuthPlugin
+val userManager: LoginManager get() = plugin.api.loginManager
 
-val config: Benji get() = plugin.configLoader.configuration
-val messages: BenjiMessages get() = plugin.messagesLoader.configuration
+val config: Benji get() = plugin.config
+val messages: BenjiMessages get() = plugin.messages
 
-val ProxiedPlayer.isRegistered: Boolean get() = userManager.findUser(name) != null
-val ProxiedPlayer.loggedInSince: Long? get() = userManager.isLoggedIn(this)
-val ProxiedPlayer.isLoggedIn: Boolean get() = loggedInSince != null
+val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
+val ProxiedPlayer.isLoggedIn: Boolean get() = userManager.isLoggedIn(this)
+val ProxiedPlayer.isEgilibleForSession: Boolean get() = userManager.isEgilibleForSessionLogin(this)
+val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefullyLoggedIn(this)
 
-fun ProxiedPlayer.login(password: String): Boolean = userManager.loginUser(this, password)
-fun ProxiedPlayer.register(password: String): User = userManager.registerUser(this, password)
-fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePassword(userManager.findUser(this.name)!!, newPassword)
+fun ProxiedPlayer.checkPassword(password: String) = userManager.checkPassword(this, password)
+fun ProxiedPlayer.login(password: String): Boolean = if(checkPassword(password)) { userManager.loginUser(this); true } else false
+fun ProxiedPlayer.loginWithoutPassword(forceful: Boolean = false) = userManager.loginUser(this, forceful)
+fun ProxiedPlayer.register(password: String) = userManager.registerUser(this, password)
+fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePassword(this, newPassword)
 fun ProxiedPlayer.logout() = userManager.logoutUser(this)

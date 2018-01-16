@@ -8,7 +8,9 @@ package eu.mikroskeem.benjiauth.hook
 
 import com.github.games647.fastlogin.bungee.FastLoginBungee
 import com.github.games647.fastlogin.core.hooks.AuthPlugin
+import eu.mikroskeem.benjiauth.loginWithoutPassword
 import eu.mikroskeem.benjiauth.pluginManager
+import eu.mikroskeem.benjiauth.register
 import eu.mikroskeem.benjiauth.userManager
 import net.md_5.bungee.api.connection.ProxiedPlayer
 
@@ -17,16 +19,16 @@ import net.md_5.bungee.api.connection.ProxiedPlayer
  */
 class FastLoginHook: AuthPlugin<ProxiedPlayer> {
     override fun isRegistered(player: String): Boolean {
-        return userManager.findUser(player) != null
+        return userManager.isRegistered(player)
     }
 
     override fun forceLogin(player: ProxiedPlayer): Boolean {
-        userManager.setLoggedIn(player)
+        player.loginWithoutPassword(forceful = true)
         return true
     }
 
     override fun forceRegister(player: ProxiedPlayer, password: String): Boolean {
-        userManager.registerUser(player, password)
+        player.register(password)
         return true
     }
 }

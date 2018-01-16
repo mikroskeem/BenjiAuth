@@ -12,6 +12,7 @@ val configurateVersion: String by extra
 val hikariVersion: String by extra
 val ormliteVersion: String by extra
 val bcryptVersion: String by extra
+val geoipVersion: String by extra
 
 repositories {
     mavenLocal()
@@ -39,6 +40,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("com.j256.ormlite:ormlite-jdbc:$ormliteVersion")
     implementation("org.mindrot:jbcrypt:$bcryptVersion")
+    implementation("com.maxmind.geoip2:geoip2:$geoipVersion")
 }
 
 license {
@@ -62,7 +64,8 @@ val shadowJar by tasks.getting(com.github.jengelman.gradle.plugins.shadow.tasks.
             "ninja.leaping.configurate",
             "com.zaxxer.hikari",
             "com.j256.ormlite",
-            "org.mindrot.jbcrypt"
+            "org.mindrot.jbcrypt",
+            "com.maxmind.geoip2"
     )
     val targetPackage = "eu.mikroskeem.benjiauth.lib"
 

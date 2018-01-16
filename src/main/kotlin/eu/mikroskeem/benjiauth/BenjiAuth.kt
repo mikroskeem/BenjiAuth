@@ -25,11 +25,11 @@ import java.nio.file.Paths
 /**
  * @author Mark Vainomaa
  */
-class BenjiAuth: Plugin() {
+class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
     val pluginDataFolder: Path by lazy { Paths.get(dataFolder.absolutePath) }
-    internal lateinit var configLoader: ConfigurationLoader<Benji>
-    internal lateinit var messagesLoader: ConfigurationLoader<BenjiMessages>
-    internal lateinit var userManager: UserManager
+    private lateinit var configLoader: ConfigurationLoader<Benji>
+    private lateinit var messagesLoader: ConfigurationLoader<BenjiMessages>
+    private lateinit var userManager: UserManager
 
     override fun onEnable() {
         configLoader = initConfig("config.cfg")
@@ -51,4 +51,16 @@ class BenjiAuth: Plugin() {
     override fun onDisable() {
         userManager.shutdown()
     }
+
+    override fun reloadConfig() {
+        configLoader.load()
+        configLoader.save()
+        messagesLoader.load()
+        messagesLoader.save()
+    }
+
+    override fun getConfig(): Benji = configLoader.configuration
+    override fun getMessages(): BenjiMessages = messagesLoader.configuration
+    override fun getApi(): BenjiAuthAPI = this
+    override fun getLoginManager(): LoginManager = userManager
 }
