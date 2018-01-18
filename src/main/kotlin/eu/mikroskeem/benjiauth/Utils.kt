@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
 /**
  * @author Mark Vainomaa
  */
-inline fun <reified T: Any> BenjiAuth.initConfig(fileName: String): ConfigurationLoader<T> = ConfigurationLoader(pluginDataFolder.resolve(fileName), T::class.java)
+inline fun <reified T: Any> BenjiAuth.initConfig(fileName: String): ConfigurationLoader<T> = ConfigurationLoader(pluginFolder.resolve(fileName), T::class.java)
 
 fun <T: Listener> Plugin.registerListener(listener: KClass<T>) = pluginManager.registerListener(this, listener.java.getConstructor().newInstance())
 

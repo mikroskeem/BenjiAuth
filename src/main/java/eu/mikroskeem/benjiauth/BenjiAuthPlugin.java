@@ -10,6 +10,8 @@ import eu.mikroskeem.benjiauth.config.Benji;
 import eu.mikroskeem.benjiauth.config.BenjiMessages;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
+
 /**
  * @author Mark Vainomaa
  */
@@ -25,7 +27,7 @@ public interface BenjiAuthPlugin {
     /**
      * Gets plugin configuration
      *
-     * @return Instance of {@link Benji}
+     * @return Instance of {@link Benji}zzzzzz
      */
     @NotNull
     Benji getConfig();
@@ -42,4 +44,12 @@ public interface BenjiAuthPlugin {
      * Reloads plugin configuration
      */
     void reloadConfig();
+
+    /**
+     * Gets plugin data folder
+     *
+     * @return Plugin data folder
+     */
+    @NotNull
+    Path getPluginFolder();
 }
