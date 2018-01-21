@@ -14,11 +14,15 @@ import eu.mikroskeem.benjiauth.commands.player.RegisterCommand
 import eu.mikroskeem.benjiauth.config.Benji
 import eu.mikroskeem.benjiauth.config.BenjiMessages
 import eu.mikroskeem.benjiauth.config.ConfigurationLoader
+import eu.mikroskeem.benjiauth.database.GeoIPDatabase
 import eu.mikroskeem.benjiauth.database.UserManager
 import eu.mikroskeem.benjiauth.hook.hookFastLogin
 import eu.mikroskeem.benjiauth.listeners.ChatListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
+import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
+import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import net.md_5.bungee.api.plugin.Plugin
+import java.net.InetAddress
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -30,19 +34,29 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
     private lateinit var configLoader: ConfigurationLoader<Benji>
     private lateinit var messagesLoader: ConfigurationLoader<BenjiMessages>
     private lateinit var userManager: UserManager
+    private lateinit var geoIPApi: GeoIPAPI
 
     override fun onEnable() {
         configLoader = initConfig("config.cfg")
         messagesLoader = initConfig("messages.cfg")
         userManager = UserManager()
+        geoIPApi = try { GeoIPDatabase() } catch (e: Exception) {
+            slF4JLogger.warn("Failed to initialize MaxMind GeoLite database!", e)
+            slF4JLogger.warn("Falling back to no-op implementation")
+            object: GeoIPAPI {
+                override fun getCountryByIP(ipAddress: InetAddress): String? = config.country.allowedCountries.first()
+                override fun getCountryByIP(ipAddress: String): String? = config.country.allowedCountries.first()
+            }
+        }
 
-        registerListener(PlayerLoginListener::class)
         registerListener(ChatListener::class)
+        registerListener(PlayerLoginListener::class)
+        registerListener(PlayerLoginStatusChangeListener::class)
 
         registerCommand(BenjiAuthCommand::class)
+        registerCommand(ChangePasswordCommand::class)
         registerCommand(LoginCommand::class)
         registerCommand(LogoutCommand::class)
-        registerCommand(ChangePasswordCommand::class)
         registerCommand(RegisterCommand::class)
 
         hookFastLogin()
@@ -64,4 +78,5 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
     override fun getMessages(): BenjiMessages = messagesLoader.configuration
     override fun getApi(): BenjiAuthAPI = this
     override fun getLoginManager(): LoginManager = userManager
+    override fun getGeoIPAPI(): GeoIPAPI = geoIPApi
 }

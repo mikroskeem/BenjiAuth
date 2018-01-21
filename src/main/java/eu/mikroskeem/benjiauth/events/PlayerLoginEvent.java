@@ -14,12 +14,22 @@ import net.md_5.bungee.api.plugin.Event;
  */
 public final class PlayerLoginEvent extends Event {
     private final ProxiedPlayer player;
+    private final boolean forceLogin;
 
     public PlayerLoginEvent(ProxiedPlayer player) {
+        this(player, false);
+    }
+
+    public PlayerLoginEvent(ProxiedPlayer player, boolean forceLogin) {
         this.player = player;
+        this.forceLogin = forceLogin;
     }
 
     public ProxiedPlayer getPlayer() {
         return player;
+    }
+
+    public boolean isForceLogin() {
+        return forceLogin;
     }
 }

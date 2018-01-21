@@ -7,8 +7,11 @@
 package eu.mikroskeem.benjiauth.commands.player
 
 import eu.mikroskeem.benjiauth.COMMAND_LOGOUT
+import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.isLoggedIn
+import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.logout
+import eu.mikroskeem.benjiauth.messages
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.connection.ProxiedPlayer
@@ -20,15 +23,25 @@ import net.md_5.bungee.api.plugin.Command
 class LogoutCommand: Command("logout", COMMAND_LOGOUT) {
     override fun execute(sender: CommandSender, args: Array<out String>) {
         val player = sender as? ProxiedPlayer ?: run {
-            sender.sendMessage(*TextComponent.fromLegacyText("this command is only for playrs")) // TODO
+            sender.authMessage(messages.error.inGameUseOnly)
+            return
+        }
+
+        if(!player.isRegistered) {
+            player.authMessage(messages.register.mustRegister)
+            return
+        }
+
+        if(args.isNotEmpty()) {
+            player.authMessage(messages.command.logout)
             return
         }
 
         if(player.isLoggedIn) {
             player.logout()
-            sender.sendMessage(*TextComponent.fromLegacyText("logged out")) // TODO
+            player.authMessage(messages.login.loggedOut)
         } else {
-            sender.sendMessage(*TextComponent.fromLegacyText("you must be logged in")) // TODO
+            player.authMessage(messages.login.mustLogin)
         }
     }
 }

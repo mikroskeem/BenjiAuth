@@ -15,6 +15,6 @@ import net.md_5.bungee.api.plugin.Command
  */
 class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH) {
     override fun execute(sender: CommandSender, args: Array<out String>) {
-
+        sender.sendMessage("Not done yet, annoy @mikroskeem with it")
     }
 }

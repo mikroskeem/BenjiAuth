@@ -6,9 +6,11 @@
 
 package eu.mikroskeem.benjiauth.listeners
 
+import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
-import net.md_5.bungee.api.chat.TextComponent
+import eu.mikroskeem.benjiauth.isRegistered
+import eu.mikroskeem.benjiauth.messages
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.ChatEvent
 import net.md_5.bungee.api.plugin.Listener
@@ -26,16 +28,24 @@ class ChatListener: Listener {
 
         val player = event.sender as? ProxiedPlayer ?: return
 
-        if(!player.isLoggedIn) {
+        if(!player.isRegistered || !player.isLoggedIn) {
             // Check if command is allowed
             if(event.isCommand) {
                 val command = event.message.split(" ", limit = 2)[0]
                 if(config.authentication.commands.allowedCommands.contains(command))
                     return
 
-                player.sendMessage(*TextComponent.fromLegacyText("you must log in before using commands!"))
+                if(!player.isRegistered) {
+                    player.authMessage(messages.register.mustRegisterBeforeUsingCommands)
+                } else if(!player.isLoggedIn) {
+                    player.authMessage(messages.login.mustLoginBeforeUsingCommands)
+                }
             } else {
-                player.sendMessage(*TextComponent.fromLegacyText("you must log in before chatting!"))
+                if(!player.isRegistered) {
+                    player.authMessage(messages.register.mustRegisterBeforeChatting)
+                } else if(!player.isLoggedIn) {
+                    player.authMessage(messages.login.mustLoginBeforeChatting)
+                }
             }
 
             // Cancel chat or commands

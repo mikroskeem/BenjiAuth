@@ -18,8 +18,18 @@ class CountryWhitelistSection {
     var allowedCountries = listOf("EE", "FI")
         private set
 
-    @Setting(value = "whitelist-works-as-a-blacklist", comment = "Whether whitelist behaviour should be reverted, " +
+    @Setting(value = "allowed-ips", comment = "What IPs are always allowed to login to server regardless of country? " +
+            "Set empty to disable")
+    var allowedIps = listOf("127.0.0.1")
+        private set
+
+    @Setting(value = "country-whitelist-works-as-a-blacklist", comment = "Whether country whitelist behaviour should be reverted, " +
             "e.g 'EE' in allowed-countries means that given country is blocked")
-    var whitelistWorksAsABlacklist = false
+    var countryWhitelistWorksAsABlacklist = false
+        private set
+
+    @Setting(value = "should-allow-unknown-classes", comment = "Whether to allow IP addresses to connect which " +
+            "couldn't be looked up from GeoIP database")
+    var shouldAllowUnknownIPs = false
         private set
 }

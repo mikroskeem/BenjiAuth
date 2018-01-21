@@ -34,4 +34,9 @@ class AuthenticationSection {
             "have to re-enter its password when one connects from same IP. Set to 0 to disable session support")
     var sessionTimeout: Long = 0
         private set
+
+    @Setting(value = "login-notice-interval", comment = "How often should player be told to log in (in seconds)." +
+            "This value cannot be under 1!")
+    var loginNoticeInterval: Long = 10
+        private set
 }

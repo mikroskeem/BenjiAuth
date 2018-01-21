@@ -7,12 +7,14 @@
 package eu.mikroskeem.benjiauth.commands.player
 
 import eu.mikroskeem.benjiauth.COMMAND_LOGIN
+import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.login
+import eu.mikroskeem.benjiauth.messages
+import eu.mikroskeem.benjiauth.processMessage
 import net.md_5.bungee.api.CommandSender
-import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
 import java.util.WeakHashMap
@@ -25,28 +27,33 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
 
     override fun execute(sender: CommandSender, args: Array<out String>) {
         val player = sender as? ProxiedPlayer ?: run {
-            sender.sendMessage(*TextComponent.fromLegacyText("this command is only for playrs")) // TODO
+            sender.authMessage(messages.error.inGameUseOnly)
             return
         }
-        attempts.put(player, 0)
+        attempts[player] = 0
 
-        if(player.isLoggedIn) {
-            player.sendMessage(*TextComponent.fromLegacyText("you are already logged in!")) // TODO
-        } else if(!player.isRegistered) {
-            player.sendMessage(*TextComponent.fromLegacyText("you must register first")) // TODO
-        } else if(args.isNotEmpty()) {
+        if(!player.isRegistered) {
+            player.authMessage(messages.register.mustRegister)
+            return
+        }
+
+        if(args.size == 1) {
+            if(player.isLoggedIn) {
+                player.authMessage(messages.login.alreadyLoggedIn)
+            }
+
             val password = args[0]
             if(player.login(password)) {
-                player.sendMessage(*TextComponent.fromLegacyText("logged in")) // TODO
+                player.authMessage(messages.login.loggedIn)
             } else {
-                player.sendMessage(*TextComponent.fromLegacyText("wrong password")) // TODO
+                player.authMessage(messages.password.wrong)
                 if(attempts[player]!! >= config.authentication.maxLoginRetries) {
-                    player.disconnect(*TextComponent.fromLegacyText("wrong password")) // TODO
+                    player.disconnect(*messages.password.wrong.processMessage(player))
                 }
                 attempts.put(player, attempts[player]!! + 1)
             }
         } else {
-            player.sendMessage(*TextComponent.fromLegacyText("usage: /login <password>")) // TODO
+            player.authMessage(messages.command.login)
         }
     }
 }

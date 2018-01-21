@@ -26,4 +26,9 @@ class RegistrationSection {
     @Setting(value = "bcrypt-rounds", comment = "How many rounds should BCrypt have? Valid values are 2-30")
     var bcryptRounds = 10
         private set
+
+    @Setting(value = "register-notice-interval", comment = "How often should player be told to register (in seconds). " +
+            "This value cannot be under 1!")
+    var registerNoticeInterval: Long = 10
+        private set
 }
