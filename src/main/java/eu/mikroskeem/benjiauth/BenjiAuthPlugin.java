@@ -9,6 +9,7 @@ package eu.mikroskeem.benjiauth;
 import eu.mikroskeem.benjiauth.config.Benji;
 import eu.mikroskeem.benjiauth.config.BenjiMessages;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
@@ -52,4 +53,12 @@ public interface BenjiAuthPlugin {
      */
     @NotNull
     Path getPluginFolder();
+
+    /**
+     * Gets plugin logger
+     *
+     * @return Plugin logger
+     */
+    @NotNull
+    Logger getPluginLogger();
 }

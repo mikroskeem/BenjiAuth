@@ -9,6 +9,7 @@ package eu.mikroskeem.benjiauth.hook
 import com.github.games647.fastlogin.bungee.FastLoginBungee
 import com.github.games647.fastlogin.core.hooks.AuthPlugin
 import eu.mikroskeem.benjiauth.loginWithoutPassword
+import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.pluginManager
 import eu.mikroskeem.benjiauth.register
 import eu.mikroskeem.benjiauth.userManager
@@ -36,5 +37,7 @@ class FastLoginHook: AuthPlugin<ProxiedPlayer> {
 // Hooks BenjiAuth to FastLogin
 fun hookFastLogin() {
     val fastLogin = pluginManager.getPlugin("FastLogin") ?: return
+    plugin.pluginLogger.info("FastLogin found, hooking...")
     (fastLogin as FastLoginBungee).core.authPluginHook = FastLoginHook()
+    plugin.pluginLogger.info("Hooked into FastLogin!")
 }

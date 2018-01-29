@@ -22,6 +22,7 @@ import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
 import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import net.md_5.bungee.api.plugin.Plugin
+import org.slf4j.Logger
 import java.net.InetAddress
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -73,6 +74,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         messagesLoader.save()
     }
 
+    override fun getPluginLogger(): Logger = slF4JLogger
     override fun getPluginFolder(): Path = pluginDataFolder
     override fun getConfig(): Benji = configLoader.configuration
     override fun getMessages(): BenjiMessages = messagesLoader.configuration
