@@ -46,9 +46,17 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
             val oldPassword = args[0]
             val newPassword = args[1]
 
-            // Check if new password equals to username
-            if(config.registration.password.disallowUsingUsername) {
-                if(newPassword == player.name) {
+            // Check password length and username usage
+            config.registration.password.run {
+                if(minimumLength > newPassword.length) {
+                    player.authMessage(messages.password.tooShort.replace("{min}", "$minimumLength"))
+                    return
+                } else if(maximumLength < newPassword.length) {
+                    player.authMessage(messages.password.tooLong.replace("{max}", "$maximumLength"))
+                    return
+                }
+
+                if(config.registration.password.disallowUsingUsername && newPassword == player.name) {
                     player.authMessage(messages.password.usernameCannotBeUsed)
                     return
                 }

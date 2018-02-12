@@ -27,4 +27,12 @@ class PasswordMessages {
     @Setting
     var usernameCannotBeUsed = "{prefix}&cKasutajanime ei saa paroolina kasutada!"
         private set
+
+    @Setting
+    var tooLong = "{prefix}&cParool on liiga pikk! Parooli maksimaalne pikkus on &3{max} &ctähemärki!"
+        private set
+
+    @Setting
+    var tooShort = "{prefix}&cParool on liiga lühike! Parooli minimaalne pikkus on &3{min} &ctähemärki!"
+        private set
 }

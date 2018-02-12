@@ -42,6 +42,24 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
             if(password != confirmPassword) {
                 player.authMessage(messages.password.dontMatch)
             } else {
+                // Check password length and username usage
+                // Note: if user sets configuration values to something unreasonable, then
+                //       I *will* tell user that PEBKAC
+                config.registration.password.run {
+                    if(minimumLength > password.length) {
+                        player.authMessage(messages.password.tooShort.replace("{min}", "$minimumLength"))
+                        return
+                    } else if(maximumLength < password.length) {
+                        player.authMessage(messages.password.tooLong.replace("{max}", "$maximumLength"))
+                        return
+                    }
+
+                    if(config.registration.password.disallowUsingUsername && password == player.name) {
+                        player.authMessage(messages.password.usernameCannotBeUsed)
+                        return
+                    }
+                }
+
                 // Register player
                 player.register(password)
 
