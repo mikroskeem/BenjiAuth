@@ -45,8 +45,8 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
             slF4JLogger.warn("Failed to initialize MaxMind GeoLite database!", e)
             slF4JLogger.warn("Falling back to no-op implementation")
             object: GeoIPAPI {
-                override fun getCountryByIP(ipAddress: InetAddress): String? = config.country.allowedCountries.first()
-                override fun getCountryByIP(ipAddress: String): String? = config.country.allowedCountries.first()
+                override fun getCountryByIP(ipAddress: InetAddress): String? = config.country.allowedCountries.firstOrNull()
+                override fun getCountryByIP(ipAddress: String): String? = config.country.allowedCountries.firstOrNull()
             }
         }
 
