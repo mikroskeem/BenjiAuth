@@ -23,4 +23,8 @@ class PasswordMessages {
     @Setting
     var changed = "{prefix}Parool vahetatud!"
         private set
+
+    @Setting
+    var usernameCannotBeUsed = "{prefix}&cKasutajanime ei saa paroolina kasutada!"
+        private set
 }

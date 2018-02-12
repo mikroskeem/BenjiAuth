@@ -10,6 +10,7 @@ import eu.mikroskeem.benjiauth.COMMAND_CPW
 import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.changePassword
 import eu.mikroskeem.benjiauth.checkPassword
+import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
@@ -28,12 +29,15 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
             return
         }
 
+        // Tell if player isn't registered
         if(!player.isRegistered) {
             player.authMessage(messages.register.mustRegister)
             return
         }
 
+        // <old> <new>
         if(args.size == 2) {
+            // Tell if player isn't logged in
             if(!player.isLoggedIn) {
                 player.authMessage(messages.login.mustLogin)
                 return
@@ -42,13 +46,24 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
             val oldPassword = args[0]
             val newPassword = args[1]
 
+            // Check if new password equals to username
+            if(config.registration.password.disallowUsingUsername) {
+                if(newPassword == player.name) {
+                    player.authMessage(messages.password.usernameCannotBeUsed)
+                    return
+                }
+            }
+
+            // Check if password matches
             if(!player.checkPassword(oldPassword)) {
                 player.authMessage(messages.password.wrongOldPassword)
             } else {
+                // Change password
                 player.changePassword(newPassword)
                 player.authMessage(messages.password.changed)
             }
         } else {
+            // Send help
             player.authMessage(messages.command.changePassword)
         }
     }

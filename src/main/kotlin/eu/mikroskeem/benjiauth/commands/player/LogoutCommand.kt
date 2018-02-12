@@ -27,16 +27,19 @@ class LogoutCommand: Command("logout", COMMAND_LOGOUT) {
             return
         }
 
+        // Tell if player is not registered
         if(!player.isRegistered) {
             player.authMessage(messages.register.mustRegister)
             return
         }
 
+        // Don't take any arguments (yes people may find this behavior stupid, but I think it's their fault)
         if(args.isNotEmpty()) {
             player.authMessage(messages.command.logout)
             return
         }
 
+        // Logout player
         if(player.isLoggedIn) {
             player.logout()
             player.authMessage(messages.login.loggedOut)

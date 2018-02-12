@@ -18,41 +18,57 @@ import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
 import java.util.WeakHashMap
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @author Mark Vainomaa
  */
 class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
-    private val attempts = WeakHashMap<ProxiedPlayer, Int>()
+    // Player login attempts
+    private val attempts = WeakHashMap<ProxiedPlayer, AtomicInteger>()
 
     override fun execute(sender: CommandSender, args: Array<out String>) {
         val player = sender as? ProxiedPlayer ?: run {
             sender.authMessage(messages.error.inGameUseOnly)
             return
         }
-        attempts[player] = 0
 
+        // Tell if player is not registered
         if(!player.isRegistered) {
             player.authMessage(messages.register.mustRegister)
             return
         }
 
+        // Initialize counter
+        attempts.computeIfAbsent(player) { AtomicInteger(0) }
+
+        // If password is supplied
         if(args.size == 1) {
+            // Tell if player is already logged in
             if(player.isLoggedIn) {
                 player.authMessage(messages.login.alreadyLoggedIn)
+                return
             }
 
             val password = args[0]
             if(player.login(password)) {
+                // Logged in!
                 player.authMessage(messages.login.loggedIn)
             } else {
+                // Password is wrong
                 player.authMessage(messages.password.wrong)
-                if(attempts[player]!! >= config.authentication.maxLoginRetries) {
+
+                // Kick if there are too many login attempts
+                if(attempts[player]!!.get() >= config.authentication.maxLoginRetries) {
                     player.disconnect(*messages.password.wrong.processMessage(player))
+                    return
                 }
-                attempts.put(player, attempts[player]!! + 1)
+
+                // Increment counter
+                attempts[player]!!.incrementAndGet()
             }
         } else {
+            // Send help message
             player.authMessage(messages.command.login)
         }
     }

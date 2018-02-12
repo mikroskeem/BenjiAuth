@@ -29,16 +29,23 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
         }
 
         if(player.isRegistered) {
+            // Tell if player is already registered
             player.authMessage(messages.register.alreadyRegistered)
         } else if(player.isLoggedIn) {
+            // Tell if player is already logged in
             player.authMessage(messages.login.alreadyLoggedIn)
         } else if(args.size == 2) {
             val password = args[0]
             val confirmPassword = args[1]
+
+            // Check if passwords don't match
             if(password != confirmPassword) {
                 player.authMessage(messages.password.dontMatch)
             } else {
+                // Register player
                 player.register(password)
+
+                // If player should be logged in after registering
                 if(config.registration.loginAfterRegister) {
                     player.authMessage(messages.register.registered)
                 } else {
@@ -46,6 +53,7 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
                 }
             }
         } else {
+            // Send help
             player.authMessage(messages.command.register)
         }
     }
