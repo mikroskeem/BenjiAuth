@@ -22,4 +22,9 @@ class ServersSection {
             "it's empty to follow BungeeCord's default fallback cycle")
     var lobbyServer = ""
         private set
+
+    @Setting(value = "kick-if-lobby-is-down", comment = "Whether to kick or not kick player from proxy if lobby server " +
+            "is down")
+    var kickIfLobbyIsDown = true
+        private set
 }
