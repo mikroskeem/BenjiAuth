@@ -41,7 +41,10 @@ class PlayerLoginListener: Listener {
             return
         }
 
-        if(!event.connection.name.matches(config.authentication.username.regex.toRegex())) {
+        if(!(
+                        event.connection.name.length <= config.authentication.username.length &&
+                        event.connection.name.matches(config.authentication.username.regex.toRegex())
+        )) {
             event.setCancelReason(*messages.error.invalidUsername.processMessage())
             event.isCancelled = true
             return
