@@ -14,35 +14,39 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
  */
 @ConfigSerializable
 class LoginMessages {
-    @Setting
+    @Setting(value = "please-login", comment = "This message gets sent to player repeatedly until one logs in")
     var pleaseLogin = "{prefix}Logige sisse käsuga &3/login &8<&3parool&8>"
         private set
 
-    @Setting
+    @Setting(value = "must-login", comment = "This message gets sent when player is doing something while not " +
+            "being logged in")
     var mustLogin = "{prefix}&cSa pead enne end sisse logima!"
         private set
 
-    @Setting
+    @Setting(value = "must-login-before-chatting", comment = "This message gets sent when player is chatting while not " +
+            "being logged in")
     var mustLoginBeforeChatting = "{prefix}&cEnne vestlusakna kasutamist palun logi sisse"
         private set
 
-    @Setting
+    @Setting(value = "must-login-before-using-commands", comment = "This message gets sent when player is using " +
+            " commands while not being logged in")
     var mustLoginBeforeUsingCommands = "{prefix}&cEnne commandide kasutamist palun logi sisse"
         private set
 
-    @Setting
+    @Setting(value = "login-timeout", comment = "This message gets sent when player doesn't log in fast enough " +
+            "(iow hits login timeout)")
     var loginTimeout = "{prefix}&cTe ei loginud piisavalt kiiresti sisse"
         private set
 
-    @Setting
+    @Setting(value = "logged-in", comment = "This message gets sent when player logs in successfully")
     var loggedIn = "{prefix}Oled sisse logitud!"
         private set
 
-    @Setting
+    @Setting(value = "already-logged-in", comment = "This message gets sent when player is already logged in")
     var alreadyLoggedIn = "{prefix}&cTe olete juba sisse logitud!"
         private set
 
-    @Setting
+    @Setting(value = "logged-out", comment = "This message gets sent when player is logged out successfully")
     var loggedOut = "{prefix}Oled välja logitud!"
         private set
 }

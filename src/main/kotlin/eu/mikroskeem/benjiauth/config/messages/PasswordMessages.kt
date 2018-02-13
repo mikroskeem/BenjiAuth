@@ -14,31 +14,32 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
  */
 @ConfigSerializable
 class PasswordMessages {
-    @Setting
+    @Setting(value = "do-not-match", comment = "This message gets sent when passwords don't match on /changepassword")
     var dontMatch = "{prefix}&cParoolid ei ühti!"
         private set
 
-    @Setting
+    @Setting(value = "wrong", comment = "This message gets sent when password is wrong")
     var wrong = "{prefix}&cVale parool!"
         private set
 
-    @Setting
+    @Setting(value = "wrong-old-password", comment = "This message gets sent on /changepassword when old password is wrong")
     var wrongOldPassword = "{prefix}&cSisestasid vale vana parooli!"
         private set
 
-    @Setting
+    @Setting(value = "password-changed", comment = "This message gets sent when password got changed successfully")
     var changed = "{prefix}Parool vahetatud!"
         private set
 
-    @Setting
+    @Setting(value = "username-can-not-be-used", comment = "This message gets sent when player tries to change its " +
+            "password to its username")
     var usernameCannotBeUsed = "{prefix}&cKasutajanime ei saa paroolina kasutada!"
         private set
 
-    @Setting
+    @Setting(value = "too-long", comment = "This message gets sent when player tries to use too long password")
     var tooLong = "{prefix}&cParool on liiga pikk! Parooli maksimaalne pikkus on &3{max} &ctähemärki!"
         private set
 
-    @Setting
+    @Setting(value = "too-short", comment = "This message gets sent when player tries to use too short password")
     var tooShort = "{prefix}&cParool on liiga lühike! Parooli minimaalne pikkus on &3{min} &ctähemärki!"
         private set
 }

@@ -14,23 +14,23 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
  */
 @ConfigSerializable
 class ErrorMessages {
-    @Setting
+    @Setting(value = "in-game-use-only", comment = "Sent when command requires player")
     var inGameUseOnly = "{prefix}&cAntud command on mõeldud mängijatele!"
         private set
 
-    @Setting
+    @Setting(value = "invalid-username", comment = "Player gets kicked with this message if username is invalid")
     var invalidUsername = "{prefix}&cVigane kasutajanimi, kasutage midagi muud!"
         private set
 
-    @Setting
+    @Setting(value = "ip-address-blocked", comment = "Player gets kicked with this message if IP address is blacklisted")
     var ipAddressDisallowed = "{prefix}&cTeie IP aadress on blokeeritud siin serveris."
         private set
 
-    @Setting
+    @Setting(value = "could-not-connect-to-lobby", comment = "Player gets kicked with this message if lobby is down")
     var couldntConnectToLobby = "{prefix}&cEi suutnud peaserveriga ühenduda!"
         private set
 
-    @Setting
+    @Setting(value = "could-not-connect-to-auth-server", comment = "Player gets kicked with this message if auth server is down")
     var couldntConnectToAuthserver = "{prefix}&cEi suutnud autentimisserveriga ühenduda!"
         private set
 }
