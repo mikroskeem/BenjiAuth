@@ -13,6 +13,7 @@ import eu.mikroskeem.benjiauth.tasks.Task
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.ProxyServer
+import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
 import net.md_5.bungee.api.plugin.Listener
@@ -55,10 +56,19 @@ val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
 val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLoggedIn(this)
 val ProxiedPlayer.isEgilibleForSession: Boolean get() = userManager.isEgilibleForSessionLogin(this)
 val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefullyLoggedIn(this)
+val ProxiedPlayer.isReady: Boolean get() = userManager.isUserReady(this)
 
 fun ProxiedPlayer.checkPassword(password: String) = userManager.checkPassword(this, password)
 fun ProxiedPlayer.login(password: String): Boolean = if(checkPassword(password)) { userManager.loginUser(this); true } else false
 fun ProxiedPlayer.loginWithoutPassword(forceful: Boolean = false) = userManager.loginUser(this, forceful)
 fun ProxiedPlayer.register(password: String) = userManager.registerUser(this, password)
 fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePassword(this, newPassword)
-fun ProxiedPlayer.logout() = userManager.logoutUser(this, true)
+fun ProxiedPlayer.logout(clearSession: Boolean = true) = userManager.logoutUser(this, clearSession)
+fun ProxiedPlayer.markReady() = userManager.markUserReady(this)
+
+inline fun getAuthServer(failure: () -> Unit): ServerInfo {
+    return config.servers.authServer.takeUnless { it.isEmpty() }?.run(::findServer) ?: run {
+        failure()
+        throw IllegalStateException("Invalid auth server '${config.servers.authServer}'!")
+    }
+}

@@ -19,6 +19,7 @@ import eu.mikroskeem.benjiauth.events.PlayerLoginEvent
 import eu.mikroskeem.benjiauth.events.PlayerLogoutEvent
 import eu.mikroskeem.benjiauth.events.PlayerRegisterEvent
 import eu.mikroskeem.benjiauth.events.PlayerUnregisterEvent
+import eu.mikroskeem.benjiauth.isReady
 import eu.mikroskeem.benjiauth.pluginManager
 import eu.mikroskeem.benjiauth.toIPString
 import net.md_5.bungee.api.connection.ProxiedPlayer
@@ -37,6 +38,7 @@ class UserManager: LoginManager {
     private val dao: Dao<User, String>
     private val random = SecureRandom()
     private val forcefullyLoggedIn: MutableSet<ProxiedPlayer> = Collections.newSetFromMap(WeakHashMap())
+    private val readyUsers: MutableSet<ProxiedPlayer> = Collections.newSetFromMap(WeakHashMap())
 
     init {
         try {
@@ -65,7 +67,9 @@ class UserManager: LoginManager {
                 null
         ))
 
-        pluginManager.callEvent(PlayerRegisterEvent(player))
+        if(player.isReady) {
+            pluginManager.callEvent(PlayerRegisterEvent(player))
+        }
 
         if(config.registration.loginAfterRegister) {
             loginUser(player)
@@ -74,10 +78,17 @@ class UserManager: LoginManager {
 
     override fun unregisterUser(player: ProxiedPlayer) {
         dao.delete(findUser(player.name))
-        pluginManager.callEvent(PlayerUnregisterEvent(player))
+        if(player.isReady) {
+            pluginManager.callEvent(PlayerUnregisterEvent(player))
+        }
     }
 
-    override fun isEgilibleForSessionLogin(player: ProxiedPlayer): Boolean = findUser(player.name).lastLogin ?: 0 > TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
+    override fun isEgilibleForSessionLogin(player: ProxiedPlayer): Boolean {
+        return if(config.authentication.sessionTimeout == 0L)
+            false
+        else
+            findUser(player.name).lastLogin ?: 0 > TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
+    }
 
     override fun isLoggedIn(player: ProxiedPlayer): Boolean = findUser(player.name).loggedIn
 
@@ -94,7 +105,10 @@ class UserManager: LoginManager {
             dao.update(this)
         }
         if(force) forcefullyLoggedIn.add(player)
-        pluginManager.callEvent(PlayerLoginEvent(player))
+
+        if(player.isReady) {
+            pluginManager.callEvent(PlayerLoginEvent(player))
+        }
     }
 
     override fun logoutUser(player: ProxiedPlayer, clearSession: Boolean) {
@@ -106,7 +120,10 @@ class UserManager: LoginManager {
             }
             dao.update(this)
         }
-        pluginManager.callEvent(PlayerLogoutEvent(player))
+
+        if(player.isReady) {
+            pluginManager.callEvent(PlayerLogoutEvent(player))
+        }
     }
 
     override fun checkPassword(player: ProxiedPlayer, password: String): Boolean {
@@ -115,6 +132,12 @@ class UserManager: LoginManager {
 
     override fun changePassword(player: ProxiedPlayer, newPassword: String) {
         dao.update(findUser(player.name).apply { password = BCrypt.hashpw(newPassword, genSalt()) })
+    }
+
+    override fun isUserReady(player: ProxiedPlayer): Boolean = readyUsers.contains(player)
+
+    override fun markUserReady(player: ProxiedPlayer) {
+        readyUsers.add(player)
     }
 
     // Shuts user manager down

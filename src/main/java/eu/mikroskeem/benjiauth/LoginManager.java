@@ -119,4 +119,23 @@ public interface LoginManager {
      * @param newPassword New password
      */
     void changePassword(@NotNull ProxiedPlayer player, @NotNull String newPassword);
+
+    /**
+     * Returns whether user initial data processing is done or not and player is eligible for
+     * events and such.
+     *
+     * @param player Player
+     * @return
+     */
+    boolean isUserReady(@NotNull ProxiedPlayer player);
+
+    /**
+     * Marks user ready, in other words initial data processing is done and events about given user
+     * can be fired.
+     * Otherwise only data processing is done.
+     * This method can be invoked only once per user session.
+     *
+     * @param player Player
+     */
+    void markUserReady(@NotNull ProxiedPlayer player);
 }
