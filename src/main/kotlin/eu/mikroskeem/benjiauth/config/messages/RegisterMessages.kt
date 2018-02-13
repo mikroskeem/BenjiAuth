@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Mark Vainomaa
+ *
+ * This source code is proprietary software and must not be distributed and/or copied without the express permission of Mark Vainomaa
+ */
+
 package eu.mikroskeem.benjiauth.config.messages
 
 import ninja.leaping.configurate.objectmapping.Setting
@@ -29,7 +35,7 @@ class RegisterMessages {
         private set
 
     @Setting
-    var registered = "{private}Registreerisid edukalt!"
+    var registered = "{prefix}Registreerisid edukalt!"
         private set
 
     @Setting
