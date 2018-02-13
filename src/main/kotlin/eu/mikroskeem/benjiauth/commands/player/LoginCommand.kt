@@ -56,6 +56,9 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
                 player.authMessage(messages.login.loggedIn)
             } else {
                 // Password is wrong
+                attempts[player]!!.incrementAndGet()
+
+                // Check login attempts count
                 if(attempts[player]!!.get() >= config.authentication.maxLoginRetries) {
                     // Kick if there are too many login attempts
                     player.disconnect(*messages.password.wrong.processMessage(player))
@@ -63,9 +66,6 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
                 } else {
                     player.authMessage(messages.password.wrong)
                 }
-
-                // Increment counter
-                attempts[player]!!.incrementAndGet()
             }
         } else {
             // Send help message
