@@ -28,7 +28,7 @@ class ChatListener: Listener {
 
         val player = event.sender as? ProxiedPlayer ?: return
 
-        if(!player.isRegistered || !player.isLoggedIn) {
+        if(!player.isLoggedIn) {
             // Check if command is allowed
             if(event.isCommand) {
                 val command = event.message.split(" ", limit = 2)[0]
