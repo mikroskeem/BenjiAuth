@@ -47,6 +47,10 @@ fun InetSocketAddress.isAllowedToJoin(): Boolean {
         return true
 
     val country = geoIpApi.getCountryByIP(address)
+    if(country == null && config.country.shouldAllowUnknownIPs) {
+        return true
+    }
+
     return if(config.country.countryWhitelistWorksAsABlacklist) {
         !config.country.allowedCountries.contains(country)
     } else {

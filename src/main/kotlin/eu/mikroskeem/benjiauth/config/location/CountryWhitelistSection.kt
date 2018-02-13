@@ -28,7 +28,7 @@ class CountryWhitelistSection {
     var countryWhitelistWorksAsABlacklist = false
         private set
 
-    @Setting(value = "should-allow-unknown-classes", comment = "Whether to allow IP addresses to connect which " +
+    @Setting(value = "should-allow-unknown-ips", comment = "Whether to allow IP addresses to connect which " +
             "couldn't be looked up from GeoIP database")
     var shouldAllowUnknownIPs = false
         private set
