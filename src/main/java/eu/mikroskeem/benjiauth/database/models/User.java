@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @DatabaseTable(tableName = "users")
 public class User {
-    @DatabaseField(id = true, columnName = "username", canBeNull = false)
+    @DatabaseField(id = true, columnName = "username", canBeNull = false, width = 16)
     private String username;
 
     @DatabaseField(columnName = "password", canBeNull = false)

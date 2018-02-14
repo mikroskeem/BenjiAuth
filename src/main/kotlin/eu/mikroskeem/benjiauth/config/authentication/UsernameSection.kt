@@ -17,8 +17,4 @@ class UsernameSection {
     @Setting(value = "valid-characters-regex", comment = "What characters are allowed in username?")
     var regex = "[a-zA-Z0-9_]*"
         private set
-
-    @Setting(value = "valid-length", comment = "What should be the max length of an username?")
-    var length = 16
-        private set
 }
