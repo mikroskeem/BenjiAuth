@@ -8,6 +8,7 @@ package eu.mikroskeem.benjiauth.hook
 
 import com.github.games647.fastlogin.bungee.FastLoginBungee
 import com.github.games647.fastlogin.core.hooks.AuthPlugin
+import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.loginWithoutPassword
 import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.pluginManager
@@ -24,13 +25,21 @@ class FastLoginHook: AuthPlugin<ProxiedPlayer> {
     }
 
     override fun forceLogin(player: ProxiedPlayer): Boolean {
-        player.loginWithoutPassword(forceful = true)
-        return true
+        return if(player.isRegistered) {
+            player.loginWithoutPassword(forceful = true)
+            true
+        } else {
+            false
+        }
     }
 
     override fun forceRegister(player: ProxiedPlayer, password: String): Boolean {
-        player.register(password)
-        return true
+        return if(!player.isRegistered) {
+            player.register(password)
+            true
+        } else {
+            false
+        }
     }
 }
 
