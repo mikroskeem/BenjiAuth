@@ -33,4 +33,8 @@ class ErrorMessages {
     @Setting(value = "could-not-connect-to-auth-server", comment = "Player gets kicked with this message if auth server is down")
     var couldntConnectToAuthserver = "{prefix}&cEi suutnud autentimisserveriga ühenduda!"
         private set
+
+    @Setting(value = "unknown-subcommand", comment = "Sent when unknown subcommand is used")
+    var unknownSubcommand = "{prefix}&cTundmatu alamkäsklus &3{subcommand}&c!"
+        private set
 }

@@ -41,7 +41,12 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
                     userManager.unregisterUser(username)
                     sender.authMessage(messages.admin.unregisteredSuccessfully)
                 }
+                else -> {
+                    sender.authMessage(messages.error.unknownSubcommand.replace("{subcommand}", args[0]))
+                }
             }
+        } else {
+            sender.authMessage(messages.command.benjiauthAdmin)
         }
     }
 

@@ -30,6 +30,14 @@ class CommandUsages {
     var logout = "{prefix}Kasutamine: &3/logout"
         private set
 
+    @Setting(value = "admin-help", comment = "/benjiauth help")
+    var benjiauthAdmin = """
+        {prefix}BenjiAuth
+        {prefix}Käsud:
+        {prefix}- &3/benjiauth reload &7- taaslaeb plugina seadistuse
+        {prefix}- &3/benjiauth unregister &8<&3kasutajanimi&8> &7- eemaldab mängija andmebaasist ja logib välja, kui mängija on serveris
+    """.trimIndent()
+
     @Setting(value = "admin-help-logout", comment = "/benjiauth unregister help")
     var unregister = "{prefix}Kasutamine: &3/benjiauth unregister &8<&3kasutajanimi&8>"
         private set
