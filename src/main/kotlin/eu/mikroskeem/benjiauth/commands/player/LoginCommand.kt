@@ -40,6 +40,12 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
             return
         }
 
+        // Tell if player is already logged in
+        if(player.isLoggedIn) {
+            player.authMessage(messages.login.alreadyLoggedIn)
+            return
+        }
+
         // Initialize counter
         attempts.computeIfAbsent(player) { AtomicInteger(0) }
 
