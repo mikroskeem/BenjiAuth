@@ -20,7 +20,6 @@ import eu.mikroskeem.benjiauth.hook.hookFastLogin
 import eu.mikroskeem.benjiauth.listeners.ChatListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
-import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import net.md_5.bungee.api.plugin.Plugin
 import org.slf4j.Logger
 import java.net.InetAddress

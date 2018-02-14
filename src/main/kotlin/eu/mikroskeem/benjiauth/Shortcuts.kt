@@ -40,14 +40,12 @@ val currentUnixTimestamp: Long get() = Instant.now().epochSecond
 inline fun <reified T: Any> BenjiAuthPlugin.initConfig(fileName: String): ConfigurationLoader<T> = ConfigurationLoader(pluginFolder.resolve(fileName), T::class.java)
 fun <T: Listener> BenjiAuthPlugin.registerListener(listener: KClass<T>) = pluginManager.registerListener(this as Plugin, listener.java.getConstructor().newInstance())
 fun <T: Command> BenjiAuthPlugin.registerCommand(command: KClass<T>) = pluginManager.registerCommand(this as Plugin, command.java.getConstructor().newInstance())
-fun <T: Runnable> BenjiAuthPlugin.runAsync(task: KClass<T>): ScheduledTask = task.java.getConstructor().newInstance().let { proxy.scheduler.runAsync(this as Plugin, it) }
 fun <T: Task> BenjiAuthPlugin.startTask(task: T): ScheduledTask = task.let { proxy.scheduler.schedule(this as Plugin, it, it.delay, it.period, it.timeUnit) }
-fun <T: Task> BenjiAuthPlugin.startTask(task: KClass<T>, vararg args: Any): ScheduledTask = task.java.getConstructor(*args.map(Any::javaClass).toTypedArray()).newInstance(args).let {
-    proxy.scheduler.schedule(this as Plugin, it, it.delay, it.period, it.timeUnit) }
 
 fun String.color(): String = ChatColor.translateAlternateColorCodes('&', this)
 
 fun CommandSender.authMessage(message: String): Unit { sendMessage(*message.processMessage(this as? ProxiedPlayer).takeIf { it.isNotEmpty() } ?: return) }
+fun ProxiedPlayer.authKickMessage(message: String): Unit { disconnect(*message.processMessage(this as? ProxiedPlayer).takeIf { it.isNotEmpty() } ?: return) }
 
 val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
 val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLoggedIn(this)

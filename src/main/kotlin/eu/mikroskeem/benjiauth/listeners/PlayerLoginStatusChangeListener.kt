@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.listeners
 
+import eu.mikroskeem.benjiauth.authKickMessage
 import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.events.PlayerLoginEvent
@@ -17,7 +18,6 @@ import eu.mikroskeem.benjiauth.getAuthServer
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.movePlayer
 import eu.mikroskeem.benjiauth.plugin
-import eu.mikroskeem.benjiauth.processMessage
 import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
@@ -47,7 +47,7 @@ class PlayerLoginStatusChangeListener: Listener {
         event.player.movePlayer(lobby, retry = true) { success, e: Throwable? ->
             if(!success) {
                 if(config.servers.kickIfLobbyIsDown) {
-                    event.player.disconnect(*messages.error.couldntConnectToLobby.processMessage(event.player))
+                    event.player.authKickMessage(messages.error.couldntConnectToLobby)
                 } else {
                     event.player.authMessage(messages.error.couldntConnectToLobby)
                 }
@@ -60,7 +60,7 @@ class PlayerLoginStatusChangeListener: Listener {
     fun on(event: PlayerLogoutEvent) {
         // Get auth server
         val auth: ServerInfo = getAuthServer {
-            event.player.disconnect(*messages.error.couldntConnectToAuthserver.processMessage(event.player))
+            event.player.authKickMessage(messages.error.couldntConnectToAuthserver)
         }
 
         // Return if player is already in auth server
@@ -70,7 +70,7 @@ class PlayerLoginStatusChangeListener: Listener {
         // Send player to auth server
         event.player.movePlayer(auth, retry = true) { success, e: Throwable? ->
             if(!success) {
-                event.player.disconnect(*messages.error.couldntConnectToAuthserver.processMessage(event.player))
+                event.player.authKickMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
         }
@@ -83,7 +83,7 @@ class PlayerLoginStatusChangeListener: Listener {
     fun on(event: PlayerUnregisterEvent) {
         // Get auth server
         val auth: ServerInfo = getAuthServer {
-            event.player.disconnect(*messages.error.couldntConnectToAuthserver.processMessage(event.player))
+            event.player.authKickMessage(messages.error.couldntConnectToAuthserver)
         }
 
         // Return if player is already in auth server
@@ -92,7 +92,7 @@ class PlayerLoginStatusChangeListener: Listener {
 
         event.player.movePlayer(auth, retry = true) { success, e: Throwable? ->
             if(!success) {
-                event.player.disconnect(*messages.error.couldntConnectToAuthserver.processMessage(event.player))
+                event.player.authKickMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
         }

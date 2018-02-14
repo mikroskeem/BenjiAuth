@@ -7,6 +7,7 @@
 package eu.mikroskeem.benjiauth.commands.player
 
 import eu.mikroskeem.benjiauth.COMMAND_LOGIN
+import eu.mikroskeem.benjiauth.authKickMessage
 import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
@@ -61,7 +62,7 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
                 // Check login attempts count
                 if(attempts[player]!!.get() >= config.authentication.maxLoginRetries) {
                     // Kick if there are too many login attempts
-                    player.disconnect(*messages.password.wrong.processMessage(player))
+                    player.authKickMessage(messages.password.wrong)
                     return
                 } else {
                     player.authMessage(messages.password.wrong)

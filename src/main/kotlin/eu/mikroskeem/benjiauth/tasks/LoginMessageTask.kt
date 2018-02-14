@@ -6,13 +6,12 @@
 
 package eu.mikroskeem.benjiauth.tasks
 
+import eu.mikroskeem.benjiauth.authKickMessage
 import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.currentUnixTimestamp
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.messages
-import eu.mikroskeem.benjiauth.processMessage
-import eu.mikroskeem.benjiauth.proxy
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import java.util.concurrent.TimeUnit
 
@@ -32,7 +31,7 @@ class LoginMessageTask(private val player: ProxiedPlayer): Task() {
         }
 
         if(currentUnixTimestamp - taskStart >= config.authentication.authTimeout) {
-            player.disconnect(*messages.login.loginTimeout.processMessage(player))
+            player.authKickMessage(messages.login.loginTimeout)
             return
         }
 

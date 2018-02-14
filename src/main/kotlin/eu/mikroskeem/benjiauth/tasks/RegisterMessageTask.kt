@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.tasks
 
+import eu.mikroskeem.benjiauth.authKickMessage
 import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.currentUnixTimestamp
@@ -32,7 +33,7 @@ class RegisterMessageTask(private val player: ProxiedPlayer): Task() {
         }
 
         if(currentUnixTimestamp - taskStart > config.authentication.authTimeout) {
-            player.disconnect(*messages.register.registerTimeout.processMessage(player))
+            player.authKickMessage(messages.register.registerTimeout)
             return
         }
 

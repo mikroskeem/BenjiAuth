@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.listeners
 
+import eu.mikroskeem.benjiauth.authKickMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.getAuthServer
 import eu.mikroskeem.benjiauth.isAllowedToJoin
@@ -91,7 +92,7 @@ class PlayerLoginListener: Listener {
         if(!player.isLoggedIn) {
             // Get authentication server info
             val auth: ServerInfo = getAuthServer {
-                event.player.disconnect(*messages.error.couldntConnectToAuthserver.processMessage(event.player))
+                event.player.authKickMessage(messages.error.couldntConnectToAuthserver)
             }
 
             // Set target server
