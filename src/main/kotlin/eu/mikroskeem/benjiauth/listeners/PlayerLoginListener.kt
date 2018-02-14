@@ -74,16 +74,9 @@ class PlayerLoginListener: Listener {
 
         // Mark player ready
         player.markReady()
-
-        // Start login/register message/timeout task
-        if(!player.isRegistered) {
-            RegisterMessageTask(player).schedule()
-        } else if(!player.isLoggedIn) {
-            LoginMessageTask(player).schedule()
-        }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGH)
     fun on(event: ServerConnectEvent) {
         val player = event.player
         val target = event.target
@@ -98,6 +91,13 @@ class PlayerLoginListener: Listener {
             // Set target server
             if(target.name != auth.name) {
                 event.target = auth
+            }
+
+            // Start login/register message/timeout task
+            if(!player.isRegistered) {
+                RegisterMessageTask(player).schedule()
+            } else if(!player.isLoggedIn) {
+                LoginMessageTask(player).schedule()
             }
         }
     }
