@@ -30,8 +30,9 @@ import net.md_5.bungee.event.EventHandler
 class PlayerLoginStatusChangeListener: Listener {
     @EventHandler
     fun on(event: PlayerRegisterEvent) {
-        // Start login message/timeout task
-        LoginMessageTask(event.player).schedule()
+        // Start login message/timeout task if player is required to log in manually after registering
+        if(!config.registration.loginAfterRegister)
+            LoginMessageTask(event.player).schedule()
     }
 
     @EventHandler
