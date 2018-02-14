@@ -45,10 +45,7 @@ fun <T: Task> BenjiAuthPlugin.startTask(task: T): ScheduledTask = task.let { pro
 fun <T: Task> BenjiAuthPlugin.startTask(task: KClass<T>, vararg args: Any): ScheduledTask = task.java.getConstructor(*args.map(Any::javaClass).toTypedArray()).newInstance(args).let {
     proxy.scheduler.schedule(this as Plugin, it, it.delay, it.period, it.timeUnit) }
 
-fun String.color() = ChatColor.translateAlternateColorCodes('&', this)
-
-fun Task.schedule() = plugin.startTask(this)
-fun <T: Task> KClass<T>.schedule(vararg args: Any) = plugin.startTask(this, args)
+fun String.color(): String = ChatColor.translateAlternateColorCodes('&', this)
 
 fun CommandSender.authMessage(message: String): Unit { sendMessage(*message.processMessage(this as? ProxiedPlayer).takeIf { it.isNotEmpty() } ?: return) }
 

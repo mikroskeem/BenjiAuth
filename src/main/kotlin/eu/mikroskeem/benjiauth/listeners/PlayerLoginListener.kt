@@ -7,7 +7,6 @@
 package eu.mikroskeem.benjiauth.listeners
 
 import eu.mikroskeem.benjiauth.config
-import eu.mikroskeem.benjiauth.findServer
 import eu.mikroskeem.benjiauth.getAuthServer
 import eu.mikroskeem.benjiauth.isAllowedToJoin
 import eu.mikroskeem.benjiauth.isEgilibleForSession
@@ -18,9 +17,9 @@ import eu.mikroskeem.benjiauth.loginWithoutPassword
 import eu.mikroskeem.benjiauth.logout
 import eu.mikroskeem.benjiauth.markReady
 import eu.mikroskeem.benjiauth.messages
-import eu.mikroskeem.benjiauth.movePlayer
-import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.processMessage
+import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
+import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
@@ -77,9 +76,9 @@ class PlayerLoginListener: Listener {
 
         // Start login/register message/timeout task
         if(!player.isRegistered) {
-            // TODO
+            RegisterMessageTask(player).schedule()
         } else if(!player.isLoggedIn) {
-            // TODO
+            LoginMessageTask(player).schedule()
         }
     }
 

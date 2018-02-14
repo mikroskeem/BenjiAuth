@@ -18,12 +18,11 @@ import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.movePlayer
 import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.processMessage
+import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
+import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
-import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Listener
-import net.md_5.bungee.api.scheduler.ScheduledTask
 import net.md_5.bungee.event.EventHandler
-import java.util.WeakHashMap
 
 /**
  * @author Mark Vainomaa
@@ -31,7 +30,8 @@ import java.util.WeakHashMap
 class PlayerLoginStatusChangeListener: Listener {
     @EventHandler
     fun on(event: PlayerRegisterEvent) {
-        // TODO: something useful here?
+        // Start login message/timeout task
+        LoginMessageTask(event.player).schedule()
     }
 
     @EventHandler
@@ -76,7 +76,7 @@ class PlayerLoginStatusChangeListener: Listener {
         }
 
         // Start login message/timeout task
-        // TODO
+        LoginMessageTask(event.player).schedule()
     }
 
     @EventHandler
@@ -98,6 +98,6 @@ class PlayerLoginStatusChangeListener: Listener {
         }
 
         // Start register message/timeout task
-        // TODO
+        RegisterMessageTask(event.player).schedule()
     }
 }
