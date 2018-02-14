@@ -21,6 +21,7 @@ import eu.mikroskeem.benjiauth.events.PlayerRegisterEvent
 import eu.mikroskeem.benjiauth.events.PlayerUnregisterEvent
 import eu.mikroskeem.benjiauth.isReady
 import eu.mikroskeem.benjiauth.pluginManager
+import eu.mikroskeem.benjiauth.proxy
 import eu.mikroskeem.benjiauth.toIPString
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import org.mindrot.jbcrypt.BCrypt
@@ -77,7 +78,14 @@ class UserManager: LoginManager {
     }
 
     override fun unregisterUser(player: ProxiedPlayer) {
-        dao.delete(findUser(player.name))
+        unregisterUser(player.name)
+    }
+
+    override fun unregisterUser(username: String) {
+        dao.delete(findUser(username))
+
+        // If player is online and marked ready, send out unregister event
+        val player = proxy.getPlayer(username) ?: return
         if(player.isReady) {
             pluginManager.callEvent(PlayerUnregisterEvent(player))
         }

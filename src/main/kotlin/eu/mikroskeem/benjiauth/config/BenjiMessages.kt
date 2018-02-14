@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.config
 
+import eu.mikroskeem.benjiauth.config.messages.AdminMessages
 import eu.mikroskeem.benjiauth.config.messages.CommandUsages
 import eu.mikroskeem.benjiauth.config.messages.ErrorMessages
 import eu.mikroskeem.benjiauth.config.messages.LoginMessages
@@ -41,5 +42,9 @@ class BenjiMessages {
 
     @Setting(value = "commands", comment = "Command help messages")
     var command = CommandUsages()
+        private set
+
+    @Setting(value = "admin", comment = "Admin messages")
+    var admin = AdminMessages()
         private set
 }

@@ -45,6 +45,13 @@ public interface LoginManager {
     void unregisterUser(@NotNull ProxiedPlayer player);
 
     /**
+     * Unregisters player from database
+     *
+     * @param username Player username to unregister
+     */
+    void unregisterUser(@NotNull String username);
+
+    /**
      * Returns whether player is egilible for password login or not
      *
      * @param player Player

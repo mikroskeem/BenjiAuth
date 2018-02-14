@@ -29,4 +29,8 @@ class CommandUsages {
     @Setting(value = "help-logout", comment = "/logout command help")
     var logout = "{prefix}Kasutamine: &3/logout"
         private set
+
+    @Setting(value = "admin-help-logout", comment = "/benjiauth unregister help")
+    var unregister = "{prefix}Kasutamine: &3/benjiauth unregister &8<&3kasutajanimi&8>"
+        private set
 }
