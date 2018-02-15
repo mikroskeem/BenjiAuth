@@ -39,10 +39,14 @@ dependencies {
     implementation("ninja.leaping.configurate:configurate-hocon:$configurateVersion") {
         exclude(module = "guava")
     }
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation("com.zaxxer:HikariCP:$hikariVersion") {
+        exclude(module = "slf4j-api")
+    }
     implementation("com.j256.ormlite:ormlite-jdbc:$ormliteVersion")
     implementation("org.mindrot:jbcrypt:$bcryptVersion")
-    implementation("com.maxmind.geoip2:geoip2:$geoipVersion")
+    implementation("com.maxmind.geoip2:geoip2:$geoipVersion") {
+        exclude(module = "httpcore")
+    }
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
 }
 
@@ -68,7 +72,13 @@ val shadowJar by tasks.getting(com.github.jengelman.gradle.plugins.shadow.tasks.
             "com.zaxxer.hikari",
             "com.j256.ormlite",
             "org.mindrot.jbcrypt",
-            "com.maxmind.geoip2"
+            "com.maxmind.db",
+            "com.maxmind.geoip2",
+            "org.apache.commons.compress",
+            "org.apache.commons.codec",
+            "org.apache.commons.logging",
+            "com.fasterxml.jackson",
+            "org.objenesis"
     )
     val targetPackage = "eu.mikroskeem.benjiauth.lib"
 
@@ -82,6 +92,26 @@ val shadowJar by tasks.getting(com.github.jengelman.gradle.plugins.shadow.tasks.
         exclude("org/jetbrains/annotations/**")
         exclude("org/intellij/lang/annotations/**")
         exclude("META-INF/maven/**")
+
+        // TODO: very likely unsafe exclusions
+        exclude("org/apache/http/**") // Since GeoIP's web client isn't used, this can be excluded
+        exclude("org/apache/commons/logging/**") // I guess logging is used when web client is used
+
+        exclude("org/apache/commons/codec/digest/**") // Nothing uses digest there
+        exclude("org/apache/commons/codec/language/**") // Nothing uses language text files
+
+        //exclude("org/apache/commons/compress/archivers/zip/**") // Note: Apparently this is needed for tar.gz unpacking
+        exclude("org/apache/commons/compress/compressors/**") // No compressing needed
+        // Exclude unneeded archivers
+        exclude("org/apache/commons/compress/archivers/jar/**")
+        exclude("org/apache/commons/compress/archivers/sevenz/**")
+        exclude("org/apache/commons/compress/archivers/dump/**")
+        exclude("org/apache/commons/compress/archivers/cpio/**")
+        exclude("org/apache/commons/compress/archivers/ar/**")
+        exclude("org/apache/commons/compress/archivers/arj/**")
+
+        // Exclude unneeded list
+        exclude("mozilla/public-suffix-list.txt")
     }
 }
 
