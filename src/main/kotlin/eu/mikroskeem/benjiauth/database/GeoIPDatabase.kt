@@ -21,7 +21,9 @@ import java.net.URL
 import java.nio.channels.Channels
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.concurrent.ExecutionException
+import java.util.Optional
+import java.util.Optional.empty
+import java.util.Optional.of
 import java.util.concurrent.TimeUnit.HOURS
 import java.util.zip.GZIPInputStream
 
@@ -35,7 +37,7 @@ private val DATABASE_URL = "http://geolite.maxmind.com/download/geoip/database/G
 class GeoIPDatabase(databaseDirectory: Path = plugin.pluginFolder): GeoIPAPI {
     private val databaseFile: Path = databaseDirectory.resolve("geoip.db")
     private val database: DatabaseReader
-    private val cache: LoadingCache<InetAddress, String>
+    private val cache: LoadingCache<InetAddress, Optional<String>>
 
     init {
         Files.createDirectories(databaseFile.parent)
@@ -62,23 +64,22 @@ class GeoIPDatabase(databaseDirectory: Path = plugin.pluginFolder): GeoIPAPI {
         }
 
         database = DatabaseReader.Builder(databaseFile.toFile()).build()
+        val loader = object: CacheLoader<InetAddress, Optional<String>>() {
+            override fun load(key: InetAddress): Optional<String> {
+                return try {
+                    of(database.country(key).country.isoCode)
+                } catch (e: AddressNotFoundException) {
+                    empty()
+                }
+            }
+        }
         cache = CacheBuilder.newBuilder()
                 .expireAfterAccess(12, HOURS)
                 .maximumSize(16384)
-                .build(CacheLoader.from { ip -> database.country(ip).country.isoCode })
+                .build(loader)
     }
 
 
-    override fun getCountryByIP(ipAddress: InetAddress): String? {
-        return try {
-            cache.get(ipAddress)
-        } catch (e: ExecutionException) {
-            if(e.cause !is AddressNotFoundException) {
-                throw e.cause!!
-            }
-            null
-        }
-    }
-
+    override fun getCountryByIP(ipAddress: InetAddress): String? = cache.get(ipAddress).map { it }.orElse(null)
     override fun getCountryByIP(ipAddress: String): String? = getCountryByIP(InetAddress.getByName(ipAddress))
 }
