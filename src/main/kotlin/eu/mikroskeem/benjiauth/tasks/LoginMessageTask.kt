@@ -18,11 +18,14 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Mark Vainomaa
  */
-// TODO: this task has issues with repeating period right now
 class LoginMessageTask(private val player: ProxiedPlayer): Task() {
     override val delay: Long = 0
-    override val period: Long get() = config.authentication.loginNoticeInterval
+    override val period: Long = 1
     override val timeUnit: TimeUnit = TimeUnit.SECONDS
+
+    private val interval = config.authentication.loginNoticeInterval
+    private var intervalCountdown = 0L
+    private var timeout = config.authentication.authTimeout
 
     override fun run() {
         if(!player.isConnected || player.isLoggedIn) {
@@ -30,11 +33,17 @@ class LoginMessageTask(private val player: ProxiedPlayer): Task() {
             return
         }
 
-        if(currentUnixTimestamp - taskStart >= config.authentication.authTimeout) {
+        if(timeout <= 0) {
             player.authKickMessage(messages.login.loginTimeout)
             return
         }
 
-        player.authMessage(messages.login.pleaseLogin)
+        if(intervalCountdown <= 0) {
+            player.authMessage(messages.login.pleaseLogin)
+            intervalCountdown = interval
+        }
+
+        timeout--
+        intervalCountdown--
     }
 }

@@ -20,23 +20,32 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Mark Vainomaa
  */
-// TODO: this task has issues with repeating period right now
 class RegisterMessageTask(private val player: ProxiedPlayer): Task() {
     override val delay: Long = 0
-    override val period: Long get() = config.registration.registerNoticeInterval
+    override val period: Long = 1
     override val timeUnit: TimeUnit = TimeUnit.SECONDS
 
+    private val interval = config.registration.registerNoticeInterval
+    private var intervalCountdown = 0L
+    private var timeout = config.authentication.authTimeout
+
     override fun run() {
-        if(!player.isConnected || player.isRegistered) {
+        if(!player.isConnected || player.isLoggedIn) {
             cancel()
             return
         }
 
-        if(currentUnixTimestamp - taskStart > config.authentication.authTimeout) {
+        if(timeout <= 0) {
             player.authKickMessage(messages.register.registerTimeout)
             return
         }
 
-        player.authMessage(messages.register.pleaseRegister)
+        if(intervalCountdown <= 0) {
+            player.authMessage(messages.register.pleaseRegister)
+            intervalCountdown = interval
+        }
+
+        timeout--
+        intervalCountdown--
     }
 }
