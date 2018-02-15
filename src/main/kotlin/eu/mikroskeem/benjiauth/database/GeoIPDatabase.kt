@@ -21,6 +21,7 @@ import java.net.URL
 import java.nio.channels.Channels
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit.HOURS
 import java.util.zip.GZIPInputStream
 
@@ -68,6 +69,16 @@ class GeoIPDatabase(databaseDirectory: Path = plugin.pluginFolder): GeoIPAPI {
     }
 
 
-    override fun getCountryByIP(ipAddress: InetAddress): String? = try { cache.get(ipAddress) } catch (e: AddressNotFoundException) { null }
+    override fun getCountryByIP(ipAddress: InetAddress): String? {
+        return try {
+            cache.get(ipAddress)
+        } catch (e: ExecutionException) {
+            if(e.cause !is AddressNotFoundException) {
+                throw e.cause!!
+            }
+            null
+        }
+    }
+
     override fun getCountryByIP(ipAddress: String): String? = getCountryByIP(InetAddress.getByName(ipAddress))
 }
