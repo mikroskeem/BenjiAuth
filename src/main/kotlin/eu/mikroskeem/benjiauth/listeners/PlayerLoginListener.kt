@@ -23,6 +23,7 @@ import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.connection.ProxiedPlayer
+import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
@@ -112,5 +113,12 @@ class PlayerLoginListener: Listener {
 
         // Mark this listener executed for player
         firstConnectDone.add(player)
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    fun on(event: PlayerDisconnectEvent) {
+        // Mark player logged out
+        if(event.player.isRegistered)
+            event.player.logout(clearSession = false)
     }
 }
