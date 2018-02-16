@@ -18,25 +18,33 @@ import java.util.Objects;
  */
 @DatabaseTable(tableName = "users")
 public class User {
-    @DatabaseField(id = true, columnName = "username", canBeNull = false, width = 16)
+    public final static String USERNAME_FIELD = "username";
+    public final static String PASSWORD_FIELD = "password";
+    public final static String REGISTER_TIMESTAMP_FIELD = "register_timestamp";
+    public final static String REGISTERED_IP_ADDRESS_FIELD = "registered_ip_address";
+    public final static String LOGGED_IN_FIELD = "logged_in";
+    public final static String LAST_LOGIN_FIELD = "last_login";
+    public final static String LAST_IP_ADDRESS_FIELD = "last_ip_address";
+
+    @DatabaseField(id = true, columnName = USERNAME_FIELD, canBeNull = false, width = 16)
     private String username;
 
-    @DatabaseField(columnName = "password", canBeNull = false)
+    @DatabaseField(columnName = PASSWORD_FIELD, canBeNull = false)
     private String password;
 
-    @DatabaseField(columnName = "registerTimestamp", canBeNull = false)
+    @DatabaseField(columnName = REGISTER_TIMESTAMP_FIELD, canBeNull = false)
     private Long registerTimestamp;
 
-    @DatabaseField(columnName = "registeredIPAddress", canBeNull = false)
+    @DatabaseField(columnName = REGISTERED_IP_ADDRESS_FIELD, canBeNull = false)
     private String registeredIPAddress;
 
-    @DatabaseField(columnName = "loggedIn", canBeNull = false)
+    @DatabaseField(columnName = LOGGED_IN_FIELD, canBeNull = false)
     private Boolean loggedIn;
 
-    @DatabaseField(columnName = "lastLogin")
+    @DatabaseField(columnName = LAST_LOGIN_FIELD)
     private Long lastLogin;
 
-    @DatabaseField(columnName = "lastIPAddress")
+    @DatabaseField(columnName = LAST_IP_ADDRESS_FIELD)
     private String lastIPAddress;
 
     User() {}
