@@ -145,4 +145,12 @@ public interface LoginManager {
      * @param player Player
      */
     void markUserReady(@NotNull ProxiedPlayer player);
+
+    /**
+     * Gets amount of registrations for given IP address
+     *
+     * @param ipAddress IP address to query
+     * @return Count of registrations for given IP address
+     */
+    long getRegistrations(@NotNull String ipAddress);
 }

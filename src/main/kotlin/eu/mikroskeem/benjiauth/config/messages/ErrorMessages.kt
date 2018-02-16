@@ -37,4 +37,8 @@ class ErrorMessages {
     @Setting(value = "unknown-subcommand", comment = "Sent when unknown subcommand is used")
     var unknownSubcommand = "{prefix}&cTundmatu alamkäsklus &3{subcommand}&c!"
         private set
+
+    @Setting(value = "too-many-registrations", comment = "Sent when player's IP has too many registered users")
+    var tooManyRegistrationsPerIP = "{prefix}Sellel IP aadressil on liiga palju kontosid registreeritud!"
+        private set
 }

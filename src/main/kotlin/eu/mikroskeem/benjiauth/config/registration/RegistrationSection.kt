@@ -31,4 +31,9 @@ class RegistrationSection {
             "This value cannot be under 1!")
     var registerNoticeInterval: Long = 10
         private set
+
+    @Setting(value = "max-registrations-per-ip", comment = "How many accounts should be allowed to register per IP" +
+            " address")
+    var maxRegstrationsPerIP = 1
+        private set
 }

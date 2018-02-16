@@ -39,6 +39,8 @@ fun ProxiedPlayer.movePlayer(target: ServerInfo, retry: Boolean = false,
 
 fun InetSocketAddress.toIPString(): String = address.hostAddress
 
+val ProxiedPlayer.ipAddress: String get() = address.toIPString()
+
 fun InetSocketAddress.isAllowedToJoin(): Boolean {
     if(config.country.allowedCountries.isEmpty())
         return true

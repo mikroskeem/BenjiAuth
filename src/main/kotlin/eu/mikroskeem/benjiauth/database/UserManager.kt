@@ -148,6 +148,10 @@ class UserManager: LoginManager {
         readyUsers.add(player)
     }
 
+    override fun getRegistrations(ipAddress: String): Long = dao.queryBuilder().where()
+            .eq(User.REGISTERED_IP_ADDRESS_FIELD, ipAddress)
+            .countOf()
+
     // Shuts user manager down
     fun shutdown() {
         hikari.close()

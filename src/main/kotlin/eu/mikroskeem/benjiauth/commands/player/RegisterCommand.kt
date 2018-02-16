@@ -9,10 +9,12 @@ package eu.mikroskeem.benjiauth.commands.player
 import eu.mikroskeem.benjiauth.COMMAND_REGISTER
 import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.config
+import eu.mikroskeem.benjiauth.ipAddress
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.register
+import eu.mikroskeem.benjiauth.userManager
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
@@ -30,9 +32,9 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
         if(player.isRegistered) {
             // Tell if player is already registered
             player.authMessage(messages.register.alreadyRegistered)
-        } else if(player.isLoggedIn) {
-            // Tell if player is already logged in
-            player.authMessage(messages.login.alreadyLoggedIn)
+        } else if(userManager.getRegistrations(player.ipAddress) >= config.registration.maxRegstrationsPerIP) {
+            // Tell that player has too many registrations for this IP address
+            player.authMessage(messages.error.tooManyRegistrationsPerIP)
         } else if(args.size == 2) {
             val password = args[0]
             val confirmPassword = args[1]
