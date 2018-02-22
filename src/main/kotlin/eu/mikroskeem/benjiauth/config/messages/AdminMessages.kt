@@ -25,4 +25,8 @@ class AdminMessages {
     @Setting(value = "unregistered-successfully", comment = "Sent when admin unregisters player successfully")
     var unregisteredSuccessfully = "{prefix}Kasutaja eemaldatud andmebaasist!"
         private set
+
+    @Setting(value = "no-permission", comment = "Sent when player has no permission for given action")
+    var noPermission = "{prefix}Sul pole selleks piisavalt õiguseid!"
+        private set
 }

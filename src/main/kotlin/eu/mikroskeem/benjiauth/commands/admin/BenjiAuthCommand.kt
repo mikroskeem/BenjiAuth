@@ -6,6 +6,8 @@
 
 package eu.mikroskeem.benjiauth.commands.admin
 
+import eu.mikroskeem.benjiauth.ADMIN_ACTION_RELOAD
+import eu.mikroskeem.benjiauth.ADMIN_ACTION_UNREGISTER
 import eu.mikroskeem.benjiauth.COMMAND_BENJIAUTH
 import eu.mikroskeem.benjiauth.authMessage
 import eu.mikroskeem.benjiauth.messages
@@ -25,24 +27,41 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
         if(args.isNotEmpty()) {
             when(args[0]) {
                 "reload" -> {
+                    // Check if player has permission
+                    if(!sender.hasPermission(ADMIN_ACTION_RELOAD)) {
+                        sender.authMessage(messages.admin.noPermission)
+                        return
+                    }
+
+                    // Reload configuration
                     plugin.reloadConfig()
                     sender.authMessage(messages.admin.reloadSuccess)
                 }
                 "unregister" -> {
+                    // Check if player has permission
+                    if(!sender.hasPermission(ADMIN_ACTION_UNREGISTER)) {
+                        sender.authMessage(messages.admin.noPermission)
+                        return
+                    }
+
+                    // Check if username argument is present
                     val username = args.getOrNull(1) ?: run {
                         sender.authMessage(messages.command.unregister)
                         return
                     }
 
+                    // Check if username is registered
                     if(!userManager.isRegistered(username)) {
                         sender.authMessage(messages.admin.noSuchRegisteredUser.replace("{player}", username))
                         return
                     }
 
+                    // Unregister user
                     userManager.unregisterUser(username)
                     sender.authMessage(messages.admin.unregisteredSuccessfully)
                 }
                 else -> {
+                    // Send help message
                     sender.authMessage(messages.error.unknownSubcommand.replace("{subcommand}", args[0]))
                 }
             }
