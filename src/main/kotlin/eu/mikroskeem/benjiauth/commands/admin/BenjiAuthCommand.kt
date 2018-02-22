@@ -15,6 +15,7 @@ import eu.mikroskeem.benjiauth.userManager
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.plugin.Command
 import net.md_5.bungee.api.plugin.TabExecutor
+import java.util.Locale
 
 /**
  * @author Mark Vainomaa
@@ -51,10 +52,13 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
     }
 
     override fun onTabComplete(sender: CommandSender, args: Array<out String>): Iterable<String> {
-        return when {
+        val availableCompletions = when {
             args.size == 2 && args[0].equals("unregister", ignoreCase = true) -> proxy.players.map { it.name }
             args.size <= 1 -> listOf("reload", "unregister")
-            else -> emptyList()
+            else -> return emptyList()
         }
+
+        val arg = args.last()
+        return availableCompletions.filter { it.length >= arg.length && it.toLowerCase(Locale.ENGLISH).startsWith(arg) }.sorted()
     }
 }
