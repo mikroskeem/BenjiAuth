@@ -119,6 +119,6 @@ class PlayerLoginListener: Listener {
     fun on(event: PlayerDisconnectEvent) {
         // Mark player logged out
         if(event.player.isRegistered)
-            event.player.logout(clearSession = false)
+            event.player.logout(clearSession = false, keepReady = false)
     }
 }

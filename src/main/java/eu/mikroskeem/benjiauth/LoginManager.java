@@ -94,12 +94,26 @@ public interface LoginManager {
     void loginUser(@NotNull ProxiedPlayer player, boolean force);
 
     /**
-     * Logs player out without clearing session
+     * Logs player out without clearing session and keeping one "ready"
      *
      * @param player Player to mark logged out
+     * @see #isUserReady(ProxiedPlayer)
+     * @see #markUserReady(ProxiedPlayer)
      */
     default void logoutUser(@NotNull ProxiedPlayer player) {
         logoutUser(player, false);
+    }
+
+    /**
+     * Logs player out, keeping one "ready"
+     *
+     * @param player Player to mark logged out
+     * @param clearSession Whether to clear session as well or not
+     * @see #isUserReady(ProxiedPlayer)
+     * @see #markUserReady(ProxiedPlayer)
+     */
+    default void logoutUser(@NotNull ProxiedPlayer player, boolean clearSession) {
+        logoutUser(player, clearSession, true);
     }
 
     /**
@@ -107,8 +121,12 @@ public interface LoginManager {
      *
      * @param player Player to mark logged out
      * @param clearSession Whether to clear session as well or not
+     * @param keepReady Whether to keep "ready" status or not, see {@link #isUserReady(ProxiedPlayer)}
+     *                   Falsy value is only useful when player is disconnecting from server
+     * @see #isUserReady(ProxiedPlayer)
+     * @see #markUserReady(ProxiedPlayer)
      */
-    void logoutUser(@NotNull ProxiedPlayer player, boolean clearSession);
+    void logoutUser(@NotNull ProxiedPlayer player, boolean clearSession, boolean keepReady);
 
     /**
      * Checks registered player password in database against {@code password}

@@ -119,7 +119,7 @@ class UserManager: LoginManager {
         }
     }
 
-    override fun logoutUser(player: ProxiedPlayer, clearSession: Boolean) {
+    override fun logoutUser(player: ProxiedPlayer, clearSession: Boolean, keepReady: Boolean) {
         findUser(player.name).apply {
             loggedIn = false
             if(clearSession) {
@@ -127,6 +127,10 @@ class UserManager: LoginManager {
                 lastIPAddress = null
             }
             dao.update(this)
+        }
+
+        if(!keepReady) {
+            readyUsers.removeIf { it == player }
         }
 
         if(player.isReady) {

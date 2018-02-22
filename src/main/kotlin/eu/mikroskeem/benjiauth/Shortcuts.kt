@@ -58,7 +58,7 @@ fun ProxiedPlayer.login(password: String): Boolean = if(checkPassword(password))
 fun ProxiedPlayer.loginWithoutPassword(forceful: Boolean = false) = userManager.loginUser(this, forceful)
 fun ProxiedPlayer.register(password: String) = userManager.registerUser(this, password)
 fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePassword(this, newPassword)
-fun ProxiedPlayer.logout(clearSession: Boolean = true) = userManager.logoutUser(this, clearSession)
+fun ProxiedPlayer.logout(clearSession: Boolean = true, keepReady: Boolean = true) = userManager.logoutUser(this, clearSession, keepReady)
 fun ProxiedPlayer.markReady() = userManager.markUserReady(this)
 
 inline fun getAuthServer(failure: () -> Unit): ServerInfo {
