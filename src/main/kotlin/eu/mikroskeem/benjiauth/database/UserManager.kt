@@ -115,7 +115,7 @@ class UserManager: LoginManager {
         if(force) forcefullyLoggedIn.add(player)
 
         if(player.isReady) {
-            pluginManager.callEvent(PlayerLoginEvent(player))
+            pluginManager.callEvent(PlayerLoginEvent(player, force))
         }
     }
 

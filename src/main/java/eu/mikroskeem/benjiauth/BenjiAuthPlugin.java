@@ -28,7 +28,7 @@ public interface BenjiAuthPlugin {
     /**
      * Gets plugin configuration
      *
-     * @return Instance of {@link Benji}zzzzzz
+     * @return Instance of {@link Benji}
      */
     @NotNull
     Benji getConfig();
