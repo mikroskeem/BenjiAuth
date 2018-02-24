@@ -115,7 +115,7 @@ public class User {
      * @param password Password BCrypt hash
      */
     public void setPassword(@NotNull String password) {
-        Preconditions.checkArgument(password.isEmpty(), "Password cannot be set empty!");
+        Preconditions.checkArgument(!password.isEmpty(), "Password cannot be set empty!");
         this.password = password;
     }
 
@@ -154,7 +154,7 @@ public class User {
      *
      * @param loggedIn Whether player is logged in or not
      */
-    public void setLoggedIn(@NotNull Boolean loggedIn) {
+    public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
     }
 
