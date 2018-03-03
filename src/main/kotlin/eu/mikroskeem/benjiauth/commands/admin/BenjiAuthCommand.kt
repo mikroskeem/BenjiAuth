@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.commands.admin
 
+import eu.mikroskeem.benjiauth.ADMIN_ACTION_REGISTER
 import eu.mikroskeem.benjiauth.ADMIN_ACTION_RELOAD
 import eu.mikroskeem.benjiauth.ADMIN_ACTION_UNREGISTER
 import eu.mikroskeem.benjiauth.COMMAND_BENJIAUTH
@@ -14,6 +15,7 @@ import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.proxy
 import eu.mikroskeem.benjiauth.userManager
+import eu.mikroskeem.benjiauth.validatePassword
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.plugin.Command
 import net.md_5.bungee.api.plugin.TabExecutor
@@ -37,6 +39,38 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
                     plugin.reloadConfig()
                     sender.authMessage(messages.admin.reloadSuccess)
                 }
+                "register" -> {
+                    // Check if player has permission
+                    if(!sender.hasPermission(ADMIN_ACTION_REGISTER)) {
+                        sender.authMessage(messages.admin.noPermission)
+                        return
+                    }
+
+                    // Check if arguments are present
+                    val username = args.getOrNull(1) ?: run {
+                        sender.authMessage(messages.command.adminRegister)
+                        return
+                    }
+
+                    val password = args.getOrNull(2) ?: run {
+                        sender.authMessage(messages.command.adminRegister)
+                        return
+                    }
+
+                    // Check if username is registered
+                    if(userManager.isRegistered(username)) {
+                        sender.authMessage(messages.admin.userAlreadyRegistered.replace("{player}", username))
+                        return
+                    }
+
+                    // Check if password is valid
+                    if(!sender.validatePassword(username, password))
+                        return
+
+                    // Register user
+                    userManager.registerUser(username, password)
+                    sender.authMessage(messages.admin.registeredSuccessfully)
+                }
                 "unregister" -> {
                     // Check if player has permission
                     if(!sender.hasPermission(ADMIN_ACTION_UNREGISTER)) {
@@ -46,7 +80,7 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
 
                     // Check if username argument is present
                     val username = args.getOrNull(1) ?: run {
-                        sender.authMessage(messages.command.unregister)
+                        sender.authMessage(messages.command.adminUnregister)
                         return
                     }
 
@@ -73,7 +107,8 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
     override fun onTabComplete(sender: CommandSender, args: Array<out String>): Iterable<String> {
         val availableCompletions = when {
             args.size == 2 && args[0].equals("unregister", ignoreCase = true) -> proxy.players.map { it.name }
-            args.size <= 1 -> listOf("reload", "unregister")
+            args.size == 2 && args[0].equals("register", ignoreCase = true) -> proxy.players.map { it.name }
+            args.size <= 1 -> listOf("reload", "unregister", "register")
             else -> return emptyList()
         }
 

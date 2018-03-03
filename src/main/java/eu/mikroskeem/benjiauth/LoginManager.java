@@ -38,6 +38,14 @@ public interface LoginManager {
     void registerUser(@NotNull ProxiedPlayer player, @NotNull String password);
 
     /**
+     * Registers a new player
+     *
+     * @param username Player username
+     * @param password Password
+     */
+    void registerUser(@NotNull String username, @NotNull String password);
+
+    /**
      * Unregisters player from database
      *
      * @param player Player to unregister

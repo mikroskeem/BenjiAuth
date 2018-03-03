@@ -15,6 +15,7 @@ const val COMMAND_LOGOUT = "benjiauth.player.logout"
 const val COMMAND_CPW = "benjiauth.player.changepassword"
 
 const val COMMAND_BENJIAUTH = "benjiauth.command.benjiauth"
-const val ADMIN_ACTION_RELOAD = "benjiauth.admin.reload"
 const val ADMIN_ACTION_FORCELOGIN = "benjiauth.admin.forcelogin"
+const val ADMIN_ACTION_REGISTER = "benjiauth.admin.register"
+const val ADMIN_ACTION_RELOAD = "benjiauth.admin.reload"
 const val ADMIN_ACTION_UNREGISTER = "benjiauth.admin.unregister"

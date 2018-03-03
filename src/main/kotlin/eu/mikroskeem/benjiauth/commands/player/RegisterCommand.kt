@@ -15,6 +15,7 @@ import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.register
 import eu.mikroskeem.benjiauth.userManager
+import eu.mikroskeem.benjiauth.validatePassword
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
@@ -46,20 +47,8 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
                 // Check password length and username usage
                 // Note: if user sets configuration values to something unreasonable, then
                 //       I *will* tell user that PEBKAC
-                config.registration.password.run {
-                    if(minimumLength > password.length) {
-                        player.authMessage(messages.password.tooShort.replace("{min}", "$minimumLength"))
-                        return
-                    } else if(maximumLength < password.length) {
-                        player.authMessage(messages.password.tooLong.replace("{max}", "$maximumLength"))
-                        return
-                    }
-
-                    if(config.registration.password.disallowUsingUsername && password == player.name) {
-                        player.authMessage(messages.password.usernameCannotBeUsed)
-                        return
-                    }
-                }
+                if(!player.validatePassword(password))
+                    return
 
                 // Register player
                 player.register(password)

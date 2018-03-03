@@ -132,11 +132,27 @@ public class User {
     /**
      * Gets player registration IP address
      *
+     * Note: string *may* be empty only if user is force registered by server or administrator. This gets updated
+     *       next time when player logs in
+     *
      * @return Player registration IP address
      */
     @NotNull
     public String getRegisteredIPAddress() {
         return registeredIPAddress;
+    }
+
+    /**
+     * Sets player registration IP address.
+     *
+     * Note: use only if registration IP address is not set (empty string).
+     *
+     * @param registeredIPAddress Player registration IP address
+     */
+    public void setRegisteredIPAddress(@NotNull String registeredIPAddress) {
+        Preconditions.checkArgument(this.registeredIPAddress.isEmpty(), "Registration IP address is already set!");
+        Preconditions.checkArgument(!registeredIPAddress.isEmpty(), "Registration IP address cannot be set empty!");
+        this.registeredIPAddress = registeredIPAddress;
     }
 
     /**

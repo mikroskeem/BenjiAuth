@@ -14,6 +14,7 @@ import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
+import eu.mikroskeem.benjiauth.validatePassword
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
@@ -46,20 +47,8 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
             val newPassword = args[1]
 
             // Check password length and username usage
-            config.registration.password.run {
-                if(minimumLength > newPassword.length) {
-                    player.authMessage(messages.password.tooShort.replace("{min}", "$minimumLength"))
-                    return
-                } else if(maximumLength < newPassword.length) {
-                    player.authMessage(messages.password.tooLong.replace("{max}", "$maximumLength"))
-                    return
-                }
-
-                if(config.registration.password.disallowUsingUsername && newPassword == player.name) {
-                    player.authMessage(messages.password.usernameCannotBeUsed)
-                    return
-                }
-            }
+            if(!player.validatePassword(newPassword))
+                return
 
             // Check if password matches
             if(!player.checkPassword(oldPassword)) {

@@ -61,6 +61,8 @@ fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePasswo
 fun ProxiedPlayer.logout(clearSession: Boolean = true, keepReady: Boolean = true) = userManager.logoutUser(this, clearSession, keepReady)
 fun ProxiedPlayer.markReady() = userManager.markUserReady(this)
 
+fun String.asPlayer(): ProxiedPlayer? = proxy.players.find { it.name == this }
+
 inline fun getAuthServer(failure: () -> Unit): ServerInfo {
     return config.servers.authServer.takeUnless { it.isEmpty() }?.run(::findServer) ?: run {
         failure()

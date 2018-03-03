@@ -12,6 +12,7 @@ import com.j256.ormlite.jdbc.DataSourceConnectionSource
 import com.j256.ormlite.table.TableUtils
 import com.zaxxer.hikari.HikariDataSource
 import eu.mikroskeem.benjiauth.LoginManager
+import eu.mikroskeem.benjiauth.asPlayer
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.currentUnixTimestamp
 import eu.mikroskeem.benjiauth.database.models.User
@@ -77,6 +78,24 @@ class UserManager: LoginManager {
         }
     }
 
+    override fun registerUser(username: String, password: String) {
+        // First check if registrable user is online, use right method if that's in case
+        username.asPlayer()?.let { player -> registerUser(player, password); return }
+
+        findUserSafe(username)?.run { throw IllegalStateException("Player $username is already registered!") }
+        val currentTime = currentUnixTimestamp
+
+        // Register user
+        dao.create(User(
+                username, BCrypt.hashpw(password, genSalt()),
+                currentTime,
+                "", // See javadoc for User#getRegisteredIPAddress()
+                false,
+                null,
+                null
+        ))
+    }
+
     override fun unregisterUser(player: ProxiedPlayer) {
         unregisterUser(player.name)
     }
@@ -110,6 +129,12 @@ class UserManager: LoginManager {
             loggedIn = true
             lastIPAddress = player.address.toIPString()
             lastLogin = currentUnixTimestamp
+
+            // Update registered IP address if empty
+            if(registeredIPAddress.isEmpty()) {
+                registeredIPAddress = lastIPAddress!!
+            }
+
             dao.update(this)
         }
         if(force) forcefullyLoggedIn.add(player)

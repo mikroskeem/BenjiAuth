@@ -34,11 +34,16 @@ class CommandUsages {
     var benjiauthAdmin = """
         {prefix}BenjiAuth
         {prefix}Käsud:
+        {prefix}- &3/benjiauth register &8<&3kasutajanimi&8> <&3parool&8>&7 - registreerib mängija
         {prefix}- &3/benjiauth reload &7- taaslaeb plugina seadistuse
         {prefix}- &3/benjiauth unregister &8<&3kasutajanimi&8> &7- eemaldab mängija andmebaasist ja logib välja, kui mängija on serveris
     """.trimIndent()
 
-    @Setting(value = "admin-help-logout", comment = "/benjiauth unregister help")
-    var unregister = "{prefix}Kasutamine: &3/benjiauth unregister &8<&3kasutajanimi&8>"
+    @Setting(value = "admin-help-unregister", comment = "/benjiauth unregister help")
+    var adminUnregister = "{prefix}Kasutamine: &3/benjiauth unregister &8<&3kasutajanimi&8>"
+        private set
+
+    @Setting(value = "admin-help-forceregister", comment = "/benjiauth register help")
+    var adminRegister = "{prefix}Kasutamine: &3/benjiauth register &8<&3kasutajanimi&8> <&3parool&8>"
         private set
 }
