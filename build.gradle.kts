@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.2.10"
+    kotlin("jvm") version "1.2.21"
     id("net.minecrell.licenser") version "0.3"
     id("net.minecrell.plugin-yml.bungee") version "0.2.1"
     id("com.github.johnrengelman.shadow") version "2.0.2"
@@ -7,7 +7,6 @@ plugins {
 }
 
 val gradleWrapperVersion: String by extra
-val kotlinVersion: String by extra
 val waterfallApiVersion: String by extra
 val configurateVersion: String by extra
 val hikariVersion: String by extra
@@ -35,7 +34,7 @@ dependencies {
     compileOnly("io.github.waterfallmc:waterfall-api:$waterfallApiVersion")
     compileOnly(rootProject.files("lib/FastLogin.jar"))
 
-    implementation(kotlin("stdlib-jdk8", kotlinVersion))
+    implementation(kotlin("stdlib-jdk8"))
     implementation("ninja.leaping.configurate:configurate-hocon:$configurateVersion") {
         exclude(module = "guava")
     }
