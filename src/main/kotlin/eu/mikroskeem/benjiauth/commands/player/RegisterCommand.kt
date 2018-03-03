@@ -7,10 +7,9 @@
 package eu.mikroskeem.benjiauth.commands.player
 
 import eu.mikroskeem.benjiauth.COMMAND_REGISTER
-import eu.mikroskeem.benjiauth.authMessage
+import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.ipAddress
-import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.register
@@ -26,23 +25,23 @@ import net.md_5.bungee.api.plugin.Command
 class RegisterCommand: Command("register", COMMAND_REGISTER) {
     override fun execute(sender: CommandSender, args: Array<out String>) {
         val player = sender as? ProxiedPlayer ?: run {
-            sender.authMessage(messages.error.inGameUseOnly)
+            sender.message(messages.error.inGameUseOnly)
             return
         }
 
         if(player.isRegistered) {
             // Tell if player is already registered
-            player.authMessage(messages.register.alreadyRegistered)
+            player.message(messages.register.alreadyRegistered)
         } else if(userManager.getRegistrations(player.ipAddress) >= config.registration.maxRegstrationsPerIP) {
             // Tell that player has too many registrations for this IP address
-            player.authMessage(messages.error.tooManyRegistrationsPerIP)
+            player.message(messages.error.tooManyRegistrationsPerIP)
         } else if(args.size == 2) {
             val password = args[0]
             val confirmPassword = args[1]
 
             // Check if passwords don't match
             if(password != confirmPassword) {
-                player.authMessage(messages.password.dontMatch)
+                player.message(messages.password.dontMatch)
             } else {
                 // Check password length and username usage
                 // Note: if user sets configuration values to something unreasonable, then
@@ -55,14 +54,14 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
 
                 // If player should be logged in after registering
                 if(config.registration.loginAfterRegister) {
-                    player.authMessage(messages.register.registered)
+                    player.message(messages.register.registered)
                 } else {
-                    player.authMessage(messages.register.registeredAndMustLogin)
+                    player.message(messages.register.registeredAndMustLogin)
                 }
             }
         } else {
             // Send help
-            player.authMessage(messages.command.register)
+            player.message(messages.command.register)
         }
     }
 }

@@ -43,15 +43,15 @@ fun CommandSender.validatePassword(username: String, password: String): Boolean 
     val pwConfig = config.registration.password
     return when(checkPassword(username, password)) {
         TOO_SHORT -> {
-            authMessage(messages.password.tooShort.replace("{min}", "${pwConfig.minimumLength}"))
+            message(messages.password.tooShort.replace("{min}", "${pwConfig.minimumLength}"))
             false
         }
         TOO_LONG -> {
-            authMessage(messages.password.tooLong.replace("{max}", "${pwConfig.maximumLength}"))
+            message(messages.password.tooLong.replace("{max}", "${pwConfig.maximumLength}"))
             false
         }
         USERNAME -> {
-            authMessage(messages.password.usernameCannotBeUsed)
+            message(messages.password.usernameCannotBeUsed)
             false
         }
         OKAY -> true

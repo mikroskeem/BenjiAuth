@@ -6,7 +6,7 @@
 
 package eu.mikroskeem.benjiauth.listeners
 
-import eu.mikroskeem.benjiauth.authMessage
+import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
@@ -36,15 +36,15 @@ class ChatListener: Listener {
                     return
 
                 if(!player.isRegistered) {
-                    player.authMessage(messages.register.mustRegisterBeforeUsingCommands)
+                    player.message(messages.register.mustRegisterBeforeUsingCommands)
                 } else if(!player.isLoggedIn) {
-                    player.authMessage(messages.login.mustLoginBeforeUsingCommands)
+                    player.message(messages.login.mustLoginBeforeUsingCommands)
                 }
             } else {
                 if(!player.isRegistered) {
-                    player.authMessage(messages.register.mustRegisterBeforeChatting)
+                    player.message(messages.register.mustRegisterBeforeChatting)
                 } else if(!player.isLoggedIn) {
-                    player.authMessage(messages.login.mustLoginBeforeChatting)
+                    player.message(messages.login.mustLoginBeforeChatting)
                 }
             }
 

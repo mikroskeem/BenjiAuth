@@ -6,14 +6,11 @@
 
 package eu.mikroskeem.benjiauth.tasks
 
-import eu.mikroskeem.benjiauth.authKickMessage
-import eu.mikroskeem.benjiauth.authMessage
+import eu.mikroskeem.benjiauth.kickWithMessage
+import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
-import eu.mikroskeem.benjiauth.currentUnixTimestamp
 import eu.mikroskeem.benjiauth.isLoggedIn
-import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
-import eu.mikroskeem.benjiauth.processMessage
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import java.util.concurrent.TimeUnit
 
@@ -36,12 +33,12 @@ class RegisterMessageTask(private val player: ProxiedPlayer): Task() {
         }
 
         if(timeout <= 0) {
-            player.authKickMessage(messages.register.registerTimeout)
+            player.kickWithMessage(messages.register.registerTimeout)
             return
         }
 
         if(intervalCountdown <= 0) {
-            player.authMessage(messages.register.pleaseRegister)
+            player.message(messages.register.pleaseRegister)
             intervalCountdown = interval
         }
 

@@ -7,14 +7,13 @@
 package eu.mikroskeem.benjiauth.commands.player
 
 import eu.mikroskeem.benjiauth.COMMAND_LOGIN
-import eu.mikroskeem.benjiauth.authKickMessage
-import eu.mikroskeem.benjiauth.authMessage
+import eu.mikroskeem.benjiauth.kickWithMessage
+import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.login
 import eu.mikroskeem.benjiauth.messages
-import eu.mikroskeem.benjiauth.processMessage
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
@@ -30,19 +29,19 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
 
     override fun execute(sender: CommandSender, args: Array<out String>) {
         val player = sender as? ProxiedPlayer ?: run {
-            sender.authMessage(messages.error.inGameUseOnly)
+            sender.message(messages.error.inGameUseOnly)
             return
         }
 
         // Tell if player is not registered
         if(!player.isRegistered) {
-            player.authMessage(messages.register.mustRegister)
+            player.message(messages.register.mustRegister)
             return
         }
 
         // Tell if player is already logged in
         if(player.isLoggedIn) {
-            player.authMessage(messages.login.alreadyLoggedIn)
+            player.message(messages.login.alreadyLoggedIn)
             return
         }
 
@@ -53,14 +52,14 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
         if(args.size == 1) {
             // Tell if player is already logged in
             if(player.isLoggedIn) {
-                player.authMessage(messages.login.alreadyLoggedIn)
+                player.message(messages.login.alreadyLoggedIn)
                 return
             }
 
             val password = args[0]
             if(player.login(password)) {
                 // Logged in!
-                player.authMessage(messages.login.loggedIn)
+                player.message(messages.login.loggedIn)
             } else {
                 // Password is wrong
                 attempts[player]!!.incrementAndGet()
@@ -68,15 +67,15 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
                 // Check login attempts count
                 if(attempts[player]!!.get() >= config.authentication.maxLoginRetries) {
                     // Kick if there are too many login attempts
-                    player.authKickMessage(messages.password.wrong)
+                    player.kickWithMessage(messages.password.wrong)
                     return
                 } else {
-                    player.authMessage(messages.password.wrong)
+                    player.message(messages.password.wrong)
                 }
             }
         } else {
             // Send help message
-            player.authMessage(messages.command.login)
+            player.message(messages.command.login)
         }
     }
 }
