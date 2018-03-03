@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("jvm") version "1.2.21"
     id("net.minecrell.licenser") version "0.3"
@@ -19,15 +21,8 @@ repositories {
     mavenLocal()
     mavenCentral()
 
-    maven {
-        name = "destroystokyo-repo"
-        setUrl("https://repo.destroystokyo.com/repository/maven-public/")
-    }
-
-    maven {
-        name = "bstats-repo"
-        setUrl("http://repo.bstats.org/content/repositories/releases/")
-    }
+    maven("https://repo.destroystokyo.com/repository/maven-public/")
+    maven("http://repo.bstats.org/content/repositories/releases/")
 }
 
 dependencies {
@@ -63,7 +58,7 @@ bungee {
     softDepends = setOf("FastLogin")
 }
 
-val shadowJar by tasks.getting(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class) {
+val shadowJar by tasks.getting(ShadowJar::class) {
     val relocations = listOf(
             "kotlin",
             "com.typesafe.config",
