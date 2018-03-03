@@ -8,17 +8,30 @@ package eu.mikroskeem.benjiauth.events;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
+import org.jetbrains.annotations.NotNull;
 
 /**
+ * Player register event
+ *
  * @author Mark Vainomaa
  */
 public final class PlayerRegisterEvent extends Event {
     private final ProxiedPlayer player;
 
-    public PlayerRegisterEvent(ProxiedPlayer player) {
+    /**
+     * Constructs new register event
+     *
+     * @param player Player who registered
+     */
+    public PlayerRegisterEvent(@NotNull ProxiedPlayer player) {
         this.player = player;
     }
 
+    /**
+     * Gets player who registered
+     *
+     * @return Player who registered
+     */
     public ProxiedPlayer getPlayer() {
         return player;
     }
