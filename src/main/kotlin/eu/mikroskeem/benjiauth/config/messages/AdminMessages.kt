@@ -34,6 +34,14 @@ class AdminMessages {
     var registeredSuccessfully = "{prefix}Kasutaja registreeritud edukalt!"
         private set
 
+    @Setting(value = "logged-in-successfully", comment = "Sent when admin force logins player successfully")
+    var loggedInSuccessfully = "{prefix}Kasutaja edukalt sisse logitud!"
+        private set
+
+    @Setting(value = "logged-out-successfully", comment = "Sent when admin logouts player successfully")
+    var loggedOutSuccessfully = "{prefix}Kasutaja edukalt välja logitud!"
+        private set
+
     @Setting(value = "no-permission", comment = "Sent when player has no permission for given action")
     var noPermission = "{prefix}Sul pole selleks piisavalt õiguseid!"
         private set

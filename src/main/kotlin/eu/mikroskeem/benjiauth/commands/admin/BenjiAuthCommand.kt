@@ -6,11 +6,18 @@
 
 package eu.mikroskeem.benjiauth.commands.admin
 
+import eu.mikroskeem.benjiauth.ADMIN_ACTION_FORCELOGIN
+import eu.mikroskeem.benjiauth.ADMIN_ACTION_LOGOUT
 import eu.mikroskeem.benjiauth.ADMIN_ACTION_REGISTER
 import eu.mikroskeem.benjiauth.ADMIN_ACTION_RELOAD
 import eu.mikroskeem.benjiauth.ADMIN_ACTION_UNREGISTER
 import eu.mikroskeem.benjiauth.COMMAND_BENJIAUTH
+import eu.mikroskeem.benjiauth.asPlayer
 import eu.mikroskeem.benjiauth.authMessage
+import eu.mikroskeem.benjiauth.isLoggedIn
+import eu.mikroskeem.benjiauth.isRegistered
+import eu.mikroskeem.benjiauth.loginWithoutPassword
+import eu.mikroskeem.benjiauth.logout
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.proxy
@@ -38,6 +45,70 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
                     // Reload configuration
                     plugin.reloadConfig()
                     sender.authMessage(messages.admin.reloadSuccess)
+                }
+                "login" -> {
+                    // Check if player has permission
+                    if(!sender.hasPermission(ADMIN_ACTION_FORCELOGIN)) {
+                        sender.authMessage(messages.admin.noPermission)
+                        return
+                    }
+
+                    // Check if username argument is present
+                    val username = args.getOrNull(1) ?: run {
+                        sender.authMessage(messages.command.adminUnregister)
+                        return
+                    }
+
+                    // Check if player is online
+                    val player = username.asPlayer() ?: run {
+                        sender.authMessage(messages.error.noSuchPlayer.replace("{player}", username))
+                        return
+                    }
+
+                    // Check if player is registered (TODO: plugin architecture does not allow logging in without having a password in database)
+                    if(!player.isRegistered) {
+                        sender.authMessage(messages.error.userNotRegistered.replace("{player}", username))
+                        return
+                    }
+
+                    // Check if player is already logged in
+                    if(player.isLoggedIn) {
+                        sender.authMessage(messages.error.userAlreadyLoggedIn.replace("{player}", username))
+                        return
+                    }
+
+                    // Force login
+                    player.loginWithoutPassword(forceful = true)
+                    sender.authMessage(messages.admin.loggedInSuccessfully)
+                }
+                "logout" -> {
+                    // Check if player has permission
+                    if(!sender.hasPermission(ADMIN_ACTION_LOGOUT)) {
+                        sender.authMessage(messages.admin.noPermission)
+                        return
+                    }
+
+                    // Check if username argument is present
+                    val username = args.getOrNull(1) ?: run {
+                        sender.authMessage(messages.command.adminUnregister)
+                        return
+                    }
+
+                    // Check if player is online
+                    val player = username.asPlayer() ?: run {
+                        sender.authMessage(messages.error.noSuchPlayer.replace("{player}", username))
+                        return
+                    }
+
+                    // Check if player is logged in
+                    if(!player.isLoggedIn) {
+                        sender.authMessage(messages.error.userNotLoggedIn.replace("{player}", username))
+                        return
+                    }
+
+                    // Log out player
+                    player.logout()
+                    sender.authMessage(messages.admin.loggedOutSuccessfully)
                 }
                 "register" -> {
                     // Check if player has permission
@@ -108,7 +179,9 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
         val availableCompletions = when {
             args.size == 2 && args[0].equals("unregister", ignoreCase = true) -> proxy.players.map { it.name }
             args.size == 2 && args[0].equals("register", ignoreCase = true) -> proxy.players.map { it.name }
-            args.size <= 1 -> listOf("reload", "unregister", "register")
+            args.size == 2 && args[0].equals("login", ignoreCase = true) -> proxy.players.map { it.name }
+            args.size == 2 && args[0].equals("logout", ignoreCase = true) -> proxy.players.map { it.name }
+            args.size <= 1 -> listOf("login", "logout", "reload", "unregister", "register")
             else -> return emptyList()
         }
 
