@@ -138,8 +138,8 @@ class UserManager: LoginManager {
         }
     }
 
-    override fun checkPassword(player: ProxiedPlayer, password: String): Boolean {
-        return findUser(player.name).let { BCrypt.checkpw(password, it.password) }
+    override fun checkPassword(player: ProxiedPlayer, password: String): Boolean = findUser(player.name).let {
+        BCrypt.checkpw(password, it.password)
     }
 
     override fun changePassword(player: ProxiedPlayer, newPassword: String) {
@@ -148,18 +148,14 @@ class UserManager: LoginManager {
 
     override fun isUserReady(player: ProxiedPlayer): Boolean = readyUsers.contains(player)
 
-    override fun markUserReady(player: ProxiedPlayer) {
-        readyUsers.add(player)
-    }
+    override fun markUserReady(player: ProxiedPlayer) { readyUsers.add(player) }
 
     override fun getRegistrations(ipAddress: String): Long = dao.queryBuilder().where()
             .eq(User.REGISTERED_IP_ADDRESS_FIELD, ipAddress)
             .countOf()
 
     // Shuts user manager down
-    fun shutdown() {
-        hikari.close()
-    }
+    fun shutdown() = hikari.close()
 
     private fun findUser(username: String): User = dao.queryForId(username) ?: throw IllegalStateException("Player $username is not registered")
     private fun findUserSafe(username: String): User? = dao.queryForId(username)
