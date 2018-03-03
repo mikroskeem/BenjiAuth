@@ -97,17 +97,18 @@ class UserManager: LoginManager {
     }
 
     override fun unregisterUser(player: ProxiedPlayer) {
-        unregisterUser(player.name)
-    }
+        dao.delete(findUser(player.name))
 
-    override fun unregisterUser(username: String) {
-        dao.delete(findUser(username))
-
-        // If player is online and marked ready, send out unregister event
-        val player = proxy.getPlayer(username) ?: return
+        // If player is marked ready, send out unregister event
         if(player.isReady) {
             pluginManager.callEvent(PlayerUnregisterEvent(player))
         }
+    }
+
+    override fun unregisterUser(username: String) {
+        username.asPlayer()?.let { player -> unregisterUser(player); return }
+
+        dao.delete(findUser(username))
     }
 
     override fun isEgilibleForSessionLogin(player: ProxiedPlayer): Boolean {
