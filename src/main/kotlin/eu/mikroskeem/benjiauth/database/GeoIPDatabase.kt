@@ -16,6 +16,7 @@ import eu.mikroskeem.benjiauth.plugin
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import java.io.FileOutputStream
+import java.net.ConnectException
 import java.net.InetAddress
 import java.net.URL
 import java.nio.channels.Channels
@@ -42,7 +43,9 @@ class GeoIPDatabase(databaseDirectory: Path = plugin.pluginFolder): GeoIPAPI {
     init {
         Files.createDirectories(databaseFile.parent)
         if(Files.notExists(databaseFile)) {
-            val urlStream = URL(DATABASE_URL).openStream()
+            val urlStream = try { URL(DATABASE_URL).openStream() } catch (e: ConnectException) {
+                throw RuntimeException("Failed to connect to $DATABASE_URL", e)
+            }
             val unpackStream = TarArchiveInputStream(GZIPInputStream(urlStream))
 
             var tarEntry: TarArchiveEntry? = unpackStream.nextTarEntry
