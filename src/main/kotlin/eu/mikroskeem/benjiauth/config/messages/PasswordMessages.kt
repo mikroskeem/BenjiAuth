@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.config.messages
 
+import eu.mikroskeem.benjiauth.Title
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
@@ -20,6 +21,11 @@ class PasswordMessages {
 
     @Setting(value = "wrong", comment = "This message gets sent when password is wrong")
     var wrong = "{prefix}&cVale parool!"
+        private set
+
+    @Setting(value = "wrong-title", comment = "This message gets sent when password is wrong. Set both title and " +
+            "subtitle empty to avoid sending it")
+    var wrongTitle = Title("", "", 20, 45, 20)
         private set
 
     @Setting(value = "wrong-old-password", comment = "This message gets sent on /changepassword when old password is wrong")
