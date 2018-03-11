@@ -18,6 +18,8 @@ import eu.mikroskeem.benjiauth.getAuthServer
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.movePlayer
 import eu.mikroskeem.benjiauth.plugin
+import eu.mikroskeem.benjiauth.resetTitle
+import eu.mikroskeem.benjiauth.shouldBeSent
 import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
@@ -30,6 +32,10 @@ import net.md_5.bungee.event.EventHandler
 class PlayerLoginStatusChangeListener: Listener {
     @EventHandler
     fun on(event: PlayerRegisterEvent) {
+        // Clear title if player got spammed with them before registering in
+        if(messages.register.pleaseRegisterTitle.shouldBeSent())
+            event.player.resetTitle()
+
         // Start login message/timeout task if player is required to log in manually after registering
         if(!config.registration.loginAfterRegister)
             LoginMessageTask(event.player).schedule()
@@ -44,6 +50,10 @@ class PlayerLoginStatusChangeListener: Listener {
         // Return if player is already in lobby server
         if(event.player.server?.info?.name == lobby.name)
             return
+
+        // Clear title if player got spammed with them before logging in
+        if(messages.login.pleaseLoginTitle.shouldBeSent())
+            event.player.resetTitle()
 
         event.player.movePlayer(lobby, retry = true) { success, e: Throwable? ->
             if(!success) {

@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.config.messages
 
+import eu.mikroskeem.benjiauth.Title
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
@@ -16,6 +17,11 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 class LoginMessages {
     @Setting(value = "please-login", comment = "This message gets sent to player repeatedly until one logs in")
     var pleaseLogin = "{prefix}Logige sisse käsuga &3/login &8<&3parool&8>"
+        private set
+
+    @Setting(value = "please-login-title", comment = "This message gets sent to player repeatedly until one gets" +
+            "registered. Set both title and subtitle empty to avoid sending it. Timings will be ignored")
+    var pleaseLoginTitle = Title("", "")
         private set
 
     @Setting(value = "must-login", comment = "This message gets sent when player is doing something while not " +

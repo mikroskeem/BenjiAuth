@@ -11,6 +11,7 @@ import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.messages
+import eu.mikroskeem.benjiauth.sendTitle
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import java.util.concurrent.TimeUnit
 
@@ -39,6 +40,7 @@ class LoginMessageTask(private val player: ProxiedPlayer): Task() {
 
         if(intervalCountdown <= 0) {
             player.message(messages.login.pleaseLogin)
+            player.sendTitle(messages.login.pleaseLoginTitle.copy(fadeIn = 0, stay = (interval * 20) + 20, fadeOut = 0))
             intervalCountdown = interval
         }
 

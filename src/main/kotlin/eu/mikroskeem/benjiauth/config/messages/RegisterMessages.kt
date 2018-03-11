@@ -6,6 +6,7 @@
 
 package eu.mikroskeem.benjiauth.config.messages
 
+import eu.mikroskeem.benjiauth.Title
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
@@ -16,6 +17,11 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 class RegisterMessages {
     @Setting(value = "please-register", comment = "This message gets sent to player repeatedly until one gets registered")
     var pleaseRegister = "{prefix}Registreerige end käsuga &3/register &8<&3parool&8> <&3parool uuesti&8>"
+        private set
+
+    @Setting(value = "please-register-title", comment = "This message gets sent to player repeatedly until one gets" +
+            "registered. Set both title and subtitle empty to avoid sending it. Timings will be ignored")
+    var pleaseRegisterTitle = Title("", "")
         private set
 
     @Setting(value = "must-register", comment = "This message gets sent when player is doing something while not " +
