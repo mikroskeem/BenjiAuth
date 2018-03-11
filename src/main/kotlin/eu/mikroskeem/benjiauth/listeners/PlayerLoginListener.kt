@@ -23,6 +23,7 @@ import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.connection.ProxiedPlayer
+import net.md_5.bungee.api.event.LoginEvent
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
@@ -74,6 +75,12 @@ class PlayerLoginListener: Listener {
                 // Note: one may ask why login is done here again. That is to update last IP address and
                 //       timestamp
                 player.loginWithoutPassword()
+                return
+            }
+        } else {
+            // Kick player if new registrations are disabled and plugin is configured to do so
+            if(config.registration.newRegistrationsDisabled && config.registration.kickIfRegistrationsDisabled) {
+                player.kickWithMessage(messages.register.newRegistrationsDisabled)
                 return
             }
         }

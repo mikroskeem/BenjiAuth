@@ -52,6 +52,7 @@ val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLogg
 val ProxiedPlayer.isEgilibleForSession: Boolean get() = userManager.isEgilibleForSessionLogin(this)
 val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefullyLoggedIn(this)
 val ProxiedPlayer.isReady: Boolean get() = userManager.isUserReady(this)
+val ProxiedPlayer.registrationsForIP: Long get() = userManager.getRegistrations(this.ipAddress)
 
 fun ProxiedPlayer.checkPassword(password: String) = userManager.checkPassword(this, password)
 fun ProxiedPlayer.login(password: String): Boolean = if(checkPassword(password)) { userManager.loginUser(this); true } else false
@@ -60,6 +61,7 @@ fun ProxiedPlayer.register(password: String) = userManager.registerUser(this, pa
 fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePassword(this, newPassword)
 fun ProxiedPlayer.logout(clearSession: Boolean = true, keepReady: Boolean = true) = userManager.logoutUser(this, clearSession, keepReady)
 fun ProxiedPlayer.markReady() = userManager.markUserReady(this)
+fun ProxiedPlayer.ipHasTooManyRegistrations() = registrationsForIP >= config.registration.maxRegstrationsPerIP
 
 fun String.asPlayer(): ProxiedPlayer? = proxy.players.find { it.name == this }
 

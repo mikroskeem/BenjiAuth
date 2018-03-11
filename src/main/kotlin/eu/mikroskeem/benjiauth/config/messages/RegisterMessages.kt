@@ -50,4 +50,9 @@ class RegisterMessages {
     @Setting(value = "already-registered", comment = "This message gets sent when player is already registered")
     var alreadyRegistered = "{prefix}&cTe olete juba registreeritud!"
         private set
+
+    @Setting(value = "new-registrations-disabled", comment = "This message gets sent to player if registrations are " +
+            "disabled")
+    var newRegistrationsDisabled = "{prefix}Registreerimine on hetkel välja lükatud. Proovige hiljem uuesti!"
+        private set
 }

@@ -10,6 +10,7 @@ import eu.mikroskeem.benjiauth.COMMAND_REGISTER
 import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.ipAddress
+import eu.mikroskeem.benjiauth.ipHasTooManyRegistrations
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.register
@@ -32,36 +33,43 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
         if(player.isRegistered) {
             // Tell if player is already registered
             player.message(messages.register.alreadyRegistered)
-        } else if(userManager.getRegistrations(player.ipAddress) >= config.registration.maxRegstrationsPerIP) {
+        } else if(player.ipHasTooManyRegistrations()) {
             // Tell that player has too many registrations for this IP address
             player.message(messages.error.tooManyRegistrationsPerIP)
-        } else if(args.size == 2) {
-            val password = args[0]
-            val confirmPassword = args[1]
-
-            // Check if passwords don't match
-            if(password != confirmPassword) {
-                player.message(messages.password.dontMatch)
-            } else {
-                // Check password length and username usage
-                // Note: if user sets configuration values to something unreasonable, then
-                //       I *will* tell user that PEBKAC
-                if(!player.validatePassword(password))
-                    return
-
-                // Register player
-                player.register(password)
-
-                // If player should be logged in after registering
-                if(config.registration.loginAfterRegister) {
-                    player.message(messages.register.registered)
-                } else {
-                    player.message(messages.register.registeredAndMustLogin)
-                }
-            }
         } else {
-            // Send help
-            player.message(messages.command.register)
+            if(config.registration.newRegistrationsDisabled) {
+                player.message(messages.register.newRegistrationsDisabled)
+                return
+            }
+
+            if(args.size == 2) {
+                val password = args[0]
+                val confirmPassword = args[1]
+
+                // Check if passwords don't match
+                if(password != confirmPassword) {
+                    player.message(messages.password.dontMatch)
+                } else {
+                    // Check password length and username usage
+                    // Note: if user sets configuration values to something unreasonable, then
+                    //       I *will* tell user that PEBKAC
+                    if(!player.validatePassword(password))
+                        return
+
+                    // Register player
+                    player.register(password)
+
+                    // If player should be logged in after registering
+                    if(config.registration.loginAfterRegister) {
+                        player.message(messages.register.registered)
+                    } else {
+                        player.message(messages.register.registeredAndMustLogin)
+                    }
+                }
+            } else {
+                // Send help
+                player.message(messages.command.register)
+            }
         }
     }
 }

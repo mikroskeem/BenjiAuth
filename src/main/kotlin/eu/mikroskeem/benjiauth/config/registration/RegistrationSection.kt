@@ -36,4 +36,14 @@ class RegistrationSection {
             " address")
     var maxRegstrationsPerIP = 1
         private set
+
+    @Setting(value = "new-registrations-disabled", comment = "Should new registrations be disabled? See messages.cfg " +
+            "for appropriate message")
+    var newRegistrationsDisabled = false
+        private set
+
+    @Setting(value = "kick-if-registrations-disablec", comment = "Whether to kick unregistered players on join or not. " +
+            "Useful if `new-registrations-disabled` is turned on.")
+    var kickIfRegistrationsDisabled = true
+        private set
 }
