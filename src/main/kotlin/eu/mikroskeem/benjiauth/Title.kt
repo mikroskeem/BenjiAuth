@@ -23,7 +23,7 @@ data class Title(
         val fadeOut: Long = 20
 )
 
-fun Title.shouldBeSent(): Boolean = title.isNotEmpty() && subTitle.isNotEmpty()
+fun Title.shouldBeSent(): Boolean = title.isNotEmpty() || subTitle.isNotEmpty()
 
 fun ProxiedPlayer.sendTitle(titleObject: Title) {
     val player = this
