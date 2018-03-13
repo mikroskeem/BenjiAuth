@@ -20,6 +20,9 @@ import eu.mikroskeem.benjiauth.hook.hookFastLogin
 import eu.mikroskeem.benjiauth.listeners.ChatListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
+import eu.mikroskeem.benjiauth.logger.JULWrapper
+import eu.mikroskeem.benjiauth.logger.PluginLogger
+import eu.mikroskeem.benjiauth.logger.SLF4JLoggerWrapper
 import net.md_5.bungee.api.plugin.Plugin
 import org.slf4j.Logger
 import java.net.InetAddress
@@ -41,8 +44,8 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         messagesLoader = initConfig("messages.cfg")
         userManager = UserManager()
         geoIPApi = try { GeoIPDatabase() } catch (e: Exception) {
-            slF4JLogger.warn("Failed to initialize MaxMind GeoLite database!", e)
-            slF4JLogger.warn("Falling back to no-op implementation for GeoIP lookups")
+            pluginLogger.warn("Failed to initialize MaxMind GeoLite database!", e)
+            pluginLogger.warn("Falling back to no-op implementation for GeoIP lookups")
             object: GeoIPAPI {
                 override fun getCountryByIP(ipAddress: InetAddress): String? = config.country.allowedCountries.firstOrNull()
                 override fun getCountryByIP(ipAddress: String): String? = config.country.allowedCountries.firstOrNull()
@@ -73,7 +76,15 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         messagesLoader.save()
     }
 
-    override fun getPluginLogger(): Logger = slF4JLogger
+    private val lazyLogger by lazy {
+        try {
+            SLF4JLoggerWrapper(Plugin::class.java.getMethod("getSLF4JLogger").invoke(this) as Logger)
+        } catch (e: NoSuchMethodException) {
+            JULWrapper(logger)
+        }
+    }
+
+    override fun getPluginLogger(): PluginLogger = lazyLogger
     override fun getPluginFolder(): Path = pluginDataFolder
     override fun getConfig(): Benji = configLoader.configuration
     override fun getMessages(): BenjiMessages = messagesLoader.configuration
