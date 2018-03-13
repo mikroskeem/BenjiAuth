@@ -9,7 +9,8 @@ plugins {
 }
 
 val gradleWrapperVersion: String by extra
-val waterfallApiVersion: String by extra
+val bungeecordApiVersion: String by extra
+val slf4jApiVersion: String by extra
 val configurateVersion: String by extra
 val hikariVersion: String by extra
 val ormliteVersion: String by extra
@@ -23,10 +24,12 @@ repositories {
 
     maven("https://repo.destroystokyo.com/repository/maven-public/")
     maven("http://repo.bstats.org/content/repositories/releases/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
-    compileOnly("io.github.waterfallmc:waterfall-api:$waterfallApiVersion")
+    compileOnly("net.md-5:bungeecord-api:$bungeecordApiVersion")
+    compileOnly("org.slf4j:slf4j-api:$slf4jApiVersion")
     compileOnly(rootProject.files("lib/FastLogin.jar"))
 
     implementation(kotlin("stdlib-jdk8"))

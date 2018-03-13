@@ -55,7 +55,7 @@ class PlayerLoginStatusChangeListener: Listener {
         if(messages.login.pleaseLoginTitle.shouldBeSent())
             event.player.resetTitle()
 
-        event.player.movePlayer(lobby, retry = true) { success, e: Throwable? ->
+        event.player.movePlayer(lobby, retry = true) { success, e ->
             if(!success) {
                 if(config.servers.kickIfLobbyIsDown) {
                     event.player.kickWithMessage(messages.error.couldntConnectToLobby)
@@ -79,7 +79,7 @@ class PlayerLoginStatusChangeListener: Listener {
             return
 
         // Send player to auth server
-        event.player.movePlayer(auth, retry = true) { success, e: Throwable? ->
+        event.player.movePlayer(auth, retry = true) { success, e ->
             if(!success) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
@@ -101,7 +101,7 @@ class PlayerLoginStatusChangeListener: Listener {
         if(event.player.server?.info?.name == auth.name)
             return
 
-        event.player.movePlayer(auth, retry = true) { success, e: Throwable? ->
+        event.player.movePlayer(auth, retry = true) { success, e ->
             if(!success) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
