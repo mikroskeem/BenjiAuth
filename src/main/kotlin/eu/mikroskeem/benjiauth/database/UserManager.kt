@@ -55,7 +55,7 @@ class UserManager: LoginManager {
             }
         }
         dao = DaoManager.createDao(dsWrapper, daoConfig)
-        TableUtils.createTableIfNotExists(dsWrapper, User::class.java)
+        TableUtils.createTableIfNotExists(dsWrapper, daoConfig)
     }
 
     override fun isRegistered(username: String): Boolean = findUserSafe(username) != null
