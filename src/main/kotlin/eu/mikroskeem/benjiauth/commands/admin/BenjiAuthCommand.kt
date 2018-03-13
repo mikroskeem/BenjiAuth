@@ -55,7 +55,7 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
 
                     // Check if username argument is present
                     val username = args.getOrNull(1) ?: run {
-                        sender.message(messages.command.adminUnregister)
+                        sender.message(messages.command.adminLogin)
                         return
                     }
 
@@ -90,7 +90,7 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
 
                     // Check if username argument is present
                     val username = args.getOrNull(1) ?: run {
-                        sender.message(messages.command.adminUnregister)
+                        sender.message(messages.command.adminLogout)
                         return
                     }
 
