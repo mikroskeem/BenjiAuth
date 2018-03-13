@@ -9,6 +9,8 @@ package eu.mikroskeem.benjiauth.database
 import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.dao.DaoManager
 import com.j256.ormlite.jdbc.DataSourceConnectionSource
+import com.j256.ormlite.table.DatabaseTableConfig
+import com.j256.ormlite.table.DatabaseTableConfigLoader
 import com.j256.ormlite.table.TableUtils
 import com.zaxxer.hikari.HikariDataSource
 import eu.mikroskeem.benjiauth.LoginManager
@@ -22,7 +24,6 @@ import eu.mikroskeem.benjiauth.events.PlayerRegisterEvent
 import eu.mikroskeem.benjiauth.events.PlayerUnregisterEvent
 import eu.mikroskeem.benjiauth.isReady
 import eu.mikroskeem.benjiauth.pluginManager
-import eu.mikroskeem.benjiauth.proxy
 import eu.mikroskeem.benjiauth.toIPString
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import org.mindrot.jbcrypt.BCrypt
@@ -48,7 +49,12 @@ class UserManager: LoginManager {
         } catch (e: Exception) {}
 
         dsWrapper = DataSourceConnectionSource(hikari, hikari.jdbcUrl)
-        dao = DaoManager.createDao(dsWrapper, User::class.java)
+        val daoConfig = DatabaseTableConfig.fromClass(dsWrapper, User::class.java).also {
+            config.database.tableName.takeUnless { it.isEmpty() }?.run {
+                it.tableName = this
+            }
+        }
+        dao = DaoManager.createDao(dsWrapper, daoConfig)
         TableUtils.createTableIfNotExists(dsWrapper, User::class.java)
     }
 

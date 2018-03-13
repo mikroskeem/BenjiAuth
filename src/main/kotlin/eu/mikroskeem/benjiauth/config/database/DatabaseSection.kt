@@ -32,6 +32,9 @@ class DatabaseSection {
             Pair("useServerPrepStmts", "true"))
         private set
 
+    @Setting(value = "table-name", comment = "What table name to use?")
+    var tableName: String = "users"
+        private set
 
     val asHikariConfig: HikariConfig get() = HikariConfig().apply hikari@ {
         jdbcUrl = database
