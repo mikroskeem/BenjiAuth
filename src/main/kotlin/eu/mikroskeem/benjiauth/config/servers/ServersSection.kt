@@ -8,6 +8,7 @@ package eu.mikroskeem.benjiauth.config.servers
 
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Mark Vainomaa
@@ -26,5 +27,9 @@ class ServersSection {
     @Setting(value = "kick-if-lobby-is-down", comment = "Whether to kick or not kick player from proxy if lobby server " +
             "is down")
     var kickIfLobbyIsDown = true
+        private set
+
+    @Setting(value = "connection-timeout", comment = "Connection timeout in milliseconds. Works only on Waterfall")
+    var connectionTimeout = TimeUnit.SECONDS.toMillis(5)
         private set
 }

@@ -49,12 +49,11 @@ private fun ProxiedPlayer.waterfallConnect(target: ServerInfo, retry: Boolean, t
 }
 
 fun ProxiedPlayer.movePlayer(target: ServerInfo, retry: Boolean = false,
-                             timeout: Long = TimeUnit.SECONDS.toMillis(5),
+                             timeout: Long = config.servers.connectionTimeout,
                              callback: (Boolean, Throwable?) -> Unit) {
     waterfallConnect?.run { waterfallConnect(target, retry, timeout.toInt(), Callback { s, t -> callback(s, t) }); return }
 
-    // Note: BungeeCord does not expose timeout option. Though this won't hurt right now, as BenjiAuth does not
-    // make use of timeout option *yet*.
+    // Note: BungeeCord does not expose timeout option. So custom value does not work
     this.connect(target) connect@ { success, throwable ->
         if(!success && retry) {
             this.connect(target, callback)
