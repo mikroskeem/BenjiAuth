@@ -47,13 +47,13 @@ class PlayerLoginStatusChangeListener: Listener {
         val lobby: ServerInfo = config.servers.lobbyServer.takeUnless { it.isEmpty() }?.run(::findServer) ?:
                                 findServer(event.player.pendingConnection.listener.serverPriority[0])!!
 
-        // Return if player is already in lobby server
-        if(event.player.server?.info?.name == lobby.name)
-            return
-
         // Clear title if player got spammed with them before logging in
         if(messages.login.pleaseLoginTitle.shouldBeSent())
             event.player.resetTitle()
+
+        // Return if player is already in lobby server
+        if(event.player.server?.info?.name == lobby.name)
+            return
 
         event.player.movePlayer(lobby, retry = true) { success, e ->
             if(!success) {
