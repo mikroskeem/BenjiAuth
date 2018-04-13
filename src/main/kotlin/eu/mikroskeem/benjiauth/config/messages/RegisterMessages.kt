@@ -16,7 +16,7 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 @ConfigSerializable
 class RegisterMessages {
     @Setting(value = "please-register", comment = "This message gets sent to player repeatedly until one gets registered")
-    var pleaseRegister = "{prefix}Registreerige end käsuga &3/register &8<&3parool&8> <&3parool uuesti&8>"
+    var pleaseRegister = "{prefix}Registreerige end käsuga &f/register &8<&fparool&8> <&fparool uuesti&8>"
         private set
 
     @Setting(value = "please-register-title", comment = "This message gets sent to player repeatedly until one gets" +
@@ -31,12 +31,12 @@ class RegisterMessages {
 
     @Setting(value = "must-register-before-chatting", comment = "This message gets sent when player is chatting while not " +
             "being registered")
-    var mustRegisterBeforeChatting = "{prefix}&cEnne vestlusakna kasutamist peate te end registeerima"
+    var mustRegisterBeforeChatting = "{prefix}&cEnne vestlusakna kasutamist pead sa end registeerima"
         private set
 
     @Setting(value = "must-register-before-using-commands", comment = "This message gets sent when player is using " +
             " commands while not being registered")
-    var mustRegisterBeforeUsingCommands = "{prefix}&cEnne commandide kasutamist peate te end registeerima"
+    var mustRegisterBeforeUsingCommands = "{prefix}&cEnne commandide kasutamist pead sa end registeerima"
         private set
 
     @Setting(value = "register-timeout", comment = "This message gets sent when player doesn't register fast enough " +
@@ -54,7 +54,7 @@ class RegisterMessages {
         private set
 
     @Setting(value = "already-registered", comment = "This message gets sent when player is already registered")
-    var alreadyRegistered = "{prefix}&cTe olete juba registreeritud!"
+    var alreadyRegistered = "{prefix}&cOled juba registreeritud!"
         private set
 
     @Setting(value = "new-registrations-disabled", comment = "This message gets sent to player if registrations are " +

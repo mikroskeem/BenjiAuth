@@ -35,7 +35,7 @@ class ErrorMessages {
         private set
 
     @Setting(value = "unknown-subcommand", comment = "Sent when unknown subcommand is used")
-    var unknownSubcommand = "{prefix}&cTundmatu alamkäsklus &3{subcommand}&c!"
+    var unknownSubcommand = "{prefix}&cTundmatu alamkäsklus &f{subcommand}&c!"
         private set
 
     @Setting(value = "too-many-registrations", comment = "Sent when player's IP has too many registered users")
@@ -43,18 +43,18 @@ class ErrorMessages {
         private set
 
     @Setting(value = "no-such-player", comment = "Sent when command targets player not online on proxy")
-    var noSuchPlayer = "{prefix}&cMängija &3{player} &cei ole servers!"
+    var noSuchPlayer = "{prefix}&cMängija &f{player} &cei ole servers!"
         private set
 
     @Setting(value = "user-not-registered", comment = "Sent when command targets unregistered user")
-    var userNotRegistered = "{prefix}&cMängija &3{player} &cei ole registreeritud!"
+    var userNotRegistered = "{prefix}&cMängija &f{player} &cei ole registreeritud!"
         private set
 
     @Setting(value = "user-already-logged-in", comment = "Sent when command targets already logged in player")
-    var userAlreadyLoggedIn = "{prefix}&cMängija &3{player} &con juba sisse logitud!"
+    var userAlreadyLoggedIn = "{prefix}&cMängija &f{player} &con juba sisse logitud!"
         private set
 
     @Setting(value = "user-not-logged-in", comment = "Sent when command targets user who isn't logged in")
-    var userNotLoggedIn = "{prefix}&cMängija &3{player} &cei ole sisse logitud!"
+    var userNotLoggedIn = "{prefix}&cMängija &f{player} &cei ole sisse logitud!"
         private set
 }

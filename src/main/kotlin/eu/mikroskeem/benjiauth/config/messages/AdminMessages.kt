@@ -19,11 +19,11 @@ class AdminMessages {
         private set
 
     @Setting(value = "no-such-registered-user", comment = "Sent when admin attempted to unregister unknown player")
-    var noSuchRegisteredUser = "{prefix}&cEi leidnud mängijat nimega &3{player} &candmebaasist!"
+    var noSuchRegisteredUser = "{prefix}&cEi leidnud mängijat nimega &f{player} &candmebaasist!"
         private set
 
     @Setting(value = "user-already-registered", comment = "Sent when admin attempted to register already registered player")
-    var userAlreadyRegistered = "{prefix}&cMängija &3{player} &con juba registreeritud!"
+    var userAlreadyRegistered = "{prefix}&cMängija &f{player} &con juba registreeritud!"
         private set
 
     @Setting(value = "unregistered-successfully", comment = "Sent when admin unregisters player successfully")

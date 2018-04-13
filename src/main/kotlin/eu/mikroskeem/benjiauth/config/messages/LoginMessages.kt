@@ -16,7 +16,7 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 @ConfigSerializable
 class LoginMessages {
     @Setting(value = "please-login", comment = "This message gets sent to player repeatedly until one logs in")
-    var pleaseLogin = "{prefix}Logige sisse käsuga &3/login &8<&3parool&8>"
+    var pleaseLogin = "{prefix}Logige sisse käsuga &f/login &8<&fparool&8>"
         private set
 
     @Setting(value = "please-login-title", comment = "This message gets sent to player repeatedly until one gets" +
@@ -49,7 +49,7 @@ class LoginMessages {
         private set
 
     @Setting(value = "already-logged-in", comment = "This message gets sent when player is already logged in")
-    var alreadyLoggedIn = "{prefix}&cTe olete juba sisse logitud!"
+    var alreadyLoggedIn = "{prefix}&cOled juba sisse logitud!"
         private set
 
     @Setting(value = "logged-out", comment = "This message gets sent when player is logged out successfully")

@@ -42,10 +42,10 @@ class PasswordMessages {
         private set
 
     @Setting(value = "too-long", comment = "This message gets sent when player tries to use too long password")
-    var tooLong = "{prefix}&cParool on liiga pikk! Parooli maksimaalne pikkus on &3{max} &ctähemärki!"
+    var tooLong = "{prefix}&cParool on liiga pikk! Parooli maksimaalne pikkus on &f{max} &ctähemärki!"
         private set
 
     @Setting(value = "too-short", comment = "This message gets sent when player tries to use too short password")
-    var tooShort = "{prefix}&cParool on liiga lühike! Parooli minimaalne pikkus on &3{min} &ctähemärki!"
+    var tooShort = "{prefix}&cParool on liiga lühike! Parooli minimaalne pikkus on &f{min} &ctähemärki!"
         private set
 }
