@@ -171,7 +171,7 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
                 }
             }
         } else {
-            sender.message(messages.command.benjiauthAdmin)
+            sender.message(messages.command.benjiauthAdmin.joinToString(separator = "\n"))
         }
     }
 
