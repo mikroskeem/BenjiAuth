@@ -42,7 +42,10 @@ fun ProxiedPlayer.sendTitle(titleObject: Title) {
     }
 }
 
-fun ProxiedPlayer.resetTitle() = proxy.createTitle().reset().send(this)
+fun ProxiedPlayer.resetTitle() {
+    proxy.createTitle().clear().send(this)
+    proxy.createTitle().reset().send(this)
+}
 
 class TitleSerializer: TypeSerializer<Title> {
     override fun deserialize(type: TypeToken<*>, node: ConfigurationNode): Title {
