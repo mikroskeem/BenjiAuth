@@ -52,22 +52,20 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
             }
         }
 
-        registerListener(ChatListener::class)
-        registerListener(PlayerLoginListener::class)
-        registerListener(PlayerLoginStatusChangeListener::class)
+        registerListener<ChatListener>()
+        registerListener<PlayerLoginListener>()
+        registerListener<PlayerLoginStatusChangeListener>()
 
-        registerCommand(BenjiAuthCommand::class)
-        registerCommand(ChangePasswordCommand::class)
-        registerCommand(LoginCommand::class)
-        registerCommand(LogoutCommand::class)
-        registerCommand(RegisterCommand::class)
+        registerCommand<BenjiAuthCommand>()
+        registerCommand<ChangePasswordCommand>()
+        registerCommand<LoginCommand>()
+        registerCommand<LogoutCommand>()
+        registerCommand<RegisterCommand>()
 
         hookFastLogin()
     }
 
-    override fun onDisable() {
-        userManager.shutdown()
-    }
+    override fun onDisable() = userManager.shutdown()
 
     override fun reloadConfig() {
         configLoader.load()

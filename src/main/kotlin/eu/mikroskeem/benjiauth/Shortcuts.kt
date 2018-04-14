@@ -38,8 +38,8 @@ val messages: BenjiMessages get() = plugin.messages
 val currentUnixTimestamp: Long get() = Instant.now().epochSecond
 
 inline fun <reified T: Any> BenjiAuthPlugin.initConfig(fileName: String): ConfigurationLoader<T> = ConfigurationLoader(pluginFolder.resolve(fileName), T::class.java)
-fun <T: Listener> BenjiAuthPlugin.registerListener(listener: KClass<T>) = pluginManager.registerListener(this as Plugin, listener.java.getConstructor().newInstance())
-fun <T: Command> BenjiAuthPlugin.registerCommand(command: KClass<T>) = pluginManager.registerCommand(this as Plugin, command.java.getConstructor().newInstance())
+inline fun <reified T: Listener> BenjiAuthPlugin.registerListener() = pluginManager.registerListener(this as Plugin, T::class.java.getConstructor().newInstance())
+inline fun <reified T: Command> BenjiAuthPlugin.registerCommand() = pluginManager.registerCommand(this as Plugin, T::class.java.getConstructor().newInstance())
 fun <T: Task> BenjiAuthPlugin.startTask(task: T): ScheduledTask = task.let { proxy.scheduler.schedule(this as Plugin, it, it.delay, it.period, it.timeUnit) }
 
 fun String.color(): String = ChatColor.translateAlternateColorCodes('&', this)
