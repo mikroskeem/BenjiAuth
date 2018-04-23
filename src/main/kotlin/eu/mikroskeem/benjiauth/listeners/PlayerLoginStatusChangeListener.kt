@@ -74,6 +74,9 @@ class PlayerLoginStatusChangeListener: Listener {
             event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
         }
 
+        // Start login message/timeout task
+        LoginMessageTask(event.player).schedule()
+
         // Return if player is already in auth server
         if(event.player.server?.info?.name == auth.name)
             return
@@ -85,9 +88,6 @@ class PlayerLoginStatusChangeListener: Listener {
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
         }
-
-        // Start login message/timeout task
-        LoginMessageTask(event.player).schedule()
     }
 
     @EventHandler
@@ -96,6 +96,9 @@ class PlayerLoginStatusChangeListener: Listener {
         val auth: ServerInfo = getAuthServer {
             event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
         }
+
+        // Start register message/timeout task
+        RegisterMessageTask(event.player).schedule()
 
         // Return if player is already in auth server
         if(event.player.server?.info?.name == auth.name)
@@ -107,8 +110,5 @@ class PlayerLoginStatusChangeListener: Listener {
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
         }
-
-        // Start register message/timeout task
-        RegisterMessageTask(event.player).schedule()
     }
 }
