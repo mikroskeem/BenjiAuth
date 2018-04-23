@@ -17,6 +17,7 @@ val ormliteVersion: String by extra
 val bcryptVersion: String by extra
 val geoipVersion: String by extra
 val commonsCompressVersion: String by extra
+val luckpermsApiVersion: String by extra
 
 repositories {
     mavenLocal()
@@ -31,6 +32,7 @@ dependencies {
     compileOnly("net.md-5:bungeecord-api:$bungeecordApiVersion")
     compileOnly("org.slf4j:slf4j-api:$slf4jApiVersion")
     compileOnly(rootProject.files("lib/FastLogin.jar"))
+    compileOnly("me.lucko.luckperms:luckperms-api:$luckpermsApiVersion")
 
     implementation(kotlin("stdlib-jdk8"))
     implementation("ninja.leaping.configurate:configurate-hocon:$configurateVersion") {
@@ -58,7 +60,7 @@ bungee {
     main = "eu.mikroskeem.benjiauth.BenjiAuth"
     description = "Finally, a decent authentication plugin for BungeeCord"
     author = "${listOf("mikroskeem")}"
-    softDepends = setOf("FastLogin")
+    softDepends = setOf("LuckPerms", "FastLogin")
 }
 
 val shadowJar by tasks.getting(ShadowJar::class) {
