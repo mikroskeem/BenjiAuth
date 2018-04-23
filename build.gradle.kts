@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    kotlin("jvm") version "1.2.31"
+    kotlin("jvm") version "1.2.40"
     id("net.minecrell.licenser") version "0.3"
     id("net.minecrell.plugin-yml.bungee") version "0.2.1"
     id("com.github.johnrengelman.shadow") version "2.0.2"
