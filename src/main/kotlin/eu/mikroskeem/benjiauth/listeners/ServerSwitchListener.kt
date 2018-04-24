@@ -28,10 +28,11 @@ class ServerSwitchListener: Listener {
         if(!config.servers.denySwitchingWhenUnauthenticated)
             return
 
-        val currentServer = event.player.server.info
-        if(currentServer == event.target)
+        // Skip if current server is the same as target
+        if(event.player.server?.info == event.target)
             return
 
+        // Check if player is not authenticated and target server is not auth server
         if(!event.player.isLoggedIn && event.target.name != config.servers.authServer) {
             if(!event.player.isRegistered) {
                 event.player.message(messages.register.mustRegisterBeforeSwitchingServers)
