@@ -21,6 +21,7 @@ import eu.mikroskeem.benjiauth.hook.hookLuckPerms
 import eu.mikroskeem.benjiauth.listeners.ChatListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
+import eu.mikroskeem.benjiauth.listeners.ServerSwitchListener
 import eu.mikroskeem.benjiauth.logger.JULWrapper
 import eu.mikroskeem.benjiauth.logger.PluginLogger
 import eu.mikroskeem.benjiauth.logger.SLF4JLoggerWrapper
@@ -56,6 +57,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         registerListener<ChatListener>()
         registerListener<PlayerLoginListener>()
         registerListener<PlayerLoginStatusChangeListener>()
+        registerListener<ServerSwitchListener>()
 
         registerCommand<BenjiAuthCommand>()
         registerCommand<ChangePasswordCommand>()

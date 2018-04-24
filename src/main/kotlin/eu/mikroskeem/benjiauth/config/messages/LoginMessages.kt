@@ -39,6 +39,11 @@ class LoginMessages {
     var mustLoginBeforeUsingCommands = "{prefix}&cEnne commandide kasutamist palun logi sisse"
         private set
 
+    @Setting(value = "must-login-before-switching-server", comment = "This message gets sent when player is trying " +
+            " to switch servers while not being logged in")
+    var mustLoginBeforeSwitchingServers = "{prefix}&cEnne serverite vahetamist palun logi sisse"
+        private set
+
     @Setting(value = "login-timeout", comment = "This message gets sent when player doesn't log in fast enough " +
             "(iow hits login timeout)")
     var loginTimeout = "{prefix}&cTe ei loginud piisavalt kiiresti sisse"

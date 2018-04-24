@@ -32,4 +32,9 @@ class ServersSection {
     @Setting(value = "connection-timeout", comment = "Connection timeout in milliseconds. Works only on Waterfall")
     var connectionTimeout = TimeUnit.SECONDS.toMillis(5)
         private set
+
+    @Setting(value = "deny-server-switching-when-unauthenticated", comment = "Whether to deny server switching when " +
+            "unauthenticated or not. Recommended to keep this on unless you know what you are doing")
+    var denySwitchingWhenUnauthenticated = true
+        private set
 }

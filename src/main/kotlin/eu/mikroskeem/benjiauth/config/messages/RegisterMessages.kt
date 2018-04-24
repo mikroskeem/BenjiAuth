@@ -39,6 +39,11 @@ class RegisterMessages {
     var mustRegisterBeforeUsingCommands = "{prefix}&cEnne commandide kasutamist pead sa end registeerima"
         private set
 
+    @Setting(value = "must-register-before-switching-server", comment = "This message gets sent when player is trying " +
+            " to switch servers while not being registered")
+    var mustRegisterBeforeSwitchingServers = "{prefix}&cEnne serverite vahetamist pead sa end registeerima"
+        private set
+
     @Setting(value = "register-timeout", comment = "This message gets sent when player doesn't register fast enough " +
             "(iow hits register timeout)")
     var registerTimeout = "{prefix}&cTe ei registreerinud piisavalt kiiresti"
