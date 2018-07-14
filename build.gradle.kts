@@ -14,12 +14,12 @@ version = "0.0.1-SNAPSHOT"
 val bungeecordApiVersion = "1.12-SNAPSHOT"
 val slf4jApiVersion = "1.7.25"
 val configurateVersion = "3.3"
-val hikariVersion = "3.1.0"
+val hikariVersion = "3.2.0"
 val ormliteVersion = "5.1"
 val bcryptVersion = "0.4"
 val geoipVersion = "2.12.0"
-val commonsCompressVersion = "1.15"
-val luckpermsApiVersion = "4.1"
+val commonsCompressVersion = "1.17"
+val luckpermsApiVersion = "4.2"
 
 repositories {
     mavenLocal()
