@@ -44,7 +44,11 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
     override fun onEnable() {
         configLoader = initConfig("config.cfg")
         messagesLoader = initConfig("messages.cfg")
-        userManager = UserManager()
+        userManager = try { UserManager() } catch (e: Exception) {
+            pluginLogger.error("Failed to initialize connection to database!", e)
+            pluginLogger.error("Disabling plugin")
+            return
+        }
         geoIPApi = try { GeoIPDatabase() } catch (e: Exception) {
             pluginLogger.warn("Failed to initialize MaxMind GeoLite database!", e)
             pluginLogger.warn("Falling back to no-op implementation for GeoIP lookups")
@@ -72,7 +76,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         hookLuckPerms()
     }
 
-    override fun onDisable() = userManager.shutdown()
+    override fun onDisable() { if(::userManager.isInitialized) userManager.shutdown() }
 
     override fun reloadConfig() {
         configLoader.load()
