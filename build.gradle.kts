@@ -8,16 +8,18 @@ plugins {
     id("org.zeroturnaround.gradle.jrebel") version "1.1.8"
 }
 
-val gradleWrapperVersion: String by extra
-val bungeecordApiVersion: String by extra
-val slf4jApiVersion: String by extra
-val configurateVersion: String by extra
-val hikariVersion: String by extra
-val ormliteVersion: String by extra
-val bcryptVersion: String by extra
-val geoipVersion: String by extra
-val commonsCompressVersion: String by extra
-val luckpermsApiVersion: String by extra
+group = "eu.mikroskeem"
+version = "0.0.1-SNAPSHOT"
+
+val bungeecordApiVersion = "1.12-SNAPSHOT"
+val slf4jApiVersion = "1.7.25"
+val configurateVersion = "3.3"
+val hikariVersion = "3.1.0"
+val ormliteVersion = "5.1"
+val bcryptVersion = "0.4"
+val geoipVersion = "2.12.0"
+val commonsCompressVersion = "1.15"
+val luckpermsApiVersion = "4.1"
 
 repositories {
     mavenLocal()
@@ -112,11 +114,6 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         // Exclude unneeded list
         exclude("mozilla/public-suffix-list.txt")
     }
-}
-
-val wrapper by tasks.creating(Wrapper::class) {
-    gradleVersion = gradleWrapperVersion
-    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
 
 if(rootProject.findProperty("useJRebel") == "true") {
