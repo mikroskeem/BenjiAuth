@@ -6,19 +6,18 @@
 
 package eu.mikroskeem.benjiauth
 
-import net.md_5.bungee.api.Callback
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.connection.ProxiedPlayer
-import java.lang.reflect.Method
 import java.net.InetSocketAddress
-import java.util.concurrent.TimeUnit
 
 /**
  * @author Mark Vainomaa
  */
-
+val isWaterfall: Boolean by lazy {
+    try { Class.forName("io.github.waterfallmc.waterfall.QueryResult"); true } catch(e: ClassNotFoundException) { false }
+}
 
 fun String.processMessage(player: ProxiedPlayer? = null): Array<out BaseComponent> {
     val message = this.takeIf { it.isNotEmpty() }
@@ -33,25 +32,13 @@ fun String.processMessage(player: ProxiedPlayer? = null): Array<out BaseComponen
 
 fun findServer(name: String): ServerInfo? = proxy.getServerInfo(name)
 
-private val waterfallConnect: Method? by lazy {
-    try {
-        ProxiedPlayer::class.java.getMethod("connect",
-                ServerInfo::class.java, Callback::class.java,
-                Boolean::class.javaPrimitiveType,
-                Int::class.javaPrimitiveType)
-    } catch (e: NoSuchMethodException) {
-        null
-    }
-}
-
-private fun ProxiedPlayer.waterfallConnect(target: ServerInfo, retry: Boolean, timeout: Int, callback: Callback<Boolean>) {
-    waterfallConnect!!.invoke(this, target, callback, retry, timeout)
-}
-
 fun ProxiedPlayer.movePlayer(target: ServerInfo, retry: Boolean = false,
                              timeout: Long = config.servers.connectionTimeout,
                              callback: (Boolean, Throwable?) -> Unit) {
-    waterfallConnect?.run { waterfallConnect(target, retry, timeout.toInt(), Callback { s, t -> callback(s, t) }); return }
+    if(isWaterfall) {
+        this.connect(target, callback, retry, timeout.toInt())
+        return
+    }
 
     // Note: BungeeCord does not expose timeout option. So custom value does not work
     this.connect(target) connect@ { success, throwable ->

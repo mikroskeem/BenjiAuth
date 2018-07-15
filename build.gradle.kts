@@ -11,7 +11,7 @@ plugins {
 group = "eu.mikroskeem"
 version = "0.0.1-SNAPSHOT"
 
-val bungeecordApiVersion = "1.12-SNAPSHOT"
+val waterfallApiVersion = "1.12-SNAPSHOT"
 val slf4jApiVersion = "1.7.25"
 val configurateVersion = "3.3"
 val hikariVersion = "3.2.0"
@@ -31,8 +31,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("net.md-5:bungeecord-api:$bungeecordApiVersion")
-    compileOnly("org.slf4j:slf4j-api:$slf4jApiVersion")
+    compileOnly("io.github.waterfallmc:waterfall-api:$waterfallApiVersion")
     compileOnly(rootProject.files("lib/FastLogin.jar"))
     compileOnly("me.lucko.luckperms:luckperms-api:$luckpermsApiVersion")
 

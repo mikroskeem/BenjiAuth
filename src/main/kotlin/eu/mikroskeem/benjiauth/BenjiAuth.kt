@@ -86,11 +86,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
     }
 
     private val lazyLogger by lazy {
-        try {
-            SLF4JLoggerWrapper(Plugin::class.java.getMethod("getSLF4JLogger").invoke(this) as Logger)
-        } catch (e: NoSuchMethodException) {
-            JULWrapper(logger)
-        }
+        if(isWaterfall) SLF4JLoggerWrapper(slF4JLogger) else JULWrapper(logger)
     }
 
     override fun getPluginLogger(): PluginLogger = lazyLogger
