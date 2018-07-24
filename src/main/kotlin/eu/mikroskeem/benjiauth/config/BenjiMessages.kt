@@ -21,7 +21,7 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 @ConfigSerializable
 class BenjiMessages {
     @Setting(value = "prefix", comment = "Prefix prepended to all messages. Can be left empty")
-    var prefix = "&8[&f✦&8] &7"
+    var prefix = "&8[&cBenjiAuth&8] &7"
         private set
 
     @Setting(value = "login", comment = "Login related messages")

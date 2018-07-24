@@ -16,7 +16,7 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 @ConfigSerializable
 class RegisterMessages {
     @Setting(value = "please-register", comment = "This message gets sent to player repeatedly until one gets registered")
-    var pleaseRegister = "{prefix}Registreerige end käsuga &f/register &8<&fparool&8> <&fparool uuesti&8>"
+    var pleaseRegister = "{prefix}Register using command &c&l/register &8<&cpassword&8> <&cpassword again&8>"
         private set
 
     @Setting(value = "please-register-title", comment = "This message gets sent to player repeatedly until one gets" +
@@ -26,44 +26,44 @@ class RegisterMessages {
 
     @Setting(value = "must-register", comment = "This message gets sent when player is doing something while not " +
             "being registered")
-    var mustRegister = "{prefix}&cSa pead enne end registreerima!"
+    var mustRegister = "{prefix}&cYou must register first!"
         private set
 
     @Setting(value = "must-register-before-chatting", comment = "This message gets sent when player is chatting while not " +
             "being registered")
-    var mustRegisterBeforeChatting = "{prefix}&cEnne vestlusakna kasutamist pead sa end registeerima"
+    var mustRegisterBeforeChatting = "{prefix}&cYou must register before chatting!"
         private set
 
     @Setting(value = "must-register-before-using-commands", comment = "This message gets sent when player is using " +
             " commands while not being registered")
-    var mustRegisterBeforeUsingCommands = "{prefix}&cEnne commandide kasutamist pead sa end registeerima"
+    var mustRegisterBeforeUsingCommands = "{prefix}&cYou must register before using commands!"
         private set
 
     @Setting(value = "must-register-before-switching-server", comment = "This message gets sent when player is trying " +
             " to switch servers while not being registered")
-    var mustRegisterBeforeSwitchingServers = "{prefix}&cEnne serverite vahetamist pead sa end registeerima"
+    var mustRegisterBeforeSwitchingServers = "{prefix}&cYou must register before switching servers!"
         private set
 
     @Setting(value = "register-timeout", comment = "This message gets sent when player doesn't register fast enough " +
             "(iow hits register timeout)")
-    var registerTimeout = "{prefix}&cTe ei registreerinud piisavalt kiiresti"
+    var registerTimeout = "{prefix}&cYou didn't register fast enough!"
         private set
 
     @Setting(value = "registered", comment = "This message gets sent when player gets registered successfully")
-    var registered = "{prefix}Registreerisid edukalt!"
+    var registered = "{prefix}You registered successfully!"
         private set
 
     @Setting(value = "registered-now-log-in", comment = "This message gets sent when player gets registered successfully, " +
             "but has to log in after that")
-    var registeredAndMustLogin = "{private}Registreerisid edukalt, nüüd logi sisse!"
+    var registeredAndMustLogin = "{private}You registered successfully, now log in!"
         private set
 
     @Setting(value = "already-registered", comment = "This message gets sent when player is already registered")
-    var alreadyRegistered = "{prefix}&cOled juba registreeritud!"
+    var alreadyRegistered = "{prefix}&cYou are already registered!"
         private set
 
     @Setting(value = "new-registrations-disabled", comment = "This message gets sent to player if registrations are " +
             "disabled")
-    var newRegistrationsDisabled = "{prefix}Registreerimine on hetkel välja lükatud. Proovige hiljem uuesti!"
+    var newRegistrationsDisabled = "{prefix}Registering is turned off right now, please try again later!"
         private set
 }

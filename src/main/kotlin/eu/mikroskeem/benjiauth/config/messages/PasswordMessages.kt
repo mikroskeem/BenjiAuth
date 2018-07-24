@@ -16,11 +16,11 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 @ConfigSerializable
 class PasswordMessages {
     @Setting(value = "do-not-match", comment = "This message gets sent when passwords don't match on /changepassword")
-    var dontMatch = "{prefix}&cParoolid ei ühti!"
+    var dontMatch = "{prefix}&cPasswords don't match!"
         private set
 
     @Setting(value = "wrong", comment = "This message gets sent when password is wrong")
-    var wrong = "{prefix}&cVale parool!"
+    var wrong = "{prefix}&cWrong password!"
         private set
 
     @Setting(value = "wrong-title", comment = "This message gets sent when password is wrong. Set both title and " +
@@ -29,23 +29,23 @@ class PasswordMessages {
         private set
 
     @Setting(value = "wrong-old-password", comment = "This message gets sent on /changepassword when old password is wrong")
-    var wrongOldPassword = "{prefix}&cSisestasid vale vana parooli!"
+    var wrongOldPassword = "{prefix}&cYou inserted wrong old password!"
         private set
 
     @Setting(value = "password-changed", comment = "This message gets sent when password got changed successfully")
-    var changed = "{prefix}Parool vahetatud!"
+    var changed = "{prefix}Password changed!"
         private set
 
     @Setting(value = "username-can-not-be-used", comment = "This message gets sent when player tries to change its " +
             "password to its username")
-    var usernameCannotBeUsed = "{prefix}&cKasutajanime ei saa paroolina kasutada!"
+    var usernameCannotBeUsed = "{prefix}&cUsername cannot be used as a password!"
         private set
 
     @Setting(value = "too-long", comment = "This message gets sent when player tries to use too long password")
-    var tooLong = "{prefix}&cParool on liiga pikk! Parooli maksimaalne pikkus on &f{max} &ctähemärki!"
+    var tooLong = "{prefix}&cPassword is too long! Password cannot be longer than &c&l{max} &ccharacters!"
         private set
 
     @Setting(value = "too-short", comment = "This message gets sent when player tries to use too short password")
-    var tooShort = "{prefix}&cParool on liiga lühike! Parooli minimaalne pikkus on &f{min} &ctähemärki!"
+    var tooShort = "{prefix}&cPassword is too short! Password cannot be shorter than &c&l{max} &ccharacters!"
         private set
 }

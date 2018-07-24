@@ -15,34 +15,34 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 @ConfigSerializable
 class AdminMessages {
     @Setting(value = "reload-success", comment = "Sent when plugin reload succeeds")
-    var reloadSuccess = "{prefix}Plugina seadistus taaslaetud!"
+    var reloadSuccess = "{prefix}Plugin configuration reloaded!"
         private set
 
     @Setting(value = "no-such-registered-user", comment = "Sent when admin attempted to unregister unknown player")
-    var noSuchRegisteredUser = "{prefix}&cEi leidnud mängijat nimega &f{player} &candmebaasist!"
+    var noSuchRegisteredUser = "{prefix}&cCouldn't find a player with name &c&l{player} &cfrom the database!"
         private set
 
     @Setting(value = "user-already-registered", comment = "Sent when admin attempted to register already registered player")
-    var userAlreadyRegistered = "{prefix}&cMängija &f{player} &con juba registreeritud!"
+    var userAlreadyRegistered = "{prefix}&cPlayer &c&l{player} &cis already registered!"
         private set
 
     @Setting(value = "unregistered-successfully", comment = "Sent when admin unregisters player successfully")
-    var unregisteredSuccessfully = "{prefix}Kasutaja eemaldatud andmebaasist!"
+    var unregisteredSuccessfully = "{prefix}Player unregistered from the database successfully!"
         private set
 
     @Setting(value = "registered-successfully", comment = "Sent when admin registers player successfully")
-    var registeredSuccessfully = "{prefix}Kasutaja registreeritud edukalt!"
+    var registeredSuccessfully = "{prefix}Player registered successfully!"
         private set
 
     @Setting(value = "logged-in-successfully", comment = "Sent when admin force logins player successfully")
-    var loggedInSuccessfully = "{prefix}Kasutaja edukalt sisse logitud!"
+    var loggedInSuccessfully = "{prefix}Player logged in successfully!"
         private set
 
     @Setting(value = "logged-out-successfully", comment = "Sent when admin logouts player successfully")
-    var loggedOutSuccessfully = "{prefix}Kasutaja edukalt välja logitud!"
+    var loggedOutSuccessfully = "{prefix}Player logged out successfully!"
         private set
 
     @Setting(value = "no-permission", comment = "Sent when player has no permission for given action")
-    var noPermission = "{prefix}Sul pole selleks piisavalt õiguseid!"
+    var noPermission = "{prefix}You don't have enough permissions for that!"
         private set
 }
