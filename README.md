@@ -1,6 +1,6 @@
 # BenjiAuth
 
-An authentication plugin for Waterfall
+An authentication plugin for BungeeCord
 
 Its sole purpose is to authenticate players and be configurable as much as possible
 
