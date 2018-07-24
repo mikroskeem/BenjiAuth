@@ -57,6 +57,7 @@ class PlayerLoginStatusChangeListener: Listener {
 
         event.player.movePlayer(lobby, retry = true) { success, e ->
             if(!success) {
+                // TODO: Not successful, but throwable is null. What's up?
                 if(config.servers.kickIfLobbyIsDown) {
                     event.player.kickWithMessage(messages.error.couldntConnectToLobby)
                 } else {
