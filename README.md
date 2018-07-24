@@ -2,7 +2,7 @@
 
 An authentication plugin for Waterfall
 
-Its sole purpose is to authenticate players and be configurable as much as possible (mikroskeem™ quality)
+Its sole purpose is to authenticate players and be configurable as much as possible
 
 ## Why another one?
 - [BungeeAuth](https://github.com/vik1395/BungeeAuth-Minecraft) is broken as shit and not as flexible as it should be
@@ -18,4 +18,4 @@ Its sole purpose is to authenticate players and be configurable as much as possi
 `./gradlew build`
 
 ## License
-Proprietary. Might be relicensed later if it isn't used anymore.
+MIT
