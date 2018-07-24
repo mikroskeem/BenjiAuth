@@ -24,9 +24,7 @@ import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
 import eu.mikroskeem.benjiauth.listeners.ServerSwitchListener
 import eu.mikroskeem.benjiauth.logger.JULWrapper
 import eu.mikroskeem.benjiauth.logger.PluginLogger
-import eu.mikroskeem.benjiauth.logger.SLF4JLoggerWrapper
 import net.md_5.bungee.api.plugin.Plugin
-import org.slf4j.Logger
 import java.net.InetAddress
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -85,9 +83,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         messagesLoader.save()
     }
 
-    private val lazyLogger by lazy {
-        if(isWaterfall) SLF4JLoggerWrapper(slF4JLogger) else JULWrapper(logger)
-    }
+    private val lazyLogger = JULWrapper(logger)
 
     override fun getPluginLogger(): PluginLogger = lazyLogger
     override fun getPluginFolder(): Path = pluginDataFolder
