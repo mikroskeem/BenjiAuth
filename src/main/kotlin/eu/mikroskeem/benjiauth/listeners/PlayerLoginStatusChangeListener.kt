@@ -76,7 +76,14 @@ class PlayerLoginStatusChangeListener: Listener {
 
         event.player.movePlayer(lobby, retry = true) { success, e ->
             if(!success) {
-                // TODO: Not successful, but throwable is null. What's up?
+                // TODO: Not successful, but throwable is null. What's up? Possible cases:
+                // TODO: 1) ServerConnectEvent.isCancelled == true
+                // TODO: 2) If ProxiedPlayer.server == lobby, but server is usually null there.
+                // TODO: 3) If UserConnection.pendingConnects.contains(lobby), but we cannot check that using API
+                // TODO: Not sure if player is going to reach the target server
+                if(e == null)
+                    return@movePlayer
+
                 if(config.servers.kickIfLobbyIsDown) {
                     event.player.kickWithMessage(messages.error.couldntConnectToLobby)
                 } else {
