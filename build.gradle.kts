@@ -24,7 +24,7 @@ repositories {
     mavenLocal()
     mavenCentral()
 
-    maven("https://repo.destroystokyo.com/repository/maven-public/")
+    maven("https://papermc.io/repo/repository/maven-public/")
     maven("http://repo.bstats.org/content/repositories/releases/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
