@@ -102,7 +102,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         messagesLoader.save()
     }
 
-    private val lazyLogger = JULWrapper(logger)
+    private val lazyLogger by lazy { JULWrapper(logger) }
 
     override fun getPluginLogger(): PluginLogger = lazyLogger
     override fun getPluginFolder(): Path = pluginDataFolder
