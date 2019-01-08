@@ -61,7 +61,7 @@ class RegistrationSection {
     var newRegistrationsDisabled = false
         private set
 
-    @Setting(value = "kick-if-registrations-disablec", comment = "Whether to kick unregistered players on join or not. " +
+    @Setting(value = "kick-if-registrations-disabled", comment = "Whether to kick unregistered players on join or not. " +
             "Useful if `new-registrations-disabled` is turned on.")
     var kickIfRegistrationsDisabled = true
         private set
