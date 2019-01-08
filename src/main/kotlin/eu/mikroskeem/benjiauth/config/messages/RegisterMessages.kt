@@ -74,7 +74,7 @@ class RegisterMessages {
 
     @Setting(value = "registered-now-log-in", comment = "This message gets sent when player gets registered successfully, " +
             "but has to log in after that")
-    var registeredAndMustLogin = "{private}You registered successfully, now log in!"
+    var registeredAndMustLogin = "{prefix}You registered successfully, now log in!"
         private set
 
     @Setting(value = "already-registered", comment = "This message gets sent when player is already registered")
