@@ -25,11 +25,11 @@
 
 package eu.mikroskeem.benjiauth.database
 
+import at.favre.lib.crypto.bcrypt.BCrypt
 import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.dao.DaoManager
 import com.j256.ormlite.jdbc.DataSourceConnectionSource
 import com.j256.ormlite.table.DatabaseTableConfig
-import com.j256.ormlite.table.DatabaseTableConfigLoader
 import com.j256.ormlite.table.TableUtils
 import com.zaxxer.hikari.HikariDataSource
 import eu.mikroskeem.benjiauth.LoginManager
@@ -45,7 +45,6 @@ import eu.mikroskeem.benjiauth.isReady
 import eu.mikroskeem.benjiauth.pluginManager
 import eu.mikroskeem.benjiauth.toIPString
 import net.md_5.bungee.api.connection.ProxiedPlayer
-import org.mindrot.jbcrypt.BCrypt
 import java.security.SecureRandom
 import java.util.Collections
 import java.util.WeakHashMap
@@ -86,7 +85,7 @@ class UserManager: LoginManager {
         val currentTime = currentUnixTimestamp
 
         dao.create(User(
-                player.name, BCrypt.hashpw(password, genSalt()),
+                player.name, hashPassword(password),
                 currentTime,
                 player.address.toIPString(),
                 false,
@@ -112,7 +111,7 @@ class UserManager: LoginManager {
 
         // Register user
         dao.create(User(
-                username, BCrypt.hashpw(password, genSalt()),
+                username, hashPassword(password),
                 currentTime,
                 "", // See javadoc for User#getRegisteredIPAddress()
                 false,
@@ -190,11 +189,11 @@ class UserManager: LoginManager {
     }
 
     override fun checkPassword(player: ProxiedPlayer, password: String): Boolean = findUser(player.name).let {
-        BCrypt.checkpw(password, it.password)
+        checkPassword(password, it.password)
     }
 
     override fun changePassword(player: ProxiedPlayer, newPassword: String) {
-        dao.update(findUser(player.name).apply { password = BCrypt.hashpw(newPassword, genSalt()) })
+        dao.update(findUser(player.name).apply { password = hashPassword(newPassword) })
     }
 
     override fun isUserReady(player: ProxiedPlayer): Boolean = readyUsers.contains(player)
@@ -210,5 +209,13 @@ class UserManager: LoginManager {
 
     private fun findUser(username: String): User = dao.queryForId(username) ?: throw IllegalStateException("Player $username is not registered")
     private fun findUserSafe(username: String): User? = dao.queryForId(username)
-    private fun genSalt(): String = BCrypt.gensalt(config.registration.bcryptRounds, random)
+
+    private fun hashPassword(password: String): String {
+        return BCrypt.with(random).hashToString(config.registration.bcryptRounds, password.toCharArray())
+    }
+
+    private fun checkPassword(password: String, correctPassword: String): Boolean {
+        val result = BCrypt.verifyer().verify(password.toCharArray(), correctPassword.toCharArray())
+        return result.verified
+    }
 }

@@ -15,7 +15,7 @@ val slf4jApiVersion = "1.7.25"
 val configurateVersion = "3.3"
 val hikariVersion = "3.3.0"
 val ormliteVersion = "5.1"
-val bcryptVersion = "0.4"
+val bcryptVersion = "0.6.0"
 val geoipVersion = "2.12.0"
 val commonsCompressVersion = "1.18"
 val luckpermsApiVersion = "4.3"
@@ -42,7 +42,7 @@ dependencies {
         exclude(module = "slf4j-api")
     }
     implementation("com.j256.ormlite:ormlite-jdbc:$ormliteVersion")
-    implementation("org.mindrot:jbcrypt:$bcryptVersion")
+    implementation("at.favre.lib:bcrypt:$bcryptVersion")
     implementation("com.maxmind.geoip2:geoip2:$geoipVersion") {
         exclude(module = "httpcore")
         exclude(module = "httpclient")
@@ -71,7 +71,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
             "ninja.leaping.configurate",
             "com.zaxxer.hikari",
             "com.j256.ormlite",
-            "org.mindrot.jbcrypt",
+            "at.favre.lib.crypto.bcryptt",
             "com.maxmind.db",
             "com.maxmind.geoip2",
             "org.apache.commons.compress",
