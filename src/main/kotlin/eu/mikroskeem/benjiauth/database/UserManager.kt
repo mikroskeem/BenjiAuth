@@ -41,6 +41,7 @@ import eu.mikroskeem.benjiauth.events.PlayerLoginEvent
 import eu.mikroskeem.benjiauth.events.PlayerLogoutEvent
 import eu.mikroskeem.benjiauth.events.PlayerRegisterEvent
 import eu.mikroskeem.benjiauth.events.PlayerUnregisterEvent
+import eu.mikroskeem.benjiauth.ipAddress
 import eu.mikroskeem.benjiauth.isReady
 import eu.mikroskeem.benjiauth.pluginManager
 import eu.mikroskeem.benjiauth.toIPString
@@ -136,10 +137,21 @@ class UserManager: LoginManager {
     }
 
     override fun isEgilibleForSessionLogin(player: ProxiedPlayer): Boolean {
-        return if(config.authentication.sessionTimeout == 0L)
-            false
-        else
-            (findUser(player.name).lastLogin?.run { currentUnixTimestamp - this } ?: 0) > TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
+        if(config.authentication.sessionTimeout == 0L)
+            return false
+
+        val user = findUser(player.name)
+        val timeout = TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
+
+        val lastLogin = user.lastLogin?.run { currentUnixTimestamp - this } ?: 0
+
+        // User is only egilible for session login when time since last login
+        // is less than timeout and if IP addresses match.
+        if(lastLogin < timeout && player.ipAddress == user.lastIPAddress) {
+            return true
+        }
+
+        return false
     }
 
     override fun isLoggedIn(player: ProxiedPlayer): Boolean = findUser(player.name).loggedIn
