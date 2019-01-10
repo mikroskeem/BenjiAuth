@@ -38,7 +38,7 @@ class RegisterMessages {
     var pleaseRegister = "{prefix}Register using command &c&l/register &8<&cpassword&8> <&cpassword again&8>"
         private set
 
-    @Setting(value = "please-register-title", comment = "This message gets sent to player repeatedly until one gets" +
+    @Setting(value = "please-register-title", comment = "This message gets sent to player repeatedly until one gets " +
             "registered. Set both title and subtitle empty to avoid sending it. Timings will be ignored")
     var pleaseRegisterTitle = Title("", "")
         private set
