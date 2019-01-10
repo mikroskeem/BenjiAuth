@@ -139,7 +139,7 @@ class UserManager: LoginManager {
         return if(config.authentication.sessionTimeout == 0L)
             false
         else
-            findUser(player.name).lastLogin ?: 0 > TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
+            (findUser(player.name).lastLogin?.run { currentUnixTimestamp - this } ?: 0) > TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
     }
 
     override fun isLoggedIn(player: ProxiedPlayer): Boolean = findUser(player.name).loggedIn
