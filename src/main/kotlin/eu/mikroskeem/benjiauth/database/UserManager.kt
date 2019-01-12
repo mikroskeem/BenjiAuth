@@ -91,7 +91,9 @@ class UserManager: LoginManager {
                 player.address.toIPString(),
                 false,
                 null,
-                null
+                null,
+                null,
+                false
         ))
 
         if(player.isReady) {
@@ -117,7 +119,9 @@ class UserManager: LoginManager {
                 "", // See javadoc for User#getRegisteredIPAddress()
                 false,
                 null,
-                null
+                null,
+                null,
+                false
         ))
     }
 
@@ -141,13 +145,18 @@ class UserManager: LoginManager {
             return false
 
         val user = findUser(player.name)
+
+        // User logged itself out, not egilible for session login in that case.
+        if(user.forceKillSession)
+            return false
+
         val timeout = TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
 
-        val lastLogin = user.lastLogin?.run { currentUnixTimestamp - this } ?: 0
+        val lastSeen = user.lastSeen?.run { currentUnixTimestamp - this } ?: 0
 
-        // User is only egilible for session login when time since last login
+        // User is only egilible for session login when time since last seen
         // is less than timeout and if IP addresses match.
-        if(lastLogin < timeout && player.ipAddress == user.lastIPAddress) {
+        if(lastSeen < timeout && player.ipAddress == user.lastIPAddress) {
             return true
         }
 
@@ -163,14 +172,20 @@ class UserManager: LoginManager {
             return
 
         findUser(player.name).apply {
+            val timestamp = currentUnixTimestamp
+
             loggedIn = true
             lastIPAddress = player.address.toIPString()
-            lastLogin = currentUnixTimestamp
+            lastLogin = timestamp
+            lastSeen = timestamp
 
             // Update registered IP address if empty
             if(registeredIPAddress.isEmpty()) {
                 registeredIPAddress = lastIPAddress!!
             }
+
+            // Reset kill session flag
+            forceKillSession = false
 
             dao.update(this)
         }
@@ -184,9 +199,9 @@ class UserManager: LoginManager {
     override fun logoutUser(player: ProxiedPlayer, clearSession: Boolean, keepReady: Boolean) {
         findUser(player.name).apply {
             loggedIn = false
-            if(clearSession) {
-                lastLogin = null
-                lastIPAddress = null
+            lastSeen = currentUnixTimestamp
+            if(clearSession && !forceKillSession) {
+                forceKillSession = clearSession
             }
             dao.update(this)
         }
