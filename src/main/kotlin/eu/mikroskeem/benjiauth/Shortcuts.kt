@@ -67,7 +67,7 @@ fun ProxiedPlayer.kickWithMessage(message: String): Unit { disconnect(*message.p
 
 val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
 val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLoggedIn(this)
-val ProxiedPlayer.isEgilibleForSession: Boolean get() = userManager.isEligibleForSessionLogin(this)
+val ProxiedPlayer.isEligibleForSession: Boolean get() = userManager.isEligibleForSessionLogin(this)
 val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefullyLoggedIn(this)
 val ProxiedPlayer.isReady: Boolean get() = userManager.isUserReady(this)
 val ProxiedPlayer.registrationsForIP: Long get() = userManager.getRegistrations(this.ipAddress)

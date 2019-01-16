@@ -25,14 +25,14 @@
 
 package eu.mikroskeem.benjiauth.listeners
 
-import eu.mikroskeem.benjiauth.kickWithMessage
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.getAuthServer
 import eu.mikroskeem.benjiauth.isAllowedToJoin
-import eu.mikroskeem.benjiauth.isEgilibleForSession
+import eu.mikroskeem.benjiauth.isEligibleForSession
 import eu.mikroskeem.benjiauth.isForcefullyLoggedIn
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
+import eu.mikroskeem.benjiauth.kickWithMessage
 import eu.mikroskeem.benjiauth.loginWithoutPassword
 import eu.mikroskeem.benjiauth.logout
 import eu.mikroskeem.benjiauth.markReady
@@ -42,7 +42,6 @@ import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.connection.ProxiedPlayer
-import net.md_5.bungee.api.event.LoginEvent
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
@@ -87,7 +86,7 @@ class PlayerLoginListener: Listener {
                 player.logout(clearSession = false)
             }
 
-            if(!player.isLoggedIn && player.isEgilibleForSession) {
+            if(!player.isLoggedIn && player.isEligibleForSession) {
                 // Mark player ready
                 player.markReady()
 
