@@ -84,7 +84,7 @@ public interface LoginManager {
      * @param player Player
      * @return Whether player is egilible for password login or not
      */
-    boolean isEgilibleForSessionLogin(@NotNull ProxiedPlayer player);
+    boolean isEligibleForSessionLogin(@NotNull ProxiedPlayer player);
 
     /**
      * Returns whether player is logged in or not

@@ -50,6 +50,7 @@ import java.security.SecureRandom
 import java.util.Collections
 import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
+import kotlin.math.absoluteValue
 
 /**
  * @author Mark Vainomaa
@@ -140,7 +141,7 @@ class UserManager: LoginManager {
         dao.delete(findUser(username))
     }
 
-    override fun isEgilibleForSessionLogin(player: ProxiedPlayer): Boolean {
+    override fun isEligibleForSessionLogin(player: ProxiedPlayer): Boolean {
         if(config.authentication.sessionTimeout == 0L)
             return false
 
@@ -152,9 +153,15 @@ class UserManager: LoginManager {
 
         val timeout = TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
 
-        val lastSeen = user.lastSeen?.run { currentUnixTimestamp - this } ?: 0
+        val lastSeen = user.lastSeen?.run { currentUnixTimestamp - this }
+        val lastLogin = user.lastLogin?.run { currentUnixTimestamp - this }
 
-        // User is only egilible for session login when time since last seen
+        // Definitely not eligible
+        if(lastSeen == null || lastLogin == null) {
+            return false
+        }
+
+        // User is only eligible for session login when time since last seen
         // is less than timeout and if IP addresses match.
         if(lastSeen < timeout && player.ipAddress == user.lastIPAddress) {
             return true
@@ -199,7 +206,6 @@ class UserManager: LoginManager {
     override fun logoutUser(player: ProxiedPlayer, clearSession: Boolean, keepReady: Boolean) {
         findUser(player.name).apply {
             loggedIn = false
-            lastSeen = currentUnixTimestamp
             if(clearSession && !forceKillSession) {
                 forceKillSession = clearSession
             }

@@ -40,7 +40,6 @@ import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.api.plugin.PluginManager
 import net.md_5.bungee.api.scheduler.ScheduledTask
 import java.time.Instant
-import kotlin.reflect.KClass
 
 /**
  * @author Mark Vainomaa
@@ -68,7 +67,7 @@ fun ProxiedPlayer.kickWithMessage(message: String): Unit { disconnect(*message.p
 
 val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
 val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLoggedIn(this)
-val ProxiedPlayer.isEgilibleForSession: Boolean get() = userManager.isEgilibleForSessionLogin(this)
+val ProxiedPlayer.isEgilibleForSession: Boolean get() = userManager.isEligibleForSessionLogin(this)
 val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefullyLoggedIn(this)
 val ProxiedPlayer.isReady: Boolean get() = userManager.isUserReady(this)
 val ProxiedPlayer.registrationsForIP: Long get() = userManager.getRegistrations(this.ipAddress)
