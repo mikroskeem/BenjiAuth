@@ -110,5 +110,5 @@ val shadowJar by tasks.getting(ShadowJar::class) {
     }
 }
 
-tasks.getByName("jar").dependsOn(tasks.getByName("shadowJar"))
+tasks["build"].dependsOn(tasks["shadowJar"])
 defaultTasks("licenseFormat", "build")
