@@ -65,6 +65,6 @@ class PasswordMessages {
         private set
 
     @Setting(value = "too-short", comment = "This message gets sent when player tries to use too short password")
-    var tooShort = "{prefix}&cPassword is too short! Password cannot be shorter than &c&l{max} &ccharacters!"
+    var tooShort = "{prefix}&cPassword is too short! Password cannot be shorter than &c&l{min} &ccharacters!"
         private set
 }
