@@ -205,7 +205,10 @@ class UserManager: LoginManager {
 
     override fun logoutUser(player: ProxiedPlayer, clearSession: Boolean, keepReady: Boolean) {
         findUser(player.name).apply {
-            loggedIn = false
+            if(loggedIn) {
+                lastSeen = currentUnixTimestamp
+                loggedIn = false
+            }
             if(clearSession && !forceKillSession) {
                 forceKillSession = clearSession
             }
