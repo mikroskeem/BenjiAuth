@@ -52,7 +52,7 @@ import java.util.zip.GZIPInputStream
  *
  * @author Mark Vainomaa
  */
-private val DATABASE_URL = "http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz"
+private val DATABASE_URL = "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz"
 
 class GeoIPDatabase(databaseDirectory: Path = plugin.pluginFolder): GeoIPAPI {
     private val databaseFile: Path = databaseDirectory.resolve("geoip.db")
