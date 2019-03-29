@@ -28,14 +28,54 @@ package eu.mikroskeem.benjiauth
 /**
  * @author Mark Vainomaa
  */
+
+/*
+ * Big list of permissions used in this plugin
+ *
+ * TL;DR quick start guide:
+ * - Grant benjiauth.player.* to players
+ * - Grant benjiauth.admin.* and benjiauth.command.benjiauth to network operators
+ *
+ */
+
+/**
+ * Allows player to use /login command
+ */
 const val COMMAND_LOGIN = "benjiauth.player.login"
+/**
+ * Allows player to use /register command
+ */
 const val COMMAND_REGISTER = "benjiauth.player.register"
+/**
+ * Allows player to use /login command
+ */
 const val COMMAND_LOGOUT = "benjiauth.player.logout"
+/**
+ * Allows player to use /changepassword
+ */
 const val COMMAND_CPW = "benjiauth.player.changepassword"
 
+/**
+ * Allows access to /benjiauth command
+ */
 const val COMMAND_BENJIAUTH = "benjiauth.command.benjiauth"
+/**
+ * Allows server operator to use /benjiauth forcelogin
+ */
 const val ADMIN_ACTION_FORCELOGIN = "benjiauth.admin.forcelogin"
+/**
+ * Allows server operator to use /benjiauth forcelogout
+ */
 const val ADMIN_ACTION_LOGOUT = "benjiauth.admin.forcelogout"
+/**
+ * Allows server operator to use /benjiauth register
+ */
 const val ADMIN_ACTION_REGISTER = "benjiauth.admin.register"
+/**
+ * Allows server operator to use /benjiauth reload
+ */
 const val ADMIN_ACTION_RELOAD = "benjiauth.admin.reload"
+/**
+ * Allows server operator to use /benjiauth unregister
+ */
 const val ADMIN_ACTION_UNREGISTER = "benjiauth.admin.unregister"
