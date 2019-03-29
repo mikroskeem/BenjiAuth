@@ -1,10 +1,10 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    kotlin("jvm") version "1.3.11"
+    kotlin("jvm") version "1.3.21"
     id("net.minecrell.licenser") version "0.4.1"
     id("net.minecrell.plugin-yml.bungee") version "0.3.0"
-    id("com.github.johnrengelman.shadow") version "4.0.2"
+    id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 
 group = "eu.mikroskeem"
