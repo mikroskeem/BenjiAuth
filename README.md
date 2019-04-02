@@ -6,6 +6,7 @@ Its sole purpose is to authenticate players and be configurable as much as possi
 
 - [PaperMC thread](https://papermc.io/forums/t/1-12-2-benjiauth-finally-a-usable-authentication-plugin-for-your-proxy/)
 - [CodeMC CI builds](https://ci.codemc.org/view/Author/job/Mikroskeem/job/BenjiAuth/)
+- [Usage statistics](https://bstats.org/plugin/bungeecord/BenjiAuth)
 
 ## Why another one?
 - [BungeeAuth](https://github.com/vik1395/BungeeAuth-Minecraft) is broken as shit and not as flexible as it should be

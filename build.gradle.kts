@@ -19,13 +19,14 @@ val bcryptVersion = "0.6.0"
 val geoipVersion = "2.12.0"
 val commonsCompressVersion = "1.18"
 val luckpermsApiVersion = "4.3"
+val bstatsVersion = "1.4"
 
 repositories {
     mavenLocal()
     mavenCentral()
 
     maven("https://papermc.io/repo/repository/maven-public/")
-    maven("http://repo.bstats.org/content/repositories/releases/")
+    maven("https://repo.codemc.org/repository/maven-public")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
@@ -48,6 +49,7 @@ dependencies {
         exclude(module = "httpclient")
     }
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
+    implementation("org.bstats:bstats-bungeecord-lite:$bstatsVersion")
 }
 
 license {
@@ -76,7 +78,8 @@ val shadowJar by tasks.getting(ShadowJar::class) {
             "com.maxmind.geoip2",
             "org.apache.commons.compress",
             "com.fasterxml.jackson",
-            "org.objenesis"
+            "org.objenesis",
+            "org.bstats"
     )
     val targetPackage = "eu.mikroskeem.benjiauth.lib"
 

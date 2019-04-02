@@ -44,6 +44,7 @@ import eu.mikroskeem.benjiauth.listeners.ServerSwitchListener
 import eu.mikroskeem.benjiauth.logger.JULWrapper
 import eu.mikroskeem.benjiauth.logger.PluginLogger
 import net.md_5.bungee.api.plugin.Plugin
+import org.bstats.bungeecord.MetricsLite
 import java.net.InetAddress
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -85,6 +86,9 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         registerCommand<LoginCommand>()
         registerCommand<LogoutCommand>()
         registerCommand<RegisterCommand>()
+
+        // Statistics!
+        MetricsLite(this)
 
         // Hook into FastLogin to skip authentication for online mode players
         hookFastLogin()
