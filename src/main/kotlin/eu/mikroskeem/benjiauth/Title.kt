@@ -68,16 +68,16 @@ fun ProxiedPlayer.resetTitle() {
 
 class TitleSerializer: TypeSerializer<Title> {
     override fun deserialize(type: TypeToken<*>, node: ConfigurationNode): Title {
-        val title = node.getNode("title").string
-        val subTitle = node.getNode("subtitle").string
-        val fadeIn = node.getNode("fade-in").long
+        val title = node.getNode("title").string ?: ""
+        val subTitle = node.getNode("subtitle").string ?: ""
+         val fadeIn = node.getNode("fade-in").long
         val stay = node.getNode("stay").long
         val fadeOut = node.getNode("fade-out").long
         return Title(title, subTitle, fadeIn, stay, fadeOut)
     }
 
-    override fun serialize(type: TypeToken<*>, titleObj: Title, node: ConfigurationNode) {
-        titleObj.run {
+    override fun serialize(type: TypeToken<*>, titleObj: Title?, node: ConfigurationNode) {
+        titleObj!!.run {
             node.getNode("title").value = title
             node.getNode("subtitle").value = subTitle
             node.getNode("fade-in").value = fadeIn

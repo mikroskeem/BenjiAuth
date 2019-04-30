@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    kotlin("jvm") version "1.3.21"
+    kotlin("jvm") version "1.3.31"
     id("net.minecrell.licenser") version "0.4.1"
     id("net.minecrell.plugin-yml.bungee") version "0.3.0"
     id("com.github.johnrengelman.shadow") version "5.0.0"
@@ -10,9 +10,9 @@ plugins {
 group = "eu.mikroskeem"
 version = "0.0.1-SNAPSHOT"
 
-val waterfallApiVersion = "1.13-SNAPSHOT"
+val waterfallApiVersion = "1.14-SNAPSHOT"
 val slf4jApiVersion = "1.7.25"
-val configurateVersion = "3.3"
+val configurateVersion = "3.7-SNAPSHOT"
 val hikariVersion = "3.3.0"
 val ormliteVersion = "5.1"
 val bcryptVersion = "0.6.0"
@@ -28,6 +28,7 @@ repositories {
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.codemc.org/repository/maven-public")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://repo.spongepowered.org/maven")
 }
 
 dependencies {
@@ -36,7 +37,7 @@ dependencies {
     compileOnly("me.lucko.luckperms:luckperms-api:$luckpermsApiVersion")
 
     implementation(kotlin("stdlib-jdk8"))
-    implementation("ninja.leaping.configurate:configurate-hocon:$configurateVersion") {
+    implementation("org.spongepowered:configurate-hocon:$configurateVersion") {
         exclude(module = "guava")
     }
     implementation("com.zaxxer:HikariCP:$hikariVersion") {
