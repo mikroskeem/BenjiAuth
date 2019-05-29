@@ -60,12 +60,18 @@ class FastLoginHook: AuthPlugin<ProxiedPlayer> {
             false
         }
     }
-}
 
-// Hooks BenjiAuth to FastLogin
-fun hookFastLogin() {
-    val fastLogin = pluginManager.getPlugin("FastLogin") ?: return
-    plugin.pluginLogger.info("FastLogin found, hooking...")
-    (fastLogin as FastLoginBungee).core.authPluginHook = FastLoginHook()
-    plugin.pluginLogger.info("Hooked into FastLogin!")
+    companion object {
+        var isHooked = false
+            private set
+
+        // Hooks BenjiAuth to FastLogin
+        fun hook() {
+            val fastLogin = pluginManager.getPlugin("FastLogin") ?: return
+            plugin.pluginLogger.info("FastLogin found, hooking...")
+            (fastLogin as FastLoginBungee).core.authPluginHook = FastLoginHook()
+            plugin.pluginLogger.info("Hooked into FastLogin!")
+            isHooked = true
+        }
+    }
 }

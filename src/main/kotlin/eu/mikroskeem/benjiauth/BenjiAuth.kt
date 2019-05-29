@@ -35,8 +35,8 @@ import eu.mikroskeem.benjiauth.config.BenjiMessages
 import eu.mikroskeem.benjiauth.config.ConfigurationLoader
 import eu.mikroskeem.benjiauth.database.GeoIPDatabase
 import eu.mikroskeem.benjiauth.database.UserManager
-import eu.mikroskeem.benjiauth.hook.hookFastLogin
-import eu.mikroskeem.benjiauth.hook.hookLuckPerms
+import eu.mikroskeem.benjiauth.hook.FastLoginHook
+import eu.mikroskeem.benjiauth.hook.LuckPermsHook
 import eu.mikroskeem.benjiauth.listeners.ChatListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
@@ -91,10 +91,10 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         MetricsLite(this)
 
         // Hook into FastLogin to skip authentication for online mode players
-        hookFastLogin()
+        FastLoginHook.hook()
 
         // Hook into LuckPerms to manage authenticated context value
-        hookLuckPerms()
+        LuckPermsHook.hook()
     }
 
     override fun onDisable() { if(::userManager.isInitialized) userManager.shutdown() }

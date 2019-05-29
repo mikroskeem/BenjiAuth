@@ -37,8 +37,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Mark Vainomaa
  */
-class RegisterMessageTask(private val player: ProxiedPlayer): Task() {
-    override val delay: Long = 0
+class RegisterMessageTask(private val player: ProxiedPlayer, override val delay: Long = 0): Task() {
     override val period: Long = 1
     override val timeUnit: TimeUnit = TimeUnit.SECONDS
 

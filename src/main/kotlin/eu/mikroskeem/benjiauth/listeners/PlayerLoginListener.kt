@@ -27,6 +27,7 @@ package eu.mikroskeem.benjiauth.listeners
 
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.getAuthServer
+import eu.mikroskeem.benjiauth.hook.FastLoginHook
 import eu.mikroskeem.benjiauth.isAllowedToJoin
 import eu.mikroskeem.benjiauth.isEligibleForSession
 import eu.mikroskeem.benjiauth.isForcefullyLoggedIn
@@ -46,6 +47,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
 import net.md_5.bungee.api.event.ServerConnectEvent
+import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
@@ -127,17 +129,23 @@ class PlayerLoginListener: Listener {
             if(target.name != auth.name) {
                 event.target = auth
             }
-
-            // Start login/register message/timeout task
-            if(!player.isRegistered) {
-                RegisterMessageTask(player).schedule()
-            } else if(!player.isLoggedIn) {
-                LoginMessageTask(player).schedule()
-            }
         }
 
         // Mark this listener executed for player
         firstConnectDone.add(player)
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    fun on(event: ServerConnectedEvent) {
+        val player = event.player
+
+        // Start login/register message/timeout task
+        val delay: Long = if(FastLoginHook.isHooked) 2 else 0
+        if(!player.isRegistered) {
+            RegisterMessageTask(player, delay = delay).schedule()
+        } else if(!player.isLoggedIn) {
+            LoginMessageTask(player, delay = delay).schedule()
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
