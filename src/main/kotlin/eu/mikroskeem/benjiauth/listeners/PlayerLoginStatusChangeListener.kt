@@ -25,8 +25,6 @@
 
 package eu.mikroskeem.benjiauth.listeners
 
-import eu.mikroskeem.benjiauth.kickWithMessage
-import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.events.PlayerLoginEvent
 import eu.mikroskeem.benjiauth.events.PlayerLogoutEvent
@@ -34,6 +32,8 @@ import eu.mikroskeem.benjiauth.events.PlayerRegisterEvent
 import eu.mikroskeem.benjiauth.events.PlayerUnregisterEvent
 import eu.mikroskeem.benjiauth.findServer
 import eu.mikroskeem.benjiauth.getAuthServer
+import eu.mikroskeem.benjiauth.kickWithMessage
+import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.movePlayer
 import eu.mikroskeem.benjiauth.plugin
@@ -41,6 +41,7 @@ import eu.mikroskeem.benjiauth.resetTitle
 import eu.mikroskeem.benjiauth.shouldBeSent
 import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
+import net.md_5.bungee.api.ServerConnectRequest
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.event.EventHandler
@@ -74,22 +75,24 @@ class PlayerLoginStatusChangeListener: Listener {
         if(event.player.server?.info?.name == lobby.name)
             return
 
-        event.player.movePlayer(lobby, retry = true) { success, e ->
-            if(!success) {
-                // TODO: Not successful, but throwable is null. What's up? Possible cases:
-                // TODO: 1) ServerConnectEvent.isCancelled == true
-                // TODO: 2) If ProxiedPlayer.server == lobby, but server is usually null there.
-                // TODO: 3) If UserConnection.pendingConnects.contains(lobby), but we cannot check that using API
-                // TODO: Not sure if player is going to reach the target server
-                if(e == null)
+        event.player.movePlayer(lobby) { result, e ->
+            when(result) {
+                ServerConnectRequest.Result.SUCCESS,
+                ServerConnectRequest.Result.EVENT_CANCEL, // HOPE FOR THE BEST
+                ServerConnectRequest.Result.ALREADY_CONNECTING,
+                ServerConnectRequest.Result.ALREADY_CONNECTED
+                -> {
+                    // Do not do anything
                     return@movePlayer
-
-                if(config.servers.kickIfLobbyIsDown) {
-                    event.player.kickWithMessage(messages.error.couldntConnectToLobby)
-                } else {
-                    event.player.message(messages.error.couldntConnectToLobby)
                 }
-                plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to lobby", e)
+                ServerConnectRequest.Result.FAIL -> {
+                    if(config.servers.kickIfLobbyIsDown) {
+                        event.player.kickWithMessage(messages.error.couldntConnectToLobby)
+                    } else {
+                        event.player.message(messages.error.couldntConnectToLobby)
+                    }
+                    plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to lobby", e)
+                }
             }
         }
     }
@@ -109,8 +112,8 @@ class PlayerLoginStatusChangeListener: Listener {
             return
 
         // Send player to auth server
-        event.player.movePlayer(auth, retry = true) { success, e ->
-            if(!success) {
+        event.player.movePlayer(auth) { result, e ->
+            if(result == ServerConnectRequest.Result.FAIL) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
@@ -131,8 +134,8 @@ class PlayerLoginStatusChangeListener: Listener {
         if(event.player.server?.info?.name == auth.name)
             return
 
-        event.player.movePlayer(auth, retry = true) { success, e ->
-            if(!success) {
+        event.player.movePlayer(auth) { result, e ->
+            if(result == ServerConnectRequest.Result.FAIL) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }

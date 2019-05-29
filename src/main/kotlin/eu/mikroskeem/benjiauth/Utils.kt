@@ -25,19 +25,17 @@
 
 package eu.mikroskeem.benjiauth
 
+import net.md_5.bungee.api.ServerConnectRequest
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.connection.ProxiedPlayer
+import net.md_5.bungee.api.event.ServerConnectEvent
 import java.net.InetSocketAddress
 
 /**
  * @author Mark Vainomaa
  */
-val isWaterfall: Boolean by lazy {
-    try { Class.forName("io.github.waterfallmc.waterfall.QueryResult"); true } catch(e: ClassNotFoundException) { false }
-}
-
 fun String.processMessage(player: ProxiedPlayer? = null): Array<out BaseComponent> {
     val message = this.takeIf { it.isNotEmpty() }
             ?.replace("{player}", player?.name ?: "")
@@ -51,22 +49,15 @@ fun String.processMessage(player: ProxiedPlayer? = null): Array<out BaseComponen
 
 fun findServer(name: String): ServerInfo? = proxy.getServerInfo(name)
 
-fun ProxiedPlayer.movePlayer(target: ServerInfo, retry: Boolean = false,
-                             timeout: Long = config.servers.connectionTimeout,
-                             callback: (Boolean, Throwable?) -> Unit) {
-    if(isWaterfall) {
-        this.connect(target, callback, retry, timeout.toInt())
-        return
-    }
-
-    // Note: BungeeCord does not expose timeout option. So custom value does not work
-    this.connect(target) connect@ { success, throwable ->
-        if(!success && retry) {
-            this.connect(target, callback)
-            return@connect
-        }
-        callback(success, throwable)
-    }
+fun ProxiedPlayer.movePlayer(target: ServerInfo, timeout: Long = config.servers.connectionTimeout,
+                             callback: (ServerConnectRequest.Result, Throwable?) -> Unit) {
+    val request = ServerConnectRequest.builder()
+            .target(target)
+            .connectTimeout(timeout.toInt())
+            .callback(callback)
+            .reason(ServerConnectEvent.Reason.PLUGIN)
+            .build()
+    connect(request)
 }
 
 fun InetSocketAddress.toIPString(): String = address.hostAddress
