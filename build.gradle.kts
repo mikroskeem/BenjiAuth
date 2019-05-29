@@ -84,10 +84,8 @@ val shadowJar by tasks.getting(ShadowJar::class) {
     )
     val targetPackage = "eu.mikroskeem.benjiauth.lib"
 
-    if(rootProject.findProperty("useJRebel") != "true") {
-        relocations.forEach {
-            relocate(it, "$targetPackage.$it")
-        }
+    relocations.forEach {
+        relocate(it, "$targetPackage.$it")
     }
 
     dependencies {
