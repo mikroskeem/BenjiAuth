@@ -93,6 +93,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
     dependencies {
         exclude("org/jetbrains/annotations/**")
         exclude("org/intellij/lang/annotations/**")
+        exclude("org/checkerframework/**")
         exclude("META-INF/maven/**")
 
         // TODO: very likely unsafe exclusions
