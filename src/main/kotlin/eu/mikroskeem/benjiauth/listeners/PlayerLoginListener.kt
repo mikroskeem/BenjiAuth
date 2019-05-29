@@ -42,7 +42,6 @@ import eu.mikroskeem.benjiauth.processMessage
 import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
 import net.md_5.bungee.api.config.ServerInfo
-import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
@@ -51,15 +50,11 @@ import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
-import java.util.Collections
-import java.util.WeakHashMap
 
 /**
  * @author Mark Vainomaa
  */
 class PlayerLoginListener: Listener {
-    private val firstConnectDone: MutableSet<ProxiedPlayer> = Collections.newSetFromMap(WeakHashMap())
-
     @EventHandler(priority = EventPriority.LOWEST)
     fun on(event: PreLoginEvent) {
         if(!event.connection.address.isAllowedToJoin()) {
@@ -114,8 +109,8 @@ class PlayerLoginListener: Listener {
         val player = event.player
         val target = event.target
 
-        // Skip if this listener executed for given player once already
-        if(firstConnectDone.contains(player))
+        // This listener should only run on initial join
+        if(event.reason != ServerConnectEvent.Reason.JOIN_PROXY)
             return
 
         // Check if player is logged in
@@ -130,9 +125,6 @@ class PlayerLoginListener: Listener {
                 event.target = auth
             }
         }
-
-        // Mark this listener executed for player
-        firstConnectDone.add(player)
     }
 
     @EventHandler(priority = EventPriority.HIGH)
