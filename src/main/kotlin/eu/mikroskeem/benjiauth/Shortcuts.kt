@@ -79,7 +79,7 @@ fun ProxiedPlayer.register(password: String) = userManager.registerUser(this, pa
 fun ProxiedPlayer.changePassword(newPassword: String) = userManager.changePassword(this, newPassword)
 fun ProxiedPlayer.logout(clearSession: Boolean = true, keepReady: Boolean = true) = userManager.logoutUser(this, clearSession, keepReady)
 fun ProxiedPlayer.markReady() = userManager.markUserReady(this)
-fun ProxiedPlayer.ipHasTooManyRegistrations() = registrationsForIP >= config.registration.maxRegstrationsPerIP
+fun ProxiedPlayer.hasTooManyRegistrations() = registrationsForIP >= config.registration.maxRegstrationsPerIP
 
 fun String.asPlayer(): ProxiedPlayer? = proxy.players.find { it.name == this }
 

@@ -28,12 +28,10 @@ package eu.mikroskeem.benjiauth.commands.player
 import eu.mikroskeem.benjiauth.COMMAND_REGISTER
 import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
-import eu.mikroskeem.benjiauth.ipAddress
-import eu.mikroskeem.benjiauth.ipHasTooManyRegistrations
+import eu.mikroskeem.benjiauth.hasTooManyRegistrations
 import eu.mikroskeem.benjiauth.isRegistered
 import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.register
-import eu.mikroskeem.benjiauth.userManager
 import eu.mikroskeem.benjiauth.validatePassword
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.connection.ProxiedPlayer
@@ -52,7 +50,7 @@ class RegisterCommand: Command("register", COMMAND_REGISTER) {
         if(player.isRegistered) {
             // Tell if player is already registered
             player.message(messages.register.alreadyRegistered)
-        } else if(player.ipHasTooManyRegistrations()) {
+        } else if(player.hasTooManyRegistrations()) {
             // Tell that player has too many registrations for this IP address
             player.message(messages.error.tooManyRegistrationsPerIP)
         } else {
