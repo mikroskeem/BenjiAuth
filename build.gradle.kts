@@ -23,6 +23,7 @@ val bstatsVersion = "1.4"
 val okHttpVersion = "3.14.2"
 val expiringMapVersion = "0.5.9"
 val javaxMailVersion = "1.6.2"
+val sunSmtpVersion = "1.6.3"
 
 repositories {
     mavenLocal()
@@ -57,6 +58,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
     implementation("net.jodah:expiringmap:$expiringMapVersion")
     implementation("javax.mail:javax.mail-api:$javaxMailVersion")
+    implementation("com.sun.mail:smtp:$sunSmtpVersion")
 }
 
 license {
