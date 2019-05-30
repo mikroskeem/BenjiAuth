@@ -25,6 +25,7 @@
 
 package eu.mikroskeem.benjiauth.config.email
 
+import eu.mikroskeem.benjiauth.config.email.providers.SmtpProviderSection
 import eu.mikroskeem.benjiauth.config.email.providers.MailgunProviderSection
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
@@ -70,11 +71,17 @@ class EmailSection {
 
     @Setting(value = "provider", comment = "E-mail service provider used in this plugin\n" +
             "Currently supported providers:\n" +
-            "- mailgun")
+            "- mailgun\n" +
+            "- smtp")
     var provider = "mailgun"
         private set
 
     @Setting(value = "mailgun-provider", comment = "Mailgun E-mail service provider")
     var mailgun = MailgunProviderSection()
+        private set
+
+    @Setting(value = "smtp-provider", comment = "Email credentials configuration. See https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html#properties\n" +
+            "for detailed properties information")
+    var smtp = SmtpProviderSection()
         private set
 }
