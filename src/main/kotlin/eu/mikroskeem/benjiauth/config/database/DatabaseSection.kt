@@ -58,5 +58,6 @@ class DatabaseSection {
     val asHikariConfig: HikariConfig get() = HikariConfig().apply hikari@ {
         jdbcUrl = database
         driverParams.forEach(this::addDataSourceProperty)
+        poolName = "benjiauth-hikari"
     }
 }
