@@ -74,7 +74,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
             "ninja.leaping.configurate",
             "com.zaxxer.hikari",
             "com.j256.ormlite",
-            "at.favre.lib.crypto.bcryptt",
+            "at.favre.lib.crypto.bcrypt",
             "com.maxmind.db",
             "com.maxmind.geoip2",
             "org.apache.commons.compress",
