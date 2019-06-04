@@ -21,6 +21,7 @@ val commonsCompressVersion = "1.18"
 val luckpermsApiVersion = "4.3"
 val bstatsVersion = "1.4"
 val okHttpVersion = "3.14.2"
+val expiringMapVersion = "0.5.9"
 
 repositories {
     mavenLocal()
@@ -53,6 +54,7 @@ dependencies {
     implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
     implementation("org.bstats:bstats-bungeecord-lite:$bstatsVersion")
     implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
+    implementation("net.jodah:expiringmap:$expiringMapVersion")
 }
 
 license {
@@ -84,7 +86,8 @@ val shadowJar by tasks.getting(ShadowJar::class) {
             "org.objenesis",
             "org.bstats",
             "okio",
-            "okhttp3"
+            "okhttp3",
+            "net.jodah.expiringmap"
     )
     val targetPackage = "eu.mikroskeem.benjiauth.lib"
 
