@@ -23,39 +23,34 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
+package eu.mikroskeem.benjiauth.email;
 
-import eu.mikroskeem.benjiauth.email.EmailManager;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
- * BenjiAuth plugin API
- *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
+public interface EmailManager {
     /**
-     * Gets instance of {@link LoginManager}
+     * Sends e-mail address verification e-mail
      *
-     * @return Instance of {@link LoginManager}
+     * @param player Player
+     * @param verificationCode E-mail address verification code
+     * @return A completable future
      */
     @NotNull
-    LoginManager getLoginManager();
+    CompletableFuture<Void> sendVerificationEmail(@NotNull ProxiedPlayer player, @NotNull String verificationCode);
 
     /**
-     * Gets instance of {@link GeoIPAPI}.
-     * Default implementation uses MaxMind's GeoLite2 Country database
+     * Sends password recovery e-mail
      *
-     * @return Instance of {@link GeoIPAPI}
+     * @param player Player
+     * @param verificationCode Password recovery code
+     * @return A completable future
      */
     @NotNull
-    GeoIPAPI getGeoIPAPI();
-
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
-    @NotNull
-    EmailManager getEmailManager();
+    CompletableFuture<Void> sendPasswordRecoveryEmail(@NotNull ProxiedPlayer player, @NotNull String verificationCode);
 }

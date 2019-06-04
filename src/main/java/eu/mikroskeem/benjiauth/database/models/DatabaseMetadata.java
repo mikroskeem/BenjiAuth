@@ -23,39 +23,56 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
+package eu.mikroskeem.benjiauth.database.models;
 
-import eu.mikroskeem.benjiauth.email.EmailManager;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * BenjiAuth plugin API
- *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
-    /**
-     * Gets instance of {@link LoginManager}
-     *
-     * @return Instance of {@link LoginManager}
-     */
-    @NotNull
-    LoginManager getLoginManager();
+@DatabaseTable(tableName = "benjiauth_metadata")
+public class DatabaseMetadata {
+    /** Key column name */
+    public final static String KEY_FIELD = "key";
 
-    /**
-     * Gets instance of {@link GeoIPAPI}.
-     * Default implementation uses MaxMind's GeoLite2 Country database
-     *
-     * @return Instance of {@link GeoIPAPI}
-     */
-    @NotNull
-    GeoIPAPI getGeoIPAPI();
+    /** Value type name */
+    public final static String VALUE_TYPE_FIELD = "type";
 
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
+    /** Key value name */
+    public final static String VALUE_FIELD = "value";
+
+    @DatabaseField(id = true, columnName = KEY_FIELD, canBeNull = false, width = 16)
+    private String key;
+
+    @DatabaseField(columnName = VALUE_TYPE_FIELD, canBeNull = false)
+    private String type;
+
+    @DatabaseField(columnName = VALUE_FIELD)
+    private String value;
+
+    DatabaseMetadata() {}
+
+    public DatabaseMetadata(String key, String type, String value) {
+        this.key = key;
+        this.type = type;
+        this.value = value;
+    }
+
     @NotNull
-    EmailManager getEmailManager();
+    public String getKey() {
+        return key;
+    }
+
+    @NotNull
+    public String getType() {
+        return type;
+    }
+
+    @Nullable
+    public String getValue() {
+        return value;
+    }
 }

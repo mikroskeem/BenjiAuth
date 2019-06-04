@@ -79,6 +79,10 @@ val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefully
 val ProxiedPlayer.isReady: Boolean get() = userManager.isUserReady(this)
 val ProxiedPlayer.registrationsForIP: Long get() = userManager.getRegistrations(this.ipAddress)
 
+val ProxiedPlayer.verifiedEmailAddress: String? get() = userManager.getEmail(this)?.takeIf { userManager.isEmailVerified(this) }
+val ProxiedPlayer.emailAddress: String? get() = userManager.getEmail(this)
+val ProxiedPlayer.isEmailVerified: Boolean get() = userManager.isEmailVerified(this)
+
 fun ProxiedPlayer.checkPassword(password: String) = userManager.checkPassword(this, password)
 fun ProxiedPlayer.login(password: String): Boolean = if(checkPassword(password)) { userManager.loginUser(this); true } else false
 fun ProxiedPlayer.loginWithoutPassword(forceful: Boolean = false) = userManager.loginUser(this, forceful)

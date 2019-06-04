@@ -23,39 +23,26 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
+package eu.mikroskeem.benjiauth.config.email.providers
 
-import eu.mikroskeem.benjiauth.email.EmailManager;
-import org.jetbrains.annotations.NotNull;
+import ninja.leaping.configurate.objectmapping.Setting
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
 /**
- * BenjiAuth plugin API
- *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
-    /**
-     * Gets instance of {@link LoginManager}
-     *
-     * @return Instance of {@link LoginManager}
-     */
-    @NotNull
-    LoginManager getLoginManager();
+@ConfigSerializable
+class MailgunProviderSection {
+    @Setting(value = "domain", comment = "Mailgun domain")
+    var domain = ""
+        private set
 
-    /**
-     * Gets instance of {@link GeoIPAPI}.
-     * Default implementation uses MaxMind's GeoLite2 Country database
-     *
-     * @return Instance of {@link GeoIPAPI}
-     */
-    @NotNull
-    GeoIPAPI getGeoIPAPI();
+    @Setting(value = "api-key", comment = "Mailgun API key")
+    var apiKey = ""
+        private set
 
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
-    @NotNull
-    EmailManager getEmailManager();
+    @Setting(value = "mailgun-api-domain", comment = "Mailgun API domain. Default is for EU customers - if you're " +
+            "not from EU then use api.mailgun.net")
+    var mailgunDomain = "api.eu.mailgun.net"
+        private set
 }

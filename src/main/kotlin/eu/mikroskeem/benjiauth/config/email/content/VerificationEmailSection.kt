@@ -23,39 +23,14 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
+package eu.mikroskeem.benjiauth.config.email.content
 
-import eu.mikroskeem.benjiauth.email.EmailManager;
-import org.jetbrains.annotations.NotNull;
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
 /**
- * BenjiAuth plugin API
- *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
-    /**
-     * Gets instance of {@link LoginManager}
-     *
-     * @return Instance of {@link LoginManager}
-     */
-    @NotNull
-    LoginManager getLoginManager();
+@ConfigSerializable
+class VerificationEmailSection: CommonContentOptions() {
 
-    /**
-     * Gets instance of {@link GeoIPAPI}.
-     * Default implementation uses MaxMind's GeoLite2 Country database
-     *
-     * @return Instance of {@link GeoIPAPI}
-     */
-    @NotNull
-    GeoIPAPI getGeoIPAPI();
-
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
-    @NotNull
-    EmailManager getEmailManager();
 }

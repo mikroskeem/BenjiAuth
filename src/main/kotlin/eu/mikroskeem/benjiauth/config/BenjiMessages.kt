@@ -27,6 +27,7 @@ package eu.mikroskeem.benjiauth.config
 
 import eu.mikroskeem.benjiauth.config.messages.AdminMessages
 import eu.mikroskeem.benjiauth.config.messages.CommandUsages
+import eu.mikroskeem.benjiauth.config.messages.EmailMessages
 import eu.mikroskeem.benjiauth.config.messages.ErrorMessages
 import eu.mikroskeem.benjiauth.config.messages.LoginMessages
 import eu.mikroskeem.benjiauth.config.messages.PasswordMessages
@@ -53,6 +54,10 @@ class BenjiMessages {
 
     @Setting(value = "password", comment = "Password related messages")
     var password = PasswordMessages()
+        private set
+
+    @Setting(value = "email", comment = "E-mail related messages")
+    var email = EmailMessages()
         private set
 
     @Setting(value = "error", comment = "Error messages")

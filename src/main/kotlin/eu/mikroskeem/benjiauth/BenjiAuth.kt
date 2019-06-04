@@ -27,14 +27,18 @@ package eu.mikroskeem.benjiauth
 
 import eu.mikroskeem.benjiauth.commands.admin.BenjiAuthCommand
 import eu.mikroskeem.benjiauth.commands.player.ChangePasswordCommand
+import eu.mikroskeem.benjiauth.commands.player.EmailCommand
 import eu.mikroskeem.benjiauth.commands.player.LoginCommand
 import eu.mikroskeem.benjiauth.commands.player.LogoutCommand
 import eu.mikroskeem.benjiauth.commands.player.RegisterCommand
 import eu.mikroskeem.benjiauth.config.Benji
 import eu.mikroskeem.benjiauth.config.BenjiMessages
 import eu.mikroskeem.benjiauth.config.ConfigurationLoader
+import eu.mikroskeem.benjiauth.email.EmailManagerImpl
+import eu.mikroskeem.benjiauth.email.NoopEmailManagerImpl
 import eu.mikroskeem.benjiauth.database.GeoIPDatabase
 import eu.mikroskeem.benjiauth.database.UserManager
+import eu.mikroskeem.benjiauth.email.EmailManager
 import eu.mikroskeem.benjiauth.hook.FastLoginHook
 import eu.mikroskeem.benjiauth.hook.LuckPermsHook
 import eu.mikroskeem.benjiauth.listeners.ChatListener
@@ -58,6 +62,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
     private lateinit var messagesLoader: ConfigurationLoader<BenjiMessages>
     private lateinit var userManager: UserManager
     private lateinit var geoIPApi: GeoIPAPI
+    private lateinit var emailManager: EmailManager
 
     override fun onEnable() {
         configLoader = initConfig("config.cfg")
@@ -75,6 +80,13 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
                 override fun getCountryByIP(ipAddress: String): String? = config.country.allowedCountries.firstOrNull()
             }
         }
+        emailManager = try { if(config.email.enabled) EmailManagerImpl() else NoopEmailManagerImpl()
+        } catch (e: Exception) {
+            pluginLogger.log(Level.WARNING, "Failed to initialize e-mail service!", e)
+            pluginLogger.warning("Falling back to no-op implementation and disabling e-mail usage")
+            config.email.enabled = false
+            NoopEmailManagerImpl()
+        }
 
         registerListener<ChatListener>()
         registerListener<PlayerLoginListener>()
@@ -86,6 +98,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         registerCommand<LoginCommand>()
         registerCommand<LogoutCommand>()
         registerCommand<RegisterCommand>()
+        registerCommand<EmailCommand>()
 
         // Statistics!
         MetricsLite(this)
@@ -113,4 +126,5 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
     override fun getApi(): BenjiAuthAPI = this
     override fun getLoginManager(): LoginManager = userManager
     override fun getGeoIPAPI(): GeoIPAPI = geoIPApi
+    override fun getEmailManager(): EmailManager = emailManager
 }

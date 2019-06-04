@@ -67,4 +67,9 @@ class PasswordMessages {
     @Setting(value = "too-short", comment = "This message gets sent when player tries to use too short password")
     var tooShort = "{prefix}&cPassword is too short! Password cannot be shorter than &c&l{min} &ccharacters!"
         private set
+
+    @Setting(value = "recovery-attempt-invalidated", comment = "This message gets sent when player logs in with password while password was attempted to recover.\n" +
+            "Note that this only applies to manual logins, automatic logins won't clear the code")
+    var recoveryAttemptInvalidated = "{prefix}Password recovery cancelled invalidated as you logged in with a password"
+        private set
 }

@@ -23,39 +23,23 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
-
-import eu.mikroskeem.benjiauth.email.EmailManager;
-import org.jetbrains.annotations.NotNull;
+package eu.mikroskeem.benjiauth.email
 
 /**
- * BenjiAuth plugin API
- *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
-    /**
-     * Gets instance of {@link LoginManager}
-     *
-     * @return Instance of {@link LoginManager}
-     */
-    @NotNull
-    LoginManager getLoginManager();
+interface EmailService {
+    fun initialize()
+    fun sendEmail(recipients: Collection<String>, subject: String, body: EmailBody)
 
-    /**
-     * Gets instance of {@link GeoIPAPI}.
-     * Default implementation uses MaxMind's GeoLite2 Country database
-     *
-     * @return Instance of {@link GeoIPAPI}
-     */
-    @NotNull
-    GeoIPAPI getGeoIPAPI();
+    enum class EmailType {
+        PLAIN,
+        HTML
+    }
 
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
-    @NotNull
-    EmailManager getEmailManager();
+    class EmailBody(val type: EmailType, val content: String)
+
+    class EmailServiceInitException(message: String, cause: Exception?): Exception(message, cause) {
+        constructor(message: String): this(message, null)
+    }
 }

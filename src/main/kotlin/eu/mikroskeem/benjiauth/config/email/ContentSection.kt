@@ -23,39 +23,27 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
+package eu.mikroskeem.benjiauth.config.email
 
-import eu.mikroskeem.benjiauth.email.EmailManager;
-import org.jetbrains.annotations.NotNull;
+import eu.mikroskeem.benjiauth.config.email.content.RecoveryEmailSection
+import eu.mikroskeem.benjiauth.config.email.content.VerificationEmailSection
+import ninja.leaping.configurate.objectmapping.Setting
+import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
 /**
- * BenjiAuth plugin API
- *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
-    /**
-     * Gets instance of {@link LoginManager}
-     *
-     * @return Instance of {@link LoginManager}
-     */
-    @NotNull
-    LoginManager getLoginManager();
+@ConfigSerializable
+class ContentSection {
+    @Setting(value = "from-user", comment = "Under what name should BenjiAuth automated e-mails appear as?")
+    var fromUser = "BenjiAuth <noreply+benjiauth@example.com>"
+        private set
 
-    /**
-     * Gets instance of {@link GeoIPAPI}.
-     * Default implementation uses MaxMind's GeoLite2 Country database
-     *
-     * @return Instance of {@link GeoIPAPI}
-     */
-    @NotNull
-    GeoIPAPI getGeoIPAPI();
+    @Setting(value = "verification-email", comment = "Verification e-mail content settings")
+    var verificationEmail = VerificationEmailSection()
+        private set
 
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
-    @NotNull
-    EmailManager getEmailManager();
+    @Setting(value = "recovery-email", comment = "Recovery e-mail content settings")
+    var recoveryEmail = RecoveryEmailSection()
+        private set
 }

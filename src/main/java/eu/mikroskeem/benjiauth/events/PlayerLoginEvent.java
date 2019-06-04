@@ -37,25 +37,19 @@ import org.jetbrains.annotations.NotNull;
 public final class PlayerLoginEvent extends Event {
     private final ProxiedPlayer player;
     private final boolean forceLogin;
-
-    /**
-     * Constructs new login event
-     *
-     * @param player Player who logged in
-     */
-    public PlayerLoginEvent(ProxiedPlayer player) {
-        this(player, false);
-    }
+    private final boolean passwordResetCodeCleared;
 
     /**
      * Constructs new login event
      *
      * @param player Player who logged in
      * @param forceLogin Whether it was a forceful login or not
+     * @param passwordResetCodeCleared Whether password reset code was cleared or not
      */
-    public PlayerLoginEvent(ProxiedPlayer player, boolean forceLogin) {
+    public PlayerLoginEvent(ProxiedPlayer player, boolean forceLogin, boolean passwordResetCodeCleared) {
         this.player = player;
         this.forceLogin = forceLogin;
+        this.passwordResetCodeCleared = passwordResetCodeCleared;
     }
 
     /**
@@ -75,5 +69,14 @@ public final class PlayerLoginEvent extends Event {
      */
     public boolean isForceLogin() {
         return forceLogin;
+    }
+
+    /**
+     * Returns whether password reset attempt was cleared or not
+     *
+     * @return Whether password reset attempt was cleared or not
+     */
+    public boolean isPasswordResetCodeCleared() {
+        return passwordResetCodeCleared;
     }
 }

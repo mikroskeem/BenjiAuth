@@ -27,6 +27,7 @@ package eu.mikroskeem.benjiauth;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Mark Vainomaa
@@ -173,6 +174,68 @@ public interface LoginManager {
     void changePassword(@NotNull ProxiedPlayer player, @NotNull String newPassword);
 
     /**
+     * Gets player e-mail
+     *
+     * @param player Player
+     * @return E-mail address. Null if not set
+     */
+    @Nullable
+    String getEmail(@NotNull ProxiedPlayer player);
+
+    /**
+     * Sets new e-mail address for player
+     *
+     * @param player Player
+     * @param email New e-mail address. Use null to unset
+     * @param verificationCode E-mail address verification code. Use null if you don't need e-mail address verification
+     */
+    void setEmail(@NotNull ProxiedPlayer player, @Nullable String email, @Nullable String verificationCode);
+
+    /**
+     *
+     * @param player
+     * @param verificationCode
+     * @return
+     */
+    @NotNull
+    EmailVerifyResult verifyEmail(@NotNull ProxiedPlayer player, @Nullable String verificationCode);
+
+    /**
+     * Returns whether player's email address is verified or not
+     *
+     * @param player Player
+     * @return whether player's email address is verified or not
+     */
+    boolean isEmailVerified(@NotNull ProxiedPlayer player);
+
+    /**
+     * Gets player's password reset code
+     *
+     * @param player Player
+     * @return Password reset code, or null if none pending
+     */
+    @Nullable
+    String getPasswordResetCode(@NotNull ProxiedPlayer player);
+
+    /**
+     * Gets player's password reset code. Note that password reset code gets unset on player login.
+     *
+     * @param player Player
+     * @param code Password reset code. Use null to unset
+     */
+    void setPasswordResetCode(@NotNull ProxiedPlayer player, @Nullable String code);
+
+    /**
+     *
+     * @param player
+     * @param code
+     * @param newPassword
+     * @return
+     */
+    @NotNull
+    PasswordResetVerifyResult verifyPasswordReset(@NotNull ProxiedPlayer player, @Nullable String code, @NotNull String newPassword);
+
+    /**
      * Returns whether user initial data processing is done or not and player is eligible for
      * events and such.
      *
@@ -198,4 +261,39 @@ public interface LoginManager {
      * @return Count of registrations for given IP address
      */
     long getRegistrations(@NotNull String ipAddress);
+
+    enum EmailVerifyResult {
+        SUCCESS(true),
+        ALREADY_VERIFIED(false),
+        EXPIRED(false),
+        FAILED(false),
+        ;
+
+        private final boolean successful;
+
+        EmailVerifyResult(boolean successful) {
+            this.successful = successful;
+        }
+
+        public boolean isSuccessful() {
+            return successful;
+        }
+    }
+
+    enum PasswordResetVerifyResult {
+        SUCCESS(true),
+        EXPIRED(false),
+        FAILED(false),
+        ;
+
+        private final boolean successful;
+
+        PasswordResetVerifyResult(boolean successful) {
+            this.successful = successful;
+        }
+
+        public boolean isSuccessful() {
+            return successful;
+        }
+    }
 }
