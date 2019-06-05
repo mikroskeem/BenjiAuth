@@ -61,7 +61,7 @@ object LuckPermsHook {
         pluginManager.getPlugin("LuckPerms") ?: return
         plugin.pluginLogger.info("LuckPerms found, hooking...")
         luckPermsApi = LuckPerms.getApiSafe().orElseGet {
-            plugin.pluginLogger.warn("Failed to hook into LuckPerms: Couldn't get API interface instance")
+            plugin.pluginLogger.warning("Failed to hook into LuckPerms: Couldn't get API interface instance")
             return@orElseGet null
         } ?: return
 

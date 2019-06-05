@@ -45,6 +45,7 @@ import net.md_5.bungee.api.ServerConnectRequest
 import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.event.EventHandler
+import java.util.logging.Level
 
 /**
  * @author Mark Vainomaa
@@ -91,7 +92,7 @@ class PlayerLoginStatusChangeListener: Listener {
                     } else {
                         event.player.message(messages.error.couldntConnectToLobby)
                     }
-                    plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to lobby", e)
+                    plugin.pluginLogger.log(Level.SEVERE, "Couldn't connect logged in player ${event.player.name} to lobby", e)
                 }
             }
         }
@@ -115,7 +116,7 @@ class PlayerLoginStatusChangeListener: Listener {
         event.player.movePlayer(auth) { result, e ->
             if (result == ServerConnectRequest.Result.FAIL) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
-                plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
+                plugin.pluginLogger.log(Level.SEVERE, "Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
         }
     }
@@ -137,7 +138,7 @@ class PlayerLoginStatusChangeListener: Listener {
         event.player.movePlayer(auth) { result, e ->
             if (result == ServerConnectRequest.Result.FAIL) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
-                plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
+                plugin.pluginLogger.log(Level.SEVERE, "Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
         }
     }

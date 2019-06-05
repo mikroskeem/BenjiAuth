@@ -27,11 +27,10 @@ package eu.mikroskeem.benjiauth;
 
 import eu.mikroskeem.benjiauth.config.Benji;
 import eu.mikroskeem.benjiauth.config.BenjiMessages;
-import eu.mikroskeem.benjiauth.logger.PluginLogger;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.nio.file.Path;
+import java.util.logging.Logger;
 
 /**
  * @author Mark Vainomaa
@@ -80,5 +79,5 @@ public interface BenjiAuthPlugin {
      * @return Plugin logger
      */
     @NotNull
-    PluginLogger getPluginLogger();
+    Logger getPluginLogger();
 }

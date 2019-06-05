@@ -41,13 +41,13 @@ import eu.mikroskeem.benjiauth.listeners.ChatListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
 import eu.mikroskeem.benjiauth.listeners.ServerSwitchListener
-import eu.mikroskeem.benjiauth.logger.JULWrapper
-import eu.mikroskeem.benjiauth.logger.PluginLogger
 import net.md_5.bungee.api.plugin.Plugin
 import org.bstats.bungeecord.MetricsLite
 import java.net.InetAddress
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.logging.Level
+import java.util.logging.Logger
 
 /**
  * @author Mark Vainomaa
@@ -63,13 +63,13 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         configLoader = initConfig("config.cfg")
         messagesLoader = initConfig("messages.cfg")
         userManager = try { UserManager() } catch (e: Exception) {
-            pluginLogger.error("Failed to initialize connection to database!", e)
-            pluginLogger.error("Disabling plugin")
+            pluginLogger.log(Level.SEVERE, "Failed to initialize connection to database!", e)
+            pluginLogger.severe("Disabling plugin")
             return
         }
         geoIPApi = try { GeoIPDatabase() } catch (e: Exception) {
-            pluginLogger.warn("Failed to initialize MaxMind GeoLite database!", e)
-            pluginLogger.warn("Falling back to no-op implementation for GeoIP lookups")
+            pluginLogger.log(Level.WARNING, "Failed to initialize MaxMind GeoLite database!", e)
+            pluginLogger.warning("Falling back to no-op implementation for GeoIP lookups")
             object: GeoIPAPI {
                 override fun getCountryByIP(ipAddress: InetAddress): String? = config.country.allowedCountries.firstOrNull()
                 override fun getCountryByIP(ipAddress: String): String? = config.country.allowedCountries.firstOrNull()
@@ -106,9 +106,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         messagesLoader.save()
     }
 
-    private val lazyLogger by lazy { JULWrapper(logger) }
-
-    override fun getPluginLogger(): PluginLogger = lazyLogger
+    override fun getPluginLogger(): Logger = this.logger
     override fun getPluginFolder(): Path = pluginDataFolder
     override fun getConfig(): Benji = configLoader.configuration
     override fun getMessages(): BenjiMessages = messagesLoader.configuration
