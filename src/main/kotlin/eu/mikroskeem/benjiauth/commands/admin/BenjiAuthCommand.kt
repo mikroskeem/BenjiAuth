@@ -196,15 +196,12 @@ class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
 
     override fun onTabComplete(sender: CommandSender, args: Array<out String>): Iterable<String> {
         val availableCompletions = when {
-            args.size == 2 && args[0].equals("unregister", ignoreCase = true) -> proxy.players.map { it.name }
-            args.size == 2 && args[0].equals("register", ignoreCase = true) -> proxy.players.map { it.name }
-            args.size == 2 && args[0].equals("login", ignoreCase = true) -> proxy.players.map { it.name }
-            args.size == 2 && args[0].equals("logout", ignoreCase = true) -> proxy.players.map { it.name }
+            args.size == 2 && args[0].toLowerCase(Locale.ROOT) in setOf("unregister", "register", "login", "logout") -> proxy.players.map { it.name }
             args.size <= 1 -> listOf("login", "logout", "reload", "unregister", "register")
             else -> return emptyList()
         }
 
         val arg = args.last()
-        return availableCompletions.filter { it.length >= arg.length && it.toLowerCase(Locale.ENGLISH).startsWith(arg) }.sorted()
+        return availableCompletions.filter { it.length >= arg.length && it.toLowerCase(Locale.ROOT).startsWith(arg) }.sorted()
     }
 }
