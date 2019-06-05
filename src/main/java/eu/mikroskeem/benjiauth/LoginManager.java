@@ -192,10 +192,12 @@ public interface LoginManager {
     void setEmail(@NotNull ProxiedPlayer player, @Nullable String email, @Nullable String verificationCode);
 
     /**
+     * Verifies player\s e-mail address. Always returns {@link EmailVerifyResult#FAILED} if player has no e-mail
+     * address set.
      *
-     * @param player
-     * @param verificationCode
-     * @return
+     * @param player Player
+     * @param verificationCode Verification code, or null if e-mail address should be forcefully verified.
+     * @return E-mail address verification result
      */
     @NotNull
     EmailVerifyResult verifyEmail(@NotNull ProxiedPlayer player, @Nullable String verificationCode);
@@ -226,11 +228,13 @@ public interface LoginManager {
     void setPasswordResetCode(@NotNull ProxiedPlayer player, @Nullable String code);
 
     /**
+     * Verifies player's password reset attempt. Always returns {@link PasswordResetVerifyResult#FAILED} if player has
+     * no pending reset code.
      *
-     * @param player
-     * @param code
-     * @param newPassword
-     * @return
+     * @param player Player
+     * @param code Player supplied code, or null if password should be changed forcefully
+     * @param newPassword New password
+     * @return Password reset verification result
      */
     @NotNull
     PasswordResetVerifyResult verifyPasswordReset(@NotNull ProxiedPlayer player, @Nullable String code, @NotNull String newPassword);
