@@ -97,11 +97,11 @@ class UserManager: LoginManager {
                 false
         ))
 
-        if(player.isReady) {
+        if (player.isReady) {
             pluginManager.callEvent(PlayerRegisterEvent(player))
         }
 
-        if(config.registration.loginAfterRegister) {
+        if (config.registration.loginAfterRegister) {
             loginUser(player)
         }
     }
@@ -130,7 +130,7 @@ class UserManager: LoginManager {
         dao.delete(findUser(player.name))
 
         // If player is marked ready, send out unregister event
-        if(player.isReady) {
+        if (player.isReady) {
             pluginManager.callEvent(PlayerUnregisterEvent(player))
         }
     }
@@ -142,13 +142,13 @@ class UserManager: LoginManager {
     }
 
     override fun isEligibleForSessionLogin(player: ProxiedPlayer): Boolean {
-        if(config.authentication.sessionTimeout == 0L)
+        if (config.authentication.sessionTimeout == 0L)
             return false
 
         val user = findUser(player.name)
 
         // User logged itself out, not egilible for session login in that case.
-        if(user.forceKillSession)
+        if (user.forceKillSession)
             return false
 
         val timeout = TimeUnit.MINUTES.toSeconds(config.authentication.sessionTimeout)
@@ -157,13 +157,13 @@ class UserManager: LoginManager {
         val lastLogin = user.lastLogin?.run { currentUnixTimestamp - this }
 
         // Definitely not eligible
-        if(lastSeen == null || lastLogin == null) {
+        if (lastSeen == null || lastLogin == null) {
             return false
         }
 
         // User is only eligible for session login when time since last seen
         // is less than timeout and if IP addresses match.
-        if(lastSeen < timeout && player.ipAddress == user.lastIPAddress) {
+        if (lastSeen < timeout && player.ipAddress == user.lastIPAddress) {
             return true
         }
 
@@ -175,7 +175,7 @@ class UserManager: LoginManager {
     override fun isForcefullyLoggedIn(player: ProxiedPlayer): Boolean = forcefullyLoggedIn.contains(player)
 
     override fun loginUser(player: ProxiedPlayer, force: Boolean) {
-        if(isLoggedIn(player))
+        if (isLoggedIn(player))
             return
 
         findUser(player.name).apply {
@@ -187,7 +187,7 @@ class UserManager: LoginManager {
             lastSeen = timestamp
 
             // Update registered IP address if empty
-            if(registeredIPAddress.isEmpty()) {
+            if (registeredIPAddress.isEmpty()) {
                 registeredIPAddress = lastIPAddress!!
             }
 
@@ -196,30 +196,30 @@ class UserManager: LoginManager {
 
             dao.update(this)
         }
-        if(force) forcefullyLoggedIn.add(player)
+        if (force) forcefullyLoggedIn.add(player)
 
-        if(player.isReady) {
+        if (player.isReady) {
             pluginManager.callEvent(PlayerLoginEvent(player, force))
         }
     }
 
     override fun logoutUser(player: ProxiedPlayer, clearSession: Boolean, keepReady: Boolean) {
         findUser(player.name).apply {
-            if(loggedIn) {
+            if (loggedIn) {
                 lastSeen = currentUnixTimestamp
                 loggedIn = false
             }
-            if(clearSession && !forceKillSession) {
+            if (clearSession && !forceKillSession) {
                 forceKillSession = clearSession
             }
             dao.update(this)
         }
 
-        if(!keepReady) {
+        if (!keepReady) {
             readyUsers.removeIf { it == player }
         }
 
-        if(player.isReady) {
+        if (player.isReady) {
             pluginManager.callEvent(PlayerLogoutEvent(player))
         }
     }

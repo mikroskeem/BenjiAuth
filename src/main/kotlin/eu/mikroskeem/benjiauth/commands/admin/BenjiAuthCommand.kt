@@ -52,145 +52,160 @@ import java.util.Locale
  */
 class BenjiAuthCommand: Command("benjiauth", COMMAND_BENJIAUTH), TabExecutor {
     override fun execute(sender: CommandSender, args: Array<out String>) {
-        if(args.isNotEmpty()) {
-            when(args[0]) {
-                "reload" -> {
-                    // Check if player has permission
-                    if(!sender.hasPermission(ADMIN_ACTION_RELOAD)) {
-                        sender.message(messages.admin.noPermission)
-                        return
-                    }
-
-                    // Reload configuration
-                    plugin.reloadConfig()
-                    sender.message(messages.admin.reloadSuccess)
+        when (args.getOrNull(0)) {
+            "reload" -> {
+                // Check if player has permission
+                if (!sender.hasPermission(ADMIN_ACTION_RELOAD)) {
+                    sender.message(messages.admin.noPermission)
+                    return
                 }
-                "login" -> {
-                    // Check if player has permission
-                    if(!sender.hasPermission(ADMIN_ACTION_FORCELOGIN)) {
-                        sender.message(messages.admin.noPermission)
-                        return
-                    }
 
-                    // Check if username argument is present
-                    val username = args.getOrNull(1) ?: run {
-                        sender.message(messages.command.adminLogin)
-                        return
-                    }
-
-                    // Check if player is online
-                    val player = username.asPlayer() ?: run {
-                        sender.message(messages.error.noSuchPlayer.replace("{player}", username))
-                        return
-                    }
-
-                    // Check if player is registered (TODO: plugin architecture does not allow logging in without having a password in database)
-                    if(!player.isRegistered) {
-                        sender.message(messages.error.userNotRegistered.replace("{player}", username))
-                        return
-                    }
-
-                    // Check if player is already logged in
-                    if(player.isLoggedIn) {
-                        sender.message(messages.error.userAlreadyLoggedIn.replace("{player}", username))
-                        return
-                    }
-
-                    // Force login
-                    player.loginWithoutPassword(forceful = true)
-                    sender.message(messages.admin.loggedInSuccessfully)
-                }
-                "logout" -> {
-                    // Check if player has permission
-                    if(!sender.hasPermission(ADMIN_ACTION_LOGOUT)) {
-                        sender.message(messages.admin.noPermission)
-                        return
-                    }
-
-                    // Check if username argument is present
-                    val username = args.getOrNull(1) ?: run {
-                        sender.message(messages.command.adminLogout)
-                        return
-                    }
-
-                    // Check if player is online
-                    val player = username.asPlayer() ?: run {
-                        sender.message(messages.error.noSuchPlayer.replace("{player}", username))
-                        return
-                    }
-
-                    // Check if player is logged in
-                    if(!player.isLoggedIn) {
-                        sender.message(messages.error.userNotLoggedIn.replace("{player}", username))
-                        return
-                    }
-
-                    // Log out player
-                    player.logout()
-                    sender.message(messages.admin.loggedOutSuccessfully)
-                }
-                "register" -> {
-                    // Check if player has permission
-                    if(!sender.hasPermission(ADMIN_ACTION_REGISTER)) {
-                        sender.message(messages.admin.noPermission)
-                        return
-                    }
-
-                    // Check if arguments are present
-                    val username = args.getOrNull(1) ?: run {
-                        sender.message(messages.command.adminRegister)
-                        return
-                    }
-
-                    val password = args.getOrNull(2) ?: run {
-                        sender.message(messages.command.adminRegister)
-                        return
-                    }
-
-                    // Check if username is registered
-                    if(userManager.isRegistered(username)) {
-                        sender.message(messages.admin.userAlreadyRegistered.replace("{player}", username))
-                        return
-                    }
-
-                    // Check if password is valid
-                    if(!sender.validatePassword(username, password))
-                        return
-
-                    // Register user
-                    userManager.registerUser(username, password)
-                    sender.message(messages.admin.registeredSuccessfully)
-                }
-                "unregister" -> {
-                    // Check if player has permission
-                    if(!sender.hasPermission(ADMIN_ACTION_UNREGISTER)) {
-                        sender.message(messages.admin.noPermission)
-                        return
-                    }
-
-                    // Check if username argument is present
-                    val username = args.getOrNull(1) ?: run {
-                        sender.message(messages.command.adminUnregister)
-                        return
-                    }
-
-                    // Check if username is registered
-                    if(!userManager.isRegistered(username)) {
-                        sender.message(messages.admin.noSuchRegisteredUser.replace("{player}", username))
-                        return
-                    }
-
-                    // Unregister user
-                    userManager.unregisterUser(username)
-                    sender.message(messages.admin.unregisteredSuccessfully)
-                }
-                else -> {
-                    // Send help message
-                    sender.message(messages.error.unknownSubcommand.replace("{subcommand}", args[0]))
-                }
+                // Reload configuration
+                plugin.reloadConfig()
+                sender.message(messages.admin.reloadSuccess)
             }
-        } else {
-            sender.message(messages.command.benjiauthAdmin.joinToString(separator = "\n"))
+            "login" -> {
+                // Check if player has permission
+                if (!sender.hasPermission(ADMIN_ACTION_FORCELOGIN)) {
+                    sender.message(messages.admin.noPermission)
+                    return
+                }
+
+                // Check if username argument is present
+                val username = args.getOrNull(1) ?: run {
+                    sender.message(messages.command.adminLogin)
+                    return
+                }
+
+                // Check if player is online
+                val player = username.asPlayer() ?: run {
+                    sender.message(messages.error.noSuchPlayer, mapOf(
+                            "player" to username
+                    ))
+                    return
+                }
+
+                // Check if player is registered (TODO: plugin architecture does not allow logging in without having a password in database)
+                if (!player.isRegistered) {
+                    sender.message(messages.error.userNotRegistered, mapOf(
+                            "player" to username
+                    ))
+                    return
+                }
+
+                // Check if player is already logged in
+                if (player.isLoggedIn) {
+                    sender.message(messages.error.userAlreadyLoggedIn, mapOf(
+                            "player" to username
+                    ))
+                    return
+                }
+
+                // Force login
+                player.loginWithoutPassword(forceful = true)
+                sender.message(messages.admin.loggedInSuccessfully)
+            }
+            "logout" -> {
+                // Check if player has permission
+                if (!sender.hasPermission(ADMIN_ACTION_LOGOUT)) {
+                    sender.message(messages.admin.noPermission)
+                    return
+                }
+
+                // Check if username argument is present
+                val username = args.getOrNull(1) ?: run {
+                    sender.message(messages.command.adminLogout)
+                    return
+                }
+
+                // Check if player is online
+                val player = username.asPlayer() ?: run {
+                    sender.message(messages.error.noSuchPlayer, mapOf(
+                            "player" to username
+                    ))
+                    return
+                }
+
+                // Check if player is logged in
+                if (!player.isLoggedIn) {
+                    sender.message(messages.error.userNotLoggedIn, mapOf(
+                            "player" to username
+                    ))
+                    return
+                }
+
+                // Log out player
+                player.logout()
+                sender.message(messages.admin.loggedOutSuccessfully)
+            }
+            "register" -> {
+                // Check if player has permission
+                if (!sender.hasPermission(ADMIN_ACTION_REGISTER)) {
+                    sender.message(messages.admin.noPermission)
+                    return
+                }
+
+                // Check if arguments are present
+                val username = args.getOrNull(1) ?: run {
+                    sender.message(messages.command.adminRegister)
+                    return
+                }
+
+                val password = args.getOrNull(2) ?: run {
+                    sender.message(messages.command.adminRegister)
+                    return
+                }
+
+                // Check if username is registered
+                if (userManager.isRegistered(username)) {
+                    sender.message(messages.admin.userAlreadyRegistered, mapOf(
+                            "player" to username
+                    ))
+                    return
+                }
+
+                // Check if password is valid
+                if(!sender.validatePassword(username, password))
+                    return
+
+                // Register user
+                userManager.registerUser(username, password)
+                sender.message(messages.admin.registeredSuccessfully)
+            }
+            "unregister" -> {
+                // Check if player has permission
+                if (!sender.hasPermission(ADMIN_ACTION_UNREGISTER)) {
+                    sender.message(messages.admin.noPermission)
+                    return
+                }
+
+                // Check if username argument is present
+                val username = args.getOrNull(1) ?: run {
+                    sender.message(messages.command.adminUnregister)
+                    return
+                }
+
+                // Check if username is registered
+                if (!userManager.isRegistered(username)) {
+                    sender.message(messages.admin.noSuchRegisteredUser, mapOf(
+                            "player" to username
+                    ))
+                    return
+                }
+
+                // Unregister user
+                userManager.unregisterUser(username)
+                sender.message(messages.admin.unregisteredSuccessfully)
+            }
+            null -> {
+                sender.message(messages.command.benjiauthAdmin)
+            }
+            else -> {
+                // Send help message
+                sender.message(messages.error.unknownSubcommand, mapOf(
+                        "subcommand" to args[0]
+                ))
+            }
         }
     }
 

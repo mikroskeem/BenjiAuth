@@ -97,7 +97,7 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         LuckPermsHook.hook()
     }
 
-    override fun onDisable() { if(::userManager.isInitialized) userManager.shutdown() }
+    override fun onDisable() { if (::userManager.isInitialized) userManager.shutdown() }
 
     override fun reloadConfig() {
         configLoader.load()

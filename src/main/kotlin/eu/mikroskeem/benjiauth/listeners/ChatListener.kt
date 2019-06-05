@@ -25,10 +25,10 @@
 
 package eu.mikroskeem.benjiauth.listeners
 
-import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
+import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.messages
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.ChatEvent
@@ -42,27 +42,27 @@ import net.md_5.bungee.event.EventPriority.LOWEST
 class ChatListener: Listener {
     @EventHandler(priority = LOWEST)
     fun on(event: ChatEvent) {
-        if(event.isCancelled)
+        if (event.isCancelled)
             return
 
         val player = event.sender as? ProxiedPlayer ?: return
 
-        if(!player.isLoggedIn) {
+        if (!player.isLoggedIn) {
             // Check if command is allowed
-            if(event.isCommand) {
-                val command = event.message.split(" ", limit = 2)[0]
-                if(config.authentication.commands.allowedCommands.contains(command))
+            if (event.isCommand) {
+                val command = event.message.split(" ", limit = 2).first()
+                if (config.authentication.commands.allowedCommands.contains(command))
                     return
 
-                if(!player.isRegistered) {
+                if (!player.isRegistered) {
                     player.message(messages.register.mustRegisterBeforeUsingCommands)
-                } else if(!player.isLoggedIn) {
+                } else if (!player.isLoggedIn) {
                     player.message(messages.login.mustLoginBeforeUsingCommands)
                 }
             } else {
-                if(!player.isRegistered) {
+                if (!player.isRegistered) {
                     player.message(messages.register.mustRegisterBeforeChatting)
-                } else if(!player.isLoggedIn) {
+                } else if (!player.isLoggedIn) {
                     player.message(messages.login.mustLoginBeforeChatting)
                 }
             }

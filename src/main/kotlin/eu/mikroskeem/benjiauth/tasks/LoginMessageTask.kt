@@ -46,17 +46,17 @@ class LoginMessageTask(private val player: ProxiedPlayer, override val delay: Lo
     private var timeout = config.authentication.authTimeout
 
     override fun run() {
-        if(!player.isConnected || player.isLoggedIn) {
+        if (!player.isConnected || player.isLoggedIn) {
             cancel()
             return
         }
 
-        if(timeout <= 0) {
+        if (timeout <= 0) {
             player.kickWithMessage(messages.login.loginTimeout)
             return
         }
 
-        if(intervalCountdown <= 0) {
+        if (intervalCountdown <= 0) {
             player.message(messages.login.pleaseLogin)
             player.sendTitle(messages.login.pleaseLoginTitle.copy(fadeIn = 0, stay = (interval * 20) + 20, fadeOut = 0))
             intervalCountdown = interval

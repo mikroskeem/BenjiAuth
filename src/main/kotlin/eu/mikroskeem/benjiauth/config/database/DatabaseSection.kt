@@ -44,11 +44,12 @@ class DatabaseSection {
 
     @Setting("driver-parameters", comment = "Database driver parameters. Advanced use only")
     var driverParams: Map<String, String> = mapOf(
-            Pair("properties", "useUnicode=true;characterEncoding=utf8"),
-            Pair("prepStmtCacheSize", "250"),
-            Pair("prepStmtCacheSqlLimit", "2048"),
-            Pair("cachePrepStmts", "true"),
-            Pair("useServerPrepStmts", "true"))
+            "properties" to "useUnicode=true;characterEncoding=utf8",
+            "prepStmtCacheSize" to "250",
+            "prepStmtCacheSqlLimit" to "2048",
+            "cachePrepStmts" to "true",
+            "useServerPrepStmts" to "true"
+    )
         private set
 
     @Setting(value = "table-name", comment = "What table name to use?")

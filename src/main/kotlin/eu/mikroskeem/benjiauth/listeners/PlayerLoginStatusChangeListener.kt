@@ -53,11 +53,11 @@ class PlayerLoginStatusChangeListener: Listener {
     @EventHandler
     fun on(event: PlayerRegisterEvent) {
         // Clear title if player got spammed with them before registering in
-        if(messages.register.pleaseRegisterTitle.shouldBeSent())
+        if (messages.register.pleaseRegisterTitle.shouldBeSent())
             event.player.resetTitle()
 
         // Start login message/timeout task if player is required to log in manually after registering
-        if(!config.registration.loginAfterRegister)
+        if (!config.registration.loginAfterRegister)
             LoginMessageTask(event.player).schedule()
     }
 
@@ -68,11 +68,11 @@ class PlayerLoginStatusChangeListener: Listener {
                                 findServer(event.player.pendingConnection.listener.serverPriority[0])!!
 
         // Clear title if player got spammed with them before logging in
-        if(messages.login.pleaseLoginTitle.shouldBeSent())
+        if (messages.login.pleaseLoginTitle.shouldBeSent())
             event.player.resetTitle()
 
         // Return if player is already in lobby server
-        if(event.player.server?.info?.name == lobby.name)
+        if (event.player.server?.info?.name == lobby.name)
             return
 
         event.player.movePlayer(lobby) { result, e ->
@@ -86,7 +86,7 @@ class PlayerLoginStatusChangeListener: Listener {
                     return@movePlayer
                 }
                 ServerConnectRequest.Result.FAIL -> {
-                    if(config.servers.kickIfLobbyIsDown) {
+                    if (config.servers.kickIfLobbyIsDown) {
                         event.player.kickWithMessage(messages.error.couldntConnectToLobby)
                     } else {
                         event.player.message(messages.error.couldntConnectToLobby)
@@ -108,12 +108,12 @@ class PlayerLoginStatusChangeListener: Listener {
         LoginMessageTask(event.player).schedule()
 
         // Return if player is already in auth server
-        if(event.player.server?.info?.name == auth.name)
+        if (event.player.server?.info?.name == auth.name)
             return
 
         // Send player to auth server
         event.player.movePlayer(auth) { result, e ->
-            if(result == ServerConnectRequest.Result.FAIL) {
+            if (result == ServerConnectRequest.Result.FAIL) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }
@@ -131,11 +131,11 @@ class PlayerLoginStatusChangeListener: Listener {
         RegisterMessageTask(event.player).schedule()
 
         // Return if player is already in auth server
-        if(event.player.server?.info?.name == auth.name)
+        if (event.player.server?.info?.name == auth.name)
             return
 
         event.player.movePlayer(auth) { result, e ->
-            if(result == ServerConnectRequest.Result.FAIL) {
+            if (result == ServerConnectRequest.Result.FAIL) {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
                 plugin.pluginLogger.error("Couldn't connect logged in player ${event.player.name} to auth server", e)
             }

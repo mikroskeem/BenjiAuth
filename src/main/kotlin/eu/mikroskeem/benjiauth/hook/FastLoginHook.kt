@@ -44,7 +44,7 @@ class FastLoginHook: AuthPlugin<ProxiedPlayer> {
     }
 
     override fun forceLogin(player: ProxiedPlayer): Boolean {
-        return if(player.isRegistered) {
+        return if (player.isRegistered) {
             player.loginWithoutPassword(forceful = true)
             true
         } else {
@@ -53,7 +53,7 @@ class FastLoginHook: AuthPlugin<ProxiedPlayer> {
     }
 
     override fun forceRegister(player: ProxiedPlayer, password: String): Boolean {
-        return if(!player.isRegistered) {
+        return if (!player.isRegistered) {
             player.register(password)
             true
         } else {

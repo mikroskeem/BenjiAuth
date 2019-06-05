@@ -48,16 +48,16 @@ fun ProxiedPlayer.sendTitle(titleObject: Title) {
     val player = this
     titleObject.run {
         // Don't send if both title and subtitle are empty
-        if(!shouldBeSent())
+        if (!shouldBeSent())
             return
 
-        proxy.createTitle().also {
-            it.title(*TextComponent.fromLegacyText(title.color()))
-            it.subTitle(*TextComponent.fromLegacyText(subTitle.color()))
-            it.fadeIn(fadeIn.toInt())
-            it.stay(stay.toInt())
-            it.fadeOut(fadeOut.toInt())
-        }.run(player::sendTitle)
+        proxy.createTitle()
+                .title(*TextComponent.fromLegacyText(title.color()))
+                .subTitle(*TextComponent.fromLegacyText(subTitle.color()))
+                .fadeIn(fadeIn.toInt())
+                .stay(stay.toInt())
+                .fadeOut(fadeOut.toInt())
+                .run(player::sendTitle)
     }
 }
 

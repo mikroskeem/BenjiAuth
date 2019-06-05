@@ -48,7 +48,7 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
         }
 
         // Tell if player isn't registered
-        if(!player.isRegistered) {
+        if (!player.isRegistered) {
             player.message(messages.register.mustRegister)
             return
         }
@@ -56,7 +56,7 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
         // <old> <new>
         if(args.size == 2) {
             // Tell if player isn't logged in
-            if(!player.isLoggedIn) {
+            if (!player.isLoggedIn) {
                 player.message(messages.login.mustLogin)
                 return
             }
@@ -65,11 +65,11 @@ class ChangePasswordCommand: Command("changepassword", COMMAND_CPW, "cpw") {
             val newPassword = args[1]
 
             // Check password length and username usage
-            if(!player.validatePassword(newPassword))
+            if (!player.validatePassword(newPassword))
                 return
 
             // Check if password matches
-            if(!player.checkPassword(oldPassword)) {
+            if (!player.checkPassword(oldPassword)) {
                 player.message(messages.password.wrongOldPassword)
             } else {
                 // Change password

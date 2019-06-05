@@ -41,19 +41,19 @@ import net.md_5.bungee.event.EventPriority.HIGHEST
 class ServerSwitchListener: Listener {
     @EventHandler(priority = HIGHEST)
     fun on(event: ServerConnectEvent) {
-        if(event.isCancelled)
+        if (event.isCancelled)
             return
 
-        if(!config.servers.denySwitchingWhenUnauthenticated)
+        if (!config.servers.denySwitchingWhenUnauthenticated)
             return
 
         // Skip if current server is the same as target
-        if(event.player.server?.info == event.target)
+        if (event.player.server?.info == event.target)
             return
 
         // Check if player is not authenticated and target server is not auth server
-        if(!event.player.isLoggedIn && event.target.name != config.servers.authServer) {
-            if(!event.player.isRegistered) {
+        if (!event.player.isLoggedIn && event.target.name != config.servers.authServer) {
+            if (!event.player.isRegistered) {
                 event.player.message(messages.register.mustRegisterBeforeSwitchingServers)
             } else {
                 event.player.message(messages.login.mustLoginBeforeSwitchingServers)

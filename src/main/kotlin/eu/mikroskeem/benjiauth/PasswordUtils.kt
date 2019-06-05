@@ -45,28 +45,27 @@ enum class PasswordResult {
 private fun checkPassword(username: String, password: String): PasswordResult {
     val pwConfig = config.registration.password
 
-    if(pwConfig.minimumLength > password.length) {
-        return TOO_SHORT
-    } else if(pwConfig.maximumLength < password.length) {
-        return TOO_LONG
+    return when {
+        pwConfig.minimumLength > password.length -> TOO_SHORT
+        pwConfig.maximumLength < password.length -> TOO_LONG
+        pwConfig.disallowUsingUsername && password == username -> USERNAME
+        else -> OKAY
     }
-
-    if(config.registration.password.disallowUsingUsername && password == username) {
-        return USERNAME
-    }
-
-    return OKAY
 }
 
 fun CommandSender.validatePassword(username: String, password: String): Boolean {
     val pwConfig = config.registration.password
     return when(checkPassword(username, password)) {
         TOO_SHORT -> {
-            message(messages.password.tooShort.replace("{min}", "${pwConfig.minimumLength}"))
+            message(messages.password.tooShort, mapOf(
+                    "min" to pwConfig.minimumLength
+            ))
             false
         }
         TOO_LONG -> {
-            message(messages.password.tooLong.replace("{max}", "${pwConfig.maximumLength}"))
+            message(messages.password.tooLong, mapOf(
+                    "max" to pwConfig.maximumLength
+            ))
             false
         }
         USERNAME -> {

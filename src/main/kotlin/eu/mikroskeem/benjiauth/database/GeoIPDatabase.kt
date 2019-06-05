@@ -61,7 +61,7 @@ class GeoIPDatabase(databaseDirectory: Path = plugin.pluginFolder): GeoIPAPI {
 
     init {
         Files.createDirectories(databaseFile.parent)
-        if(Files.notExists(databaseFile)) {
+        if (Files.notExists(databaseFile)) {
             val urlStream = try { URL(DATABASE_URL).openStream() } catch (e: ConnectException) {
                 throw RuntimeException("Failed to connect to $DATABASE_URL", e)
             }
@@ -69,13 +69,13 @@ class GeoIPDatabase(databaseDirectory: Path = plugin.pluginFolder): GeoIPAPI {
 
             var tarEntry: TarArchiveEntry? = unpackStream.nextTarEntry
             while(tarEntry != null) {
-                if(tarEntry.isFile && tarEntry.name.endsWith("GeoLite2-Country.mmdb"))
+                if (tarEntry.isFile && tarEntry.name.endsWith("GeoLite2-Country.mmdb"))
                     break
 
                 tarEntry = unpackStream.nextTarEntry
             }
 
-            if(tarEntry == null)
+            if (tarEntry == null)
                 throw IllegalStateException("Failed to find GeoLite2-Country.mmdb from tarball!")
 
             Channels.newChannel(unpackStream).use { download ->

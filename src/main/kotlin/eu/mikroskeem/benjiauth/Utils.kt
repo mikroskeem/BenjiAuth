@@ -36,12 +36,18 @@ import java.net.InetSocketAddress
 /**
  * @author Mark Vainomaa
  */
-fun String.processMessage(player: ProxiedPlayer? = null): Array<out BaseComponent> {
-    val message = this.takeIf { it.isNotEmpty() }
-            ?.replace("{player}", player?.name ?: "")
-            ?.replace("{prefix}", messages.prefix)
-            ?.color()
-            ?: return emptyArray()
+fun String.processMessage(player: ProxiedPlayer? = null, placeholders: Map<String, Any> = emptyMap()): Array<out BaseComponent> {
+    if (this.isEmpty())
+        return emptyArray()
+
+    var message = this
+            .replace("{player}", player?.name ?: "")
+            .replace("{prefix}", messages.prefix)
+            .color()
+
+    placeholders.forEach { key, value ->
+        message = message.replace("{$key}", value.toString())
+    }
 
     return TextComponent.fromLegacyText(message)
 }

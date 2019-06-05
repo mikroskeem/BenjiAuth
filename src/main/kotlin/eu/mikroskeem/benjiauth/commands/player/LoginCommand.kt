@@ -54,13 +54,13 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
         }
 
         // Tell if player is not registered
-        if(!player.isRegistered) {
+        if (!player.isRegistered) {
             player.message(messages.register.mustRegister)
             return
         }
 
         // Tell if player is already logged in
-        if(player.isLoggedIn) {
+        if (player.isLoggedIn) {
             player.message(messages.login.alreadyLoggedIn)
             return
         }
@@ -69,15 +69,15 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
         attempts.computeIfAbsent(player) { AtomicInteger(0) }
 
         // If password is supplied
-        if(args.size == 1) {
+        if (args.size == 1) {
             // Tell if player is already logged in
-            if(player.isLoggedIn) {
+            if (player.isLoggedIn) {
                 player.message(messages.login.alreadyLoggedIn)
                 return
             }
 
             val password = args[0]
-            if(player.login(password)) {
+            if (player.login(password)) {
                 // Logged in!
                 player.message(messages.login.loggedIn)
             } else {
@@ -85,7 +85,7 @@ class LoginCommand: Command("login", COMMAND_LOGIN, "l") {
                 attempts[player]!!.incrementAndGet()
 
                 // Check login attempts count
-                if(attempts[player]!!.get() >= config.authentication.maxLoginRetries) {
+                if (attempts[player]!!.get() >= config.authentication.maxLoginRetries) {
                     // Kick if there are too many login attempts
                     player.kickWithMessage(messages.password.wrong)
                     return

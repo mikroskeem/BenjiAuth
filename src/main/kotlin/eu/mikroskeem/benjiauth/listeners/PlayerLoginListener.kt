@@ -57,16 +57,15 @@ import net.md_5.bungee.event.EventPriority
 class PlayerLoginListener: Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun on(event: PreLoginEvent) {
-        if(!event.connection.address.isAllowedToJoin()) {
+        if (!event.connection.address.isAllowedToJoin()) {
             event.setCancelReason(*messages.error.ipAddressDisallowed.processMessage())
             event.isCancelled = true
             return
         }
 
-        if(!(
-                        event.connection.name.length <= 16 &&
-                        event.connection.name.matches(config.authentication.username.regex.toRegex())
-        )) {
+        val username = event.connection.name
+        val usernameRegex = config.authentication.username.regex.takeIf { it.isNotEmpty() }?.toRegex()
+        if (!(username.length <= 16 && (usernameRegex?.run(username::matches) == true))) {
             event.setCancelReason(*messages.error.invalidUsername.processMessage())
             event.isCancelled = true
             return
@@ -77,13 +76,13 @@ class PlayerLoginListener: Listener {
     fun on(event: PostLoginEvent) {
         val player = event.player
 
-        if(player.isRegistered) {
+        if (player.isRegistered) {
             // Check if user isn't actually logged in (plugin failed to set login status previously?)
-            if(player.isLoggedIn && !player.isForcefullyLoggedIn) {
+            if (player.isLoggedIn && !player.isForcefullyLoggedIn) {
                 player.logout(clearSession = false)
             }
 
-            if(!player.isLoggedIn && player.isEligibleForSession) {
+            if (!player.isLoggedIn && player.isEligibleForSession) {
                 // Mark player ready
                 player.markReady()
 
@@ -94,7 +93,7 @@ class PlayerLoginListener: Listener {
             }
         } else {
             // Kick player if new registrations are disabled and plugin is configured to do so
-            if(config.registration.newRegistrationsDisabled && config.registration.kickIfRegistrationsDisabled) {
+            if (config.registration.newRegistrationsDisabled && config.registration.kickIfRegistrationsDisabled) {
                 player.kickWithMessage(messages.register.newRegistrationsDisabled)
                 return
             }
@@ -110,18 +109,18 @@ class PlayerLoginListener: Listener {
         val target = event.target
 
         // This listener should only run on initial join
-        if(event.reason != ServerConnectEvent.Reason.JOIN_PROXY)
+        if (event.reason != ServerConnectEvent.Reason.JOIN_PROXY)
             return
 
         // Check if player is logged in
-        if(!player.isLoggedIn) {
+        if (!player.isLoggedIn) {
             // Get authentication server info
             val auth: ServerInfo = getAuthServer {
                 event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
             }
 
             // Set target server
-            if(target.name != auth.name) {
+            if (target.name != auth.name) {
                 event.target = auth
             }
         }
@@ -132,10 +131,10 @@ class PlayerLoginListener: Listener {
         val player = event.player
 
         // Start login/register message/timeout task
-        val delay: Long = if(FastLoginHook.isHooked) 2 else 0
-        if(!player.isRegistered) {
+        val delay: Long = if (FastLoginHook.isHooked) 2 else 0
+        if (!player.isRegistered) {
             RegisterMessageTask(player, delay = delay).schedule()
-        } else if(!player.isLoggedIn) {
+        } else if (!player.isLoggedIn) {
             LoginMessageTask(player, delay = delay).schedule()
         }
     }
@@ -143,7 +142,7 @@ class PlayerLoginListener: Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun on(event: PlayerDisconnectEvent) {
         // Mark player logged out
-        if(event.player.isRegistered)
+        if (event.player.isRegistered)
             event.player.logout(clearSession = false, keepReady = false)
     }
 }

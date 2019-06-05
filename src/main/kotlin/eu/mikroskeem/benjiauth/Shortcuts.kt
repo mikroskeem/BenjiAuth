@@ -62,8 +62,15 @@ fun <T: Task> BenjiAuthPlugin.startTask(task: T): ScheduledTask = task.let { pro
 
 fun String.color(): String = ChatColor.translateAlternateColorCodes('&', this)
 
-fun CommandSender.message(message: String): Unit { sendMessage(*message.processMessage(this as? ProxiedPlayer).takeIf { it.isNotEmpty() } ?: return) }
-fun ProxiedPlayer.kickWithMessage(message: String): Unit { disconnect(*message.processMessage(this as? ProxiedPlayer).takeIf { it.isNotEmpty() } ?: return) }
+fun CommandSender.message(message: Iterable<String>, placeholders: Map<String, Any> = emptyMap()): Unit {
+    message(message.joinToString(separator = "\n"), placeholders)
+}
+fun CommandSender.message(message: String, placeholders: Map<String, Any> = emptyMap()): Unit {
+    sendMessage(*message.processMessage(this as? ProxiedPlayer, placeholders).takeIf { it.isNotEmpty() } ?: return)
+}
+fun ProxiedPlayer.kickWithMessage(message: String, placeholders: Map<String, Any> = emptyMap()): Unit {
+    disconnect(*message.processMessage(this, placeholders).takeIf { it.isNotEmpty() } ?: return)
+}
 
 val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
 val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLoggedIn(this)

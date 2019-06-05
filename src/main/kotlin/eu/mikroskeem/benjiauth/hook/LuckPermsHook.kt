@@ -47,7 +47,7 @@ object LuckPermsHook {
 
     class BenjiAuthContextCalculator internal constructor(): ContextCalculator<ProxiedPlayer> {
         override fun giveApplicableContext(subject: ProxiedPlayer, accumulator: MutableContextSet): MutableContextSet {
-            if(accumulator.containsKey(AUTHENTICATED_CONTEXT_NAME)) {
+            if (accumulator.containsKey(AUTHENTICATED_CONTEXT_NAME)) {
                 accumulator.removeAll(AUTHENTICATED_CONTEXT_NAME)
             }
 
