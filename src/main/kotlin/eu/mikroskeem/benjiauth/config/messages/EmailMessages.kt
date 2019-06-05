@@ -41,6 +41,10 @@ class EmailMessages {
     var invalidAddress = "{prefix}&cInvalid e-mail address"
         private set
 
+    @Setting(value = "already-in-use", comment = "Sent when player tries to add an e-mail address which is already used by somebody")
+    var alreadyInUse = "{prefix}&cE-mail address is aleady in use!"
+        private set
+
     @Setting(value = "invalid-password-reset-code", comment = "Sent when player uses invalid password reset code")
     var invalidPasswordResetCode = "{prefix}&cInvalid password reset code!"
         private set

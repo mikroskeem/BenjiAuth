@@ -361,6 +361,12 @@ class UserManager: LoginManager {
             .eq(User.REGISTERED_IP_ADDRESS_FIELD, ipAddress)
             .countOf()
 
+    override fun getEmailUsages(emailAddress: String): Long = usersDao.queryBuilder().where()
+            .eq(User.EMAIL_FIELD, emailAddress)
+            .and()
+            .isNull(User.EMAIL_VERIFICATION_FIELD)
+            .countOf()
+
     // Shuts user manager down
     fun shutdown() = hikari.close()
 

@@ -266,6 +266,14 @@ public interface LoginManager {
      */
     long getRegistrations(@NotNull String ipAddress);
 
+    /**
+     * Gets amount of e-mail addresses
+     *
+     * @param emailAddress E-mail address
+     * @return Count of usages
+     */
+    long getEmailUsages(@NotNull String emailAddress);
+
     enum EmailVerifyResult {
         SUCCESS(true),
         ALREADY_VERIFIED(false),

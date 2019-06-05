@@ -103,6 +103,11 @@ class EmailCommand: Command("email", COMMAND_EMAIL), TabExecutor {
                     return
                 }
 
+                if (userManager.getEmailUsages(emailAddress) > 0) {
+                    player.message(messages.email.alreadyInUse)
+                    return
+                }
+
                 player.message(messages.email.sendingEmail)
                 val verificationCode = generateRandomString(config.email.verificationCodeLength)
                 userManager.setEmail(player, emailAddress, verificationCode) // This must be here, as email sending code requires address to be present
