@@ -43,15 +43,6 @@ public interface BenjiAuthAPI {
     LoginManager getLoginManager();
 
     /**
-     * Gets instance of {@link GeoIPAPI}.
-     * Default implementation uses MaxMind's GeoLite2 Country database
-     *
-     * @return Instance of {@link GeoIPAPI}
-     */
-    @NotNull
-    GeoIPAPI getGeoIPAPI();
-
-    /**
      * Gets instance of {@link EmailManager}
      *
      * @return Instance of {@link EmailManager}

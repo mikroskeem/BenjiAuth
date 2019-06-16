@@ -34,17 +34,17 @@ import eu.mikroskeem.benjiauth.commands.player.RegisterCommand
 import eu.mikroskeem.benjiauth.config.Benji
 import eu.mikroskeem.benjiauth.config.BenjiMessages
 import eu.mikroskeem.benjiauth.config.ConfigurationLoader
-import eu.mikroskeem.benjiauth.email.EmailManagerImpl
-import eu.mikroskeem.benjiauth.email.NoopEmailManagerImpl
-import eu.mikroskeem.benjiauth.database.GeoIPDatabase
 import eu.mikroskeem.benjiauth.database.UserManager
 import eu.mikroskeem.benjiauth.email.EmailManager
+import eu.mikroskeem.benjiauth.email.EmailManagerImpl
+import eu.mikroskeem.benjiauth.email.NoopEmailManagerImpl
 import eu.mikroskeem.benjiauth.hook.FastLoginHook
 import eu.mikroskeem.benjiauth.hook.LuckPermsHook
 import eu.mikroskeem.benjiauth.listeners.ChatListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginListener
 import eu.mikroskeem.benjiauth.listeners.PlayerLoginStatusChangeListener
 import eu.mikroskeem.benjiauth.listeners.ServerSwitchListener
+import eu.mikroskeem.geoip.GeoIPAPI
 import net.md_5.bungee.api.plugin.Plugin
 import org.bstats.bungeecord.MetricsLite
 import java.net.InetAddress
@@ -72,8 +72,8 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
             pluginLogger.severe("Disabling plugin")
             return
         }
-        geoIPApi = try { GeoIPDatabase() } catch (e: Exception) {
-            pluginLogger.log(Level.WARNING, "Failed to initialize MaxMind GeoLite database!", e)
+        geoIPApi = try { requireNotNull(GeoIPAPI.INSTANCE) } catch (e: Exception) {
+            pluginLogger.log(Level.WARNING, "Failed to initialize MaxMind GeoLite database access!", e)
             pluginLogger.warning("Falling back to no-op implementation for GeoIP lookups")
             object: GeoIPAPI {
                 override fun getCountryByIP(ipAddress: InetAddress): String? = config.country.allowedCountries.firstOrNull()

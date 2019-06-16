@@ -29,6 +29,7 @@ import eu.mikroskeem.benjiauth.config.Benji
 import eu.mikroskeem.benjiauth.config.BenjiMessages
 import eu.mikroskeem.benjiauth.config.ConfigurationLoader
 import eu.mikroskeem.benjiauth.tasks.Task
+import eu.mikroskeem.geoip.GeoIPAPI
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.ProxyServer
@@ -48,7 +49,7 @@ val proxy: ProxyServer get() = ProxyServer.getInstance()
 val pluginManager: PluginManager get() = proxy.pluginManager
 val plugin: BenjiAuthPlugin get() = pluginManager.getPlugin("BenjiAuth") as BenjiAuthPlugin
 val userManager: LoginManager get() = plugin.api.loginManager
-val geoIpApi: GeoIPAPI get() = plugin.api.geoIPAPI
+val geoIpApi: GeoIPAPI get() = plugin.geoIPAPI
 
 val config: Benji get() = plugin.config
 val messages: BenjiMessages get() = plugin.messages
