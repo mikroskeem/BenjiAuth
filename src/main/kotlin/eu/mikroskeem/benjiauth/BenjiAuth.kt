@@ -47,6 +47,7 @@ import eu.mikroskeem.benjiauth.listeners.ServerSwitchListener
 import eu.mikroskeem.geoip.GeoIPAPI
 import net.md_5.bungee.api.plugin.Plugin
 import org.bstats.bungeecord.MetricsLite
+import java.lang.reflect.Proxy
 import java.net.InetAddress
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -75,10 +76,12 @@ class BenjiAuth: Plugin(), BenjiAuthPlugin, BenjiAuthAPI {
         geoIPApi = try { requireNotNull(GeoIPAPI.INSTANCE) } catch (e: Exception) {
             pluginLogger.log(Level.WARNING, "Failed to initialize MaxMind GeoLite database access!", e)
             pluginLogger.warning("Falling back to no-op implementation for GeoIP lookups")
-            object: GeoIPAPI {
-                override fun getCountryByIP(ipAddress: InetAddress): String? = config.country.allowedCountries.firstOrNull()
-                override fun getCountryByIP(ipAddress: String): String? = config.country.allowedCountries.firstOrNull()
-            }
+            Proxy.newProxyInstance(this.javaClass.classLoader, arrayOf(GeoIPAPI::class.java)) { _, m, _ ->
+                if (m.name == "getCountryByIP") {
+                    return@newProxyInstance config.country.allowedCountries.firstOrNull()
+                }
+                return@newProxyInstance null
+            } as GeoIPAPI
         }
         emailManager = try { if(config.email.enabled) EmailManagerImpl() else NoopEmailManagerImpl()
         } catch (e: Exception) {
