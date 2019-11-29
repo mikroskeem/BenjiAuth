@@ -28,6 +28,7 @@ package eu.mikroskeem.benjiauth
 import eu.mikroskeem.benjiauth.config.Benji
 import eu.mikroskeem.benjiauth.config.BenjiMessages
 import eu.mikroskeem.benjiauth.config.ConfigurationLoader
+import eu.mikroskeem.benjiauth.database.UserManager
 import eu.mikroskeem.benjiauth.tasks.Task
 import eu.mikroskeem.geoip.GeoIPAPI
 import net.md_5.bungee.api.ChatColor
@@ -74,6 +75,9 @@ fun ProxiedPlayer.kickWithMessage(message: String, placeholders: Map<String, Any
 }
 
 val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
+// TODO: two methods below are evil
+val ProxiedPlayer.isUsernameCaseCorrect: Boolean get() = (userManager as UserManager).usernameCaseCorrect(this)
+val String.isUsernameCaseCorrect: Boolean get() = (userManager as UserManager).usernameCaseCorrect(this)
 val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLoggedIn(this)
 val ProxiedPlayer.isEligibleForSession: Boolean get() = userManager.isEligibleForSessionLogin(this)
 val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefullyLoggedIn(this)

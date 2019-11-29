@@ -33,6 +33,7 @@ import eu.mikroskeem.benjiauth.isEligibleForSession
 import eu.mikroskeem.benjiauth.isForcefullyLoggedIn
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
+import eu.mikroskeem.benjiauth.isUsernameCaseCorrect
 import eu.mikroskeem.benjiauth.kickWithMessage
 import eu.mikroskeem.benjiauth.loginWithoutPassword
 import eu.mikroskeem.benjiauth.logout
@@ -41,7 +42,9 @@ import eu.mikroskeem.benjiauth.messages
 import eu.mikroskeem.benjiauth.processMessage
 import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
+import eu.mikroskeem.benjiauth.userManager
 import net.md_5.bungee.api.config.ServerInfo
+import net.md_5.bungee.api.event.LoginEvent
 import net.md_5.bungee.api.event.PlayerDisconnectEvent
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
@@ -69,6 +72,15 @@ class PlayerLoginListener: Listener {
             event.setCancelReason(*messages.error.invalidUsername.processMessage())
             event.isCancelled = true
             return
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    fun on(event: LoginEvent) {
+        // Kick
+        if (!event.connection.name.isUsernameCaseCorrect) {
+            event.setCancelReason(*messages.error.writeUsernameCorrectly.processMessage())
+            event.isCancelled = true
         }
     }
 

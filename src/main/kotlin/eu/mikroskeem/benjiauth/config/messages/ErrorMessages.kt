@@ -41,6 +41,11 @@ class ErrorMessages {
     var invalidUsername = "{prefix}&cInvalid username, pick something else!"
         private set
 
+    @Setting(value = "use-correctly-written-username", comment = "Player gets kicked with this message if username is written in" +
+            " different case than originally registered with")
+    var writeUsernameCorrectly = "{prefix}&cWrite your username correctly!"
+        private set
+
     @Setting(value = "ip-address-blocked", comment = "Player gets kicked with this message if IP address is blacklisted")
     var ipAddressDisallowed = "{prefix}&cYour IP address is blocked in this server."
         private set

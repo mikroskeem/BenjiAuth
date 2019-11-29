@@ -28,6 +28,7 @@ package eu.mikroskeem.benjiauth.database.models;
 import com.google.common.base.Preconditions;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +39,10 @@ import org.jetbrains.annotations.Nullable;
 public class User {
     /** Username column name */
     public final static String USERNAME_FIELD = "username";
+
+    /** Original username column name */
+    // TODO: ugly hack for comparing usernames
+    public final static String ORIGINAL_USERNAME_FIELD = "original_username";
 
     /** Password column name */
     public final static String PASSWORD_FIELD = "password";
@@ -80,6 +85,9 @@ public class User {
 
     @DatabaseField(id = true, columnName = USERNAME_FIELD, canBeNull = false, width = 16)
     private String username;
+
+    @DatabaseField(columnName = ORIGINAL_USERNAME_FIELD, canBeNull = false, width = 16)
+    private String originalUsername;
 
     @DatabaseField(columnName = PASSWORD_FIELD, canBeNull = false)
     private String password;
@@ -138,11 +146,12 @@ public class User {
      * @param lastIPAddress Last login IP address
      * @param forceKillSession  Whether player session should killed forcefully or not
      */
-    public User(@NotNull String username, @NotNull String password, @NotNull Long registerTimestamp,
+    public User(@NotNull String username, @Nullable String originalUsername, @NotNull String password, @NotNull Long registerTimestamp,
                 @NotNull String registeredIPAddress, @NotNull Boolean loggedIn,
                 @Nullable Long lastLogin, @Nullable Long lastSeen,
                 @Nullable String lastIPAddress, @NotNull Boolean forceKillSession) {
         this.username = username;
+        this.originalUsername = originalUsername;
         this.password = password;
         this.registerTimestamp = registerTimestamp;
         this.registeredIPAddress = registeredIPAddress;
@@ -154,13 +163,23 @@ public class User {
     }
 
     /**
-     * Gets player username
+     * Gets player's lower case username
      *
-     * @return Player username
+     * @return Player's lower case username
      */
     @NotNull
     public String getUsername() {
         return username;
+    }
+
+    /**
+     * Gets player's original username
+     *
+     * @return Player's original username
+     */
+    @NonNull
+    public String getOriginalUsername() {
+        return originalUsername;
     }
 
     /**

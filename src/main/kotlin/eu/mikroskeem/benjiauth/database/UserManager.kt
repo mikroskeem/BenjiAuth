@@ -38,6 +38,7 @@ import eu.mikroskeem.benjiauth.createDatabaseConfig
 import eu.mikroskeem.benjiauth.currentUnixTimestamp
 import eu.mikroskeem.benjiauth.database.migrations.Migration
 import eu.mikroskeem.benjiauth.database.migrations.Users_0to1
+import eu.mikroskeem.benjiauth.database.migrations.Users_1to2
 import eu.mikroskeem.benjiauth.database.models.DatabaseMetadata
 import eu.mikroskeem.benjiauth.database.models.User
 import eu.mikroskeem.benjiauth.events.PlayerLoginEvent
@@ -53,6 +54,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer
 import java.security.SecureRandom
 import java.util.Collections
 import java.util.LinkedList
+import java.util.Locale
 import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
@@ -117,12 +119,23 @@ class UserManager: LoginManager {
 
     override fun isRegistered(player: ProxiedPlayer): Boolean = isRegistered(player.name)
 
+    // TODO: ugly :(
+    fun usernameCaseCorrect(player: ProxiedPlayer): Boolean {
+        val user = findUser(player.name)
+        return user.originalUsername == user.username
+    }
+
+    fun usernameCaseCorrect(playerName: String): Boolean {
+        val user = findUserSafe(playerName) ?: return true // Not registered
+        return user.originalUsername == playerName
+    }
+
     override fun registerUser(player: ProxiedPlayer, password: String) {
         findUserSafe(player.name)?.run { throw IllegalStateException("Player ${player.name} is already registered!") }
         val currentTime = currentUnixTimestamp
 
         usersDao.create(User(
-                player.name, hashPassword(password),
+                player.name.toLowerCase(Locale.ROOT), player.name, hashPassword(password),
                 currentTime,
                 player.address.toIPString(),
                 false,
@@ -150,7 +163,7 @@ class UserManager: LoginManager {
 
         // Register user
         usersDao.create(User(
-                username, hashPassword(password),
+                username.toLowerCase(Locale.ROOT), username, hashPassword(password),
                 currentTime,
                 "", // See javadoc for User#getRegisteredIPAddress()
                 false,
@@ -370,8 +383,8 @@ class UserManager: LoginManager {
     // Shuts user manager down
     fun shutdown() = hikari.close()
 
-    private fun findUser(username: String): User = usersDao.queryForId(username) ?: throw IllegalStateException("Player $username is not registered")
-    private fun findUserSafe(username: String): User? = usersDao.queryForId(username)
+    private fun findUser(username: String): User = usersDao.queryForId(username.toLowerCase(Locale.ROOT)) ?: throw IllegalStateException("Player $username is not registered")
+    private fun findUserSafe(username: String): User? = usersDao.queryForId(username.toLowerCase(Locale.ROOT))
 
     private fun hashPassword(password: String): String {
         return BCrypt.with(random).hashToString(config.registration.bcryptRounds, password.toCharArray())
@@ -403,6 +416,7 @@ class UserManager: LoginManager {
 
         init {
             registerMigration(Users_0to1())
+            registerMigration(Users_1to2())
         }
     }
 }
