@@ -39,6 +39,7 @@ import eu.mikroskeem.benjiauth.loginWithoutPassword
 import eu.mikroskeem.benjiauth.logout
 import eu.mikroskeem.benjiauth.markReady
 import eu.mikroskeem.benjiauth.messages
+import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.processMessage
 import eu.mikroskeem.benjiauth.tasks.LoginMessageTask
 import eu.mikroskeem.benjiauth.tasks.RegisterMessageTask
@@ -53,6 +54,7 @@ import net.md_5.bungee.api.event.ServerConnectedEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
+import java.util.logging.Level
 
 /**
  * @author Mark Vainomaa
@@ -79,6 +81,7 @@ class PlayerLoginListener: Listener {
     fun on(event: LoginEvent) {
         // Kick
         if (!event.connection.name.isUsernameCaseCorrect) {
+            plugin.pluginLogger.log(Level.INFO, "Player {0} attempted to connect with wrongly cased username", event.connection)
             event.setCancelReason(*messages.error.writeUsernameCorrectly.processMessage())
             event.isCancelled = true
         }
