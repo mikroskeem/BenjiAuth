@@ -28,7 +28,9 @@ package eu.mikroskeem.benjiauth
 import eu.mikroskeem.benjiauth.config.Benji
 import eu.mikroskeem.benjiauth.config.BenjiMessages
 import eu.mikroskeem.benjiauth.config.ConfigurationLoader
+import eu.mikroskeem.benjiauth.database.UserManager
 import eu.mikroskeem.benjiauth.tasks.Task
+import eu.mikroskeem.geoip.GeoIPAPI
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.ProxyServer
@@ -48,7 +50,7 @@ val proxy: ProxyServer get() = ProxyServer.getInstance()
 val pluginManager: PluginManager get() = proxy.pluginManager
 val plugin: BenjiAuthPlugin get() = pluginManager.getPlugin("BenjiAuth") as BenjiAuthPlugin
 val userManager: LoginManager get() = plugin.api.loginManager
-val geoIpApi: GeoIPAPI get() = plugin.api.geoIPAPI
+val geoIpApi: GeoIPAPI get() = plugin.geoIPAPI
 
 val config: Benji get() = plugin.config
 val messages: BenjiMessages get() = plugin.messages
@@ -73,11 +75,18 @@ fun ProxiedPlayer.kickWithMessage(message: String, placeholders: Map<String, Any
 }
 
 val ProxiedPlayer.isRegistered: Boolean get() = userManager.isRegistered(this)
+// TODO: two methods below are evil
+val ProxiedPlayer.isUsernameCaseCorrect: Boolean get() = (userManager as UserManager).usernameCaseCorrect(this)
+val String.isUsernameCaseCorrect: Boolean get() = (userManager as UserManager).usernameCaseCorrect(this)
 val ProxiedPlayer.isLoggedIn: Boolean get() = isRegistered && userManager.isLoggedIn(this)
 val ProxiedPlayer.isEligibleForSession: Boolean get() = userManager.isEligibleForSessionLogin(this)
 val ProxiedPlayer.isForcefullyLoggedIn: Boolean get() = userManager.isForcefullyLoggedIn(this)
 val ProxiedPlayer.isReady: Boolean get() = userManager.isUserReady(this)
 val ProxiedPlayer.registrationsForIP: Long get() = userManager.getRegistrations(this.ipAddress)
+
+val ProxiedPlayer.verifiedEmailAddress: String? get() = userManager.getEmail(this)?.takeIf { userManager.isEmailVerified(this) }
+val ProxiedPlayer.emailAddress: String? get() = userManager.getEmail(this)
+val ProxiedPlayer.isEmailVerified: Boolean get() = userManager.isEmailVerified(this)
 
 fun ProxiedPlayer.checkPassword(password: String) = userManager.checkPassword(this, password)
 fun ProxiedPlayer.login(password: String): Boolean = if(checkPassword(password)) { userManager.loginUser(this); true } else false

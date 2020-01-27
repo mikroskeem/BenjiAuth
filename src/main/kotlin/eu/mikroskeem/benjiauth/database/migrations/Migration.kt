@@ -23,30 +23,33 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
+package eu.mikroskeem.benjiauth.database.migrations
 
-import eu.mikroskeem.benjiauth.email.EmailManager;
-import org.jetbrains.annotations.NotNull;
+import com.j256.ormlite.dao.Dao
+import eu.mikroskeem.benjiauth.plugin
+import java.util.logging.Level
 
 /**
- * BenjiAuth plugin API
+ * A database migration
  *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
-    /**
-     * Gets instance of {@link LoginManager}
-     *
-     * @return Instance of {@link LoginManager}
-     */
-    @NotNull
-    LoginManager getLoginManager();
+abstract class Migration {
+    abstract val oldVersion: Int
+    abstract val newVersion: Int
+    abstract val description: String
 
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
-    @NotNull
-    EmailManager getEmailManager();
+    fun update(currentVersion: Int, allowFailure: Boolean,dao: Dao<*, *>) {
+        try {
+            doUpdate(currentVersion, dao)
+        } catch (e: Exception) {
+            if (allowFailure) {
+                plugin.pluginLogger.log(Level.WARNING, "Migration ${this.javaClass.name} ($description) failed", e)
+            } else {
+                throw e
+            }
+        }
+    }
+
+    abstract fun doUpdate(currentVersion: Int, dao: Dao<*, *>)
 }

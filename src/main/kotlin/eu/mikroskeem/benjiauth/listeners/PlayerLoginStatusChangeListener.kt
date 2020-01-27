@@ -76,6 +76,10 @@ class PlayerLoginStatusChangeListener: Listener {
         if (event.player.server?.info?.name == lobby.name)
             return
 
+        // Tell player about password reset code invalidation
+        if (event.isPasswordResetCodeCleared)
+            event.player.message(messages.password.recoveryAttemptInvalidated)
+
         event.player.movePlayer(lobby) { result, e ->
             when(result) {
                 ServerConnectRequest.Result.SUCCESS,

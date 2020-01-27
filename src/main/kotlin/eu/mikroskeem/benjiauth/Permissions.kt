@@ -54,6 +54,10 @@ const val COMMAND_LOGOUT = "benjiauth.player.logout"
  * Allows player to use /changepassword
  */
 const val COMMAND_CPW = "benjiauth.player.changepassword"
+/**
+ * Allows player to use /email
+ */
+const val COMMAND_EMAIL = "benjiauth.player.email"
 
 /**
  * Allows access to /benjiauth command

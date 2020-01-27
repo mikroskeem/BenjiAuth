@@ -28,21 +28,39 @@ package eu.mikroskeem.benjiauth.database.models;
 import com.google.common.base.Preconditions;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * @author Mark Vainomaa
  */
-@DatabaseTable(tableName = "users")
+@DatabaseTable(tableName = "benjiauth_users")
 public class User {
     /** Username column name */
     public final static String USERNAME_FIELD = "username";
 
+    /** Original username column name */
+    // TODO: ugly hack for comparing usernames
+    public final static String ORIGINAL_USERNAME_FIELD = "original_username";
+
     /** Password column name */
     public final static String PASSWORD_FIELD = "password";
+
+    /** Password reset code column name */
+    public final static String PASSWORD_RESET_CODE_FIELD = "password_reset_code";
+
+    /** Password reset code sent timestamp column name */
+    public final static String PASSWORD_RESET_CODE_SENT_TIMESTAMP_FIELD = "password_reset_code_sent";
+
+    /** E-mail column name */
+    public final static String EMAIL_FIELD = "email";
+
+    /** E-mail verification code column name */
+    public final static String EMAIL_VERIFICATION_FIELD = "email_verification";
+
+    /** E-mail verification code sent timestamp column name */
+    public final static String EMAIL_VERIFICATION_SENT_TIMESTAMP_FIELD = "email_verification_sent";
 
     /** Registration timestamp column name */
     public final static String REGISTER_TIMESTAMP_FIELD = "register_timestamp";
@@ -68,8 +86,26 @@ public class User {
     @DatabaseField(id = true, columnName = USERNAME_FIELD, canBeNull = false, width = 16)
     private String username;
 
+    @DatabaseField(columnName = ORIGINAL_USERNAME_FIELD, canBeNull = false, width = 16)
+    private String originalUsername;
+
     @DatabaseField(columnName = PASSWORD_FIELD, canBeNull = false)
     private String password;
+
+    @DatabaseField(columnName = PASSWORD_RESET_CODE_FIELD, canBeNull = true, width = 32)
+    private String passwordResetCode;
+
+    @DatabaseField(columnName = PASSWORD_RESET_CODE_SENT_TIMESTAMP_FIELD, canBeNull = true)
+    private Long passwordResetSentTimestamp;
+
+    @DatabaseField(columnName = EMAIL_FIELD, canBeNull = true)
+    private String email;
+
+    @DatabaseField(columnName = EMAIL_VERIFICATION_FIELD, canBeNull = true, width = 32)
+    private String emailVerification;
+
+    @DatabaseField(columnName = EMAIL_VERIFICATION_SENT_TIMESTAMP_FIELD, canBeNull = true)
+    private Long emailVerificationSentTimestamp;
 
     @DatabaseField(columnName = REGISTER_TIMESTAMP_FIELD, canBeNull = false)
     private Long registerTimestamp;
@@ -110,11 +146,12 @@ public class User {
      * @param lastIPAddress Last login IP address
      * @param forceKillSession  Whether player session should killed forcefully or not
      */
-    public User(@NotNull String username, @NotNull String password, @NotNull Long registerTimestamp,
+    public User(@NotNull String username, @Nullable String originalUsername, @NotNull String password, @NotNull Long registerTimestamp,
                 @NotNull String registeredIPAddress, @NotNull Boolean loggedIn,
                 @Nullable Long lastLogin, @Nullable Long lastSeen,
                 @Nullable String lastIPAddress, @NotNull Boolean forceKillSession) {
         this.username = username;
+        this.originalUsername = originalUsername;
         this.password = password;
         this.registerTimestamp = registerTimestamp;
         this.registeredIPAddress = registeredIPAddress;
@@ -126,13 +163,23 @@ public class User {
     }
 
     /**
-     * Gets player username
+     * Gets player's lower case username
      *
-     * @return Player username
+     * @return Player's lower case username
      */
     @NotNull
     public String getUsername() {
         return username;
+    }
+
+    /**
+     * Gets player's original username
+     *
+     * @return Player's original username
+     */
+    @NonNull
+    public String getOriginalUsername() {
+        return originalUsername;
     }
 
     /**
@@ -153,6 +200,91 @@ public class User {
     public void setPassword(@NotNull String password) {
         Preconditions.checkArgument(!password.isEmpty(), "Password cannot be set empty!");
         this.password = password;
+    }
+
+    /**
+     * Gets player's password reset code
+     *
+     * @return Player's password reset code
+     */
+    @Nullable
+    public String getPasswordResetCode() {
+        return passwordResetCode;
+    }
+
+    /**
+     * Sets player's password reset code
+     *
+     * @param passwordResetCode Player's password reset code
+     */
+    public void setPasswordResetCode(@Nullable String passwordResetCode) {
+        this.passwordResetCode = passwordResetCode;
+    }
+
+    @Nullable
+    public Long getPasswordResetSentTimestamp() {
+        return passwordResetSentTimestamp;
+    }
+
+    public void setPasswordResetSentTimestamp(@Nullable Long passwordResetSentTimestamp) {
+        this.passwordResetSentTimestamp = passwordResetSentTimestamp;
+    }
+
+    /**
+     * Gets player e-mail address
+     *
+     * @return Player e-mail address, or null if not set
+     */
+    @Nullable
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets player e-mail address
+     *
+     * @param email Player new e-mail address
+     */
+    public void setEmail(@Nullable String email) {
+        this.email = email;
+    }
+
+    /**
+     * Gets player e-mail address verification code
+     *
+     * @return Player e-mail address verification code, null if e-mail is verified or email is not present
+     */
+    @Nullable
+    public String getEmailVerification() {
+        return emailVerification;
+    }
+
+    /**
+     * Sets player e-mail address verification code
+     *
+     * @param emailVerification Player e-mail address verification code
+     */
+    public void setEmailVerification(@Nullable String emailVerification) {
+        this.emailVerification = emailVerification;
+    }
+
+    /**
+     * Gets player e-mail address verification code sent timestamp
+     *
+     * @return Player e-mail address verification code sent timestamp, null if e-mail is verified or email is not present
+     */
+    @Nullable
+    public Long getEmailVerificationSentTimestamp() {
+        return emailVerificationSentTimestamp;
+    }
+
+    /**
+     * Sets player e-mail address verification code sent timestamp
+     *
+     * @param emailVerificationSentTimestamp Player e-mail address verification code sent timestamp
+     */
+    public void setEmailVerificationSentTimestamp(@Nullable Long emailVerificationSentTimestamp) {
+        this.emailVerificationSentTimestamp = emailVerificationSentTimestamp;
     }
 
     /**

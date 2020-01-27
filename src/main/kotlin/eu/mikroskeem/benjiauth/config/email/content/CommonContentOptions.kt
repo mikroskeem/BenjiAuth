@@ -23,46 +23,52 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth.config.database
+package eu.mikroskeem.benjiauth.config.email.content
 
-import com.zaxxer.hikari.HikariConfig
+import eu.mikroskeem.benjiauth.email.EmailService
+import eu.mikroskeem.benjiauth.plugin
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
+import java.lang.Exception
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.Locale
 
 /**
  * @author Mark Vainomaa
  */
 @ConfigSerializable
-class DatabaseSection {
-    @Setting(value = "database-url", comment = "Database JDBC connection URL")
-    var database = "jdbc:mysql://127.0.0.1:3306/th3databaze?user=r00t&password=p2sswurd"
+open class CommonContentOptions {
+    @Setting(value = "subject", comment = "E-mail subject. Supported placeholders:\n" +
+            "- {player_name}")
+    var subject = ""
         private set
 
-    @Setting(value = "driver-class", comment = "Driver class to initialize")
-    var driverClass = "com.mysql.jdbc.Driver"
+    @Setting(value = "source", comment = "E-mail body source. Must be a file name inside plugins/BenjiAuth/email path.\n" +
+            "Supported placeholders:\n" +
+            "- {player_name}\n" +
+            "- {player_uuid}\n" +
+            "- {verification_code}")
+    var source = ""
         private set
 
-    @Setting("driver-parameters", comment = "Database driver parameters. Advanced use only")
-    var driverParams: Map<String, String> = mapOf(
-            "properties" to "useUnicode=true;characterEncoding=utf8",
-            "prepStmtCacheSize" to "250",
-            "prepStmtCacheSqlLimit" to "2048",
-            "cachePrepStmts" to "true",
-            "useServerPrepStmts" to "true"
-    )
+    @Setting(value = "source-type", comment = "E-mail body source type. Supported types:\n" +
+            "- html\n" +
+            "- text\n" +
+            "\n" +
+            "Defaults to html, if invalid value is passed")
+    var sourceType = "html"
         private set
 
-    @Setting(value = "table-name", comment = "What table name to use?")
-    var tableName: String = "benjiauth_users"
-        private set
+    val isValid: Boolean get() {
+        return subject.isNotEmpty() && source.isNotEmpty() && Files.exists(plugin.pluginFolder.resolve("email").resolve(source))
+    }
 
-    @Setting(value = "meta-table-name", comment = "What table name to use for BenjiAuth internal data? Do not change unless really needed!")
-    var metaTableName: String = "benjiauth_meta"
-        private set
-
-    val asHikariConfig: HikariConfig get() = HikariConfig().apply hikari@ {
-        jdbcUrl = database
-        driverParams.forEach(this::addDataSourceProperty)
-        poolName = "benjiauth-hikari"
+    val sourceTypeValue: EmailService.EmailType get() {
+        return try {
+            EmailService.EmailType.valueOf(sourceType.toUpperCase(Locale.ROOT))
+        } catch (e: Exception) {
+            EmailService.EmailType.HTML
+        }
     }
 }

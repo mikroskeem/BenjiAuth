@@ -37,7 +37,8 @@ class CommandsSection {
     var allowedCommands = listOf(
             "/login",
             "/l",
-            "/register"
+            "/register",
+            "/email"
     )
         private set
 }

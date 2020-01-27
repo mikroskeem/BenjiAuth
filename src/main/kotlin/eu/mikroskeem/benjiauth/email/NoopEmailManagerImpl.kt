@@ -23,30 +23,20 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth;
+package eu.mikroskeem.benjiauth.email
 
-import eu.mikroskeem.benjiauth.email.EmailManager;
-import org.jetbrains.annotations.NotNull;
+import net.md_5.bungee.api.connection.ProxiedPlayer
+import java.util.concurrent.CompletableFuture
 
 /**
- * BenjiAuth plugin API
- *
  * @author Mark Vainomaa
  */
-public interface BenjiAuthAPI {
-    /**
-     * Gets instance of {@link LoginManager}
-     *
-     * @return Instance of {@link LoginManager}
-     */
-    @NotNull
-    LoginManager getLoginManager();
+class NoopEmailManagerImpl: EmailManager {
+    override fun sendVerificationEmail(player: ProxiedPlayer, verificationCode: String): CompletableFuture<Void> {
+        return CompletableFuture.completedFuture(null)
+    }
 
-    /**
-     * Gets instance of {@link EmailManager}
-     *
-     * @return Instance of {@link EmailManager}
-     */
-    @NotNull
-    EmailManager getEmailManager();
+    override fun sendPasswordRecoveryEmail(player: ProxiedPlayer, verificationCode: String): CompletableFuture<Void> {
+        return CompletableFuture.completedFuture(null)
+    }
 }

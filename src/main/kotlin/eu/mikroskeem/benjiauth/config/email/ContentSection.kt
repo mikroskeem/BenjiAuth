@@ -23,9 +23,10 @@
  * THE SOFTWARE.
  */
 
-package eu.mikroskeem.benjiauth.config.database
+package eu.mikroskeem.benjiauth.config.email
 
-import com.zaxxer.hikari.HikariConfig
+import eu.mikroskeem.benjiauth.config.email.content.RecoveryEmailSection
+import eu.mikroskeem.benjiauth.config.email.content.VerificationEmailSection
 import ninja.leaping.configurate.objectmapping.Setting
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
 
@@ -33,36 +34,16 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable
  * @author Mark Vainomaa
  */
 @ConfigSerializable
-class DatabaseSection {
-    @Setting(value = "database-url", comment = "Database JDBC connection URL")
-    var database = "jdbc:mysql://127.0.0.1:3306/th3databaze?user=r00t&password=p2sswurd"
+class ContentSection {
+    @Setting(value = "from-user", comment = "Under what name should BenjiAuth automated e-mails appear as?")
+    var fromUser = "BenjiAuth <noreply+benjiauth@example.com>"
         private set
 
-    @Setting(value = "driver-class", comment = "Driver class to initialize")
-    var driverClass = "com.mysql.jdbc.Driver"
+    @Setting(value = "verification-email", comment = "Verification e-mail content settings")
+    var verificationEmail = VerificationEmailSection()
         private set
 
-    @Setting("driver-parameters", comment = "Database driver parameters. Advanced use only")
-    var driverParams: Map<String, String> = mapOf(
-            "properties" to "useUnicode=true;characterEncoding=utf8",
-            "prepStmtCacheSize" to "250",
-            "prepStmtCacheSqlLimit" to "2048",
-            "cachePrepStmts" to "true",
-            "useServerPrepStmts" to "true"
-    )
+    @Setting(value = "recovery-email", comment = "Recovery e-mail content settings")
+    var recoveryEmail = RecoveryEmailSection()
         private set
-
-    @Setting(value = "table-name", comment = "What table name to use?")
-    var tableName: String = "benjiauth_users"
-        private set
-
-    @Setting(value = "meta-table-name", comment = "What table name to use for BenjiAuth internal data? Do not change unless really needed!")
-    var metaTableName: String = "benjiauth_meta"
-        private set
-
-    val asHikariConfig: HikariConfig get() = HikariConfig().apply hikari@ {
-        jdbcUrl = database
-        driverParams.forEach(this::addDataSourceProperty)
-        poolName = "benjiauth-hikari"
-    }
 }

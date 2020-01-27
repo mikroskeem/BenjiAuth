@@ -25,6 +25,8 @@
 
 package eu.mikroskeem.benjiauth
 
+import com.j256.ormlite.support.ConnectionSource
+import com.j256.ormlite.table.DatabaseTableConfig
 import net.md_5.bungee.api.ServerConnectRequest
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.TextComponent
@@ -32,10 +34,13 @@ import net.md_5.bungee.api.config.ServerInfo
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.ServerConnectEvent
 import java.net.InetSocketAddress
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author Mark Vainomaa
  */
+private val alphabet = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray()
+
 fun String.processMessage(player: ProxiedPlayer? = null, placeholders: Map<String, Any> = emptyMap()): Array<out BaseComponent> {
     if (this.isEmpty())
         return emptyArray()
@@ -87,4 +92,25 @@ fun InetSocketAddress.isAllowedToJoin(): Boolean {
     } else {
         config.country.allowedCountries.contains(country)
     }
+}
+
+inline fun <reified T: Any> createDatabaseConfig(connectionSource: ConnectionSource, tableName: String? = null): DatabaseTableConfig<T> {
+    val config = DatabaseTableConfig.fromClass(connectionSource, T::class.java)
+    tableName?.takeUnless { it.isEmpty() }?.run {
+        config.tableName = this
+    }
+    return config
+}
+
+fun generateRandomString(length: Int): String {
+    return StringBuilder().apply {
+        for (i in 0 until length) {
+            append(alphabet[ThreadLocalRandom.current().nextInt(alphabet.size)])
+        }
+    }.toString()
+}
+
+fun String.isValidEmailAddress(): Boolean {
+    // TODO: definitely implement a proper check
+    return count { it == '@' } == 1 && count { it == '.' } >= 1
 }

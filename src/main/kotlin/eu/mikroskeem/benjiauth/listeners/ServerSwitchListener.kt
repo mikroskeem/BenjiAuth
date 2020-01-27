@@ -26,8 +26,10 @@
 package eu.mikroskeem.benjiauth.listeners
 
 import eu.mikroskeem.benjiauth.config
+import eu.mikroskeem.benjiauth.getAuthServer
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.isRegistered
+import eu.mikroskeem.benjiauth.kickWithMessage
 import eu.mikroskeem.benjiauth.message
 import eu.mikroskeem.benjiauth.messages
 import net.md_5.bungee.api.event.ServerConnectEvent
@@ -59,6 +61,9 @@ class ServerSwitchListener: Listener {
                 event.player.message(messages.login.mustLoginBeforeSwitchingServers)
             }
             event.isCancelled = true
+            event.target = getAuthServer {
+                event.player.kickWithMessage(messages.error.couldntConnectToAuthserver)
+            }
         }
     }
 }

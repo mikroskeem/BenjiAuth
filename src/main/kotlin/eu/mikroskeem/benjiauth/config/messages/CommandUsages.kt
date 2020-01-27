@@ -49,6 +49,16 @@ class CommandUsages {
     var logout = "{prefix}Usage: &c&l/logout"
         private set
 
+    @Setting(value = "help-email", comment = "/email command help")
+    var email = listOf(
+        "{prefix}Usage:",
+        "{prefix}- &c&l/email add &8<&ce-mail address&8> &7- adds an e-mail address to your account",
+        "{prefix}- &c&l/email remove &7- removes e-mail address from your account",
+        "{prefix}- &c&l/email recover &8[<&ccode&8> &8<&cnew password&8>] &7- recovers forgotten password",
+        "{prefix}- &c&l/email verify &8<&ccode&8> &7- verifies e-mail address"
+    )
+        private set
+
     @Setting(value = "admin-help", comment = "/benjiauth help")
     var benjiauthAdmin = listOf(
         "{prefix}BenjiAuth",
@@ -60,6 +70,7 @@ class CommandUsages {
         "{prefix}- &c&l/benjiauth register &8<&cusername&8> <&cpassword&8> &7- registers player into database with given password",
         "{prefix}- &c&l/benjiauth unregister &8<&cusername&8> &7- removes player from the database, and logs player out if one is logged in"
     )
+        private set
 
     @Setting(value = "admin-help-unregister", comment = "/benjiauth unregister help")
     var adminUnregister = "{prefix}Usage: &c&l/benjiauth unregister &8<&cusername&8>"

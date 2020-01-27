@@ -27,6 +27,7 @@ package eu.mikroskeem.benjiauth;
 
 import eu.mikroskeem.benjiauth.config.Benji;
 import eu.mikroskeem.benjiauth.config.BenjiMessages;
+import eu.mikroskeem.geoip.GeoIPAPI;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -80,4 +81,12 @@ public interface BenjiAuthPlugin {
      */
     @NotNull
     Logger getPluginLogger();
+
+    /**
+     * Gets always working instance of {@link GeoIPAPI}
+     *
+     * @return Instance of {@link GeoIPAPI}
+     */
+    @NotNull
+    GeoIPAPI getGeoIPAPI();
 }
