@@ -57,6 +57,9 @@ import java.util.LinkedList
 import java.util.Locale
 import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
+import kotlin.concurrent.write
 import kotlin.math.max
 
 /**
@@ -70,6 +73,8 @@ class UserManager: LoginManager {
     private val random = SecureRandom()
     private val forcefullyLoggedIn: MutableSet<ProxiedPlayer> = Collections.newSetFromMap(WeakHashMap())
     private val readyUsers: MutableSet<ProxiedPlayer> = Collections.newSetFromMap(WeakHashMap())
+    private val forcefullyLoggedInLock = ReentrantReadWriteLock()
+    private val readyUsersLock = ReentrantReadWriteLock()
 
     init {
         try {
@@ -220,7 +225,7 @@ class UserManager: LoginManager {
 
     override fun isLoggedIn(player: ProxiedPlayer): Boolean = findUser(player.name).loggedIn
 
-    override fun isForcefullyLoggedIn(player: ProxiedPlayer): Boolean = forcefullyLoggedIn.contains(player)
+    override fun isForcefullyLoggedIn(player: ProxiedPlayer): Boolean = forcefullyLoggedInLock.read { forcefullyLoggedIn.contains(player) }
 
     override fun loginUser(player: ProxiedPlayer, force: Boolean) {
         if (isLoggedIn(player))
@@ -254,7 +259,7 @@ class UserManager: LoginManager {
 
             usersDao.update(this)
         }
-        if (force) forcefullyLoggedIn.add(player)
+        if (force) forcefullyLoggedInLock.write { forcefullyLoggedIn.add(player) }
 
         if (player.isReady) {
             pluginManager.callEvent(PlayerLoginEvent(player, force, passwordResetCodeCleared))
@@ -274,7 +279,9 @@ class UserManager: LoginManager {
         }
 
         if (!keepReady) {
-            readyUsers.removeIf { it == player }
+            readyUsersLock.write {
+                readyUsers.removeIf { it == player }
+            }
         }
 
         if (player.isReady) {
@@ -366,9 +373,9 @@ class UserManager: LoginManager {
         return LoginManager.PasswordResetVerifyResult.SUCCESS
     }
 
-    override fun isUserReady(player: ProxiedPlayer): Boolean = readyUsers.contains(player)
+    override fun isUserReady(player: ProxiedPlayer): Boolean = readyUsersLock.read { readyUsers.contains(player) }
 
-    override fun markUserReady(player: ProxiedPlayer) { readyUsers.add(player) }
+    override fun markUserReady(player: ProxiedPlayer) { readyUsersLock.write { readyUsers.add(player) } }
 
     override fun getRegistrations(ipAddress: String): Long = usersDao.queryBuilder().where()
             .eq(User.REGISTERED_IP_ADDRESS_FIELD, ipAddress)
