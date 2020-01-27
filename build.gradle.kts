@@ -1,25 +1,25 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
-    kotlin("jvm") version "1.3.31"
+    kotlin("jvm") version "1.3.61"
     id("net.minecrell.licenser") version "0.4.1"
     id("net.minecrell.plugin-yml.bungee") version "0.3.0"
-    id("com.github.johnrengelman.shadow") version "5.0.0"
+    id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
 group = "eu.mikroskeem"
 version = "0.0.1-SNAPSHOT"
 
-val waterfallApiVersion = "1.14-SNAPSHOT"
+val waterfallApiVersion = "1.15-SNAPSHOT"
 val geoIpApiVersion = "0.0.1-SNAPSHOT"
-val slf4jApiVersion = "1.7.25"
+val slf4jApiVersion = "1.7.26"
 val configurateVersion = "3.7-SNAPSHOT"
-val hikariVersion = "3.3.0"
+val hikariVersion = "3.4.2"
 val ormliteVersion = "5.1"
-val bcryptVersion = "0.6.0"
+val bcryptVersion = "0.9.0"
 val luckpermsApiVersion = "4.3"
 val bstatsVersion = "1.4"
-val okHttpVersion = "3.14.2"
+val okHttpVersion = "4.3.1"
 val expiringMapVersion = "0.5.9"
 
 repositories {

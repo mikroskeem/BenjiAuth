@@ -1,7 +1,7 @@
 /*
  * This file is part of project BenjiAuth, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2018-2019 Mark Vainomaa <mikroskeem@mikroskeem.eu>
+ * Copyright (c) 2018-2020 Mark Vainomaa <mikroskeem@mikroskeem.eu>
  * Copyright (c) Contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,11 +27,14 @@ package eu.mikroskeem.benjiauth.email.providers
 
 import eu.mikroskeem.benjiauth.config
 import eu.mikroskeem.benjiauth.email.EmailService
+import okhttp3.Authenticator
 import okhttp3.Credentials
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.Response
+import okhttp3.Route
 
 
 /**
@@ -52,17 +55,19 @@ class MailgunEmailService: EmailService {
         from = config.email.content.fromUser
 
         httpClient = OkHttpClient.Builder()
-                .authenticator { _, response ->
-                    val credential = Credentials.basic("api", apiKey)
-                    return@authenticator response.request().newBuilder().header("Authorization", credential).build()
-                }
+                .authenticator(object: Authenticator {
+                    override fun authenticate(route: Route?, response: Response): Request? {
+                        val credential = Credentials.basic("api", apiKey)
+                        return response.request.newBuilder().header("Authorization", credential).build()
+                    }
+                })
                 .build()
 
         // Test
         httpClient.newCall("$mailgunUrl/domains/$domain/ips".getRequest().build()).execute().use { resp ->
             if (!resp.isSuccessful) {
                 throw EmailService.EmailServiceInitException(
-                        "Failed to test Mailgun connection, got response code ${resp.code()} whilst sending a GET request to ${resp.request().url()}"
+                        "Failed to test Mailgun connection, got response code ${resp.code} whilst sending a GET request to ${resp.request.url}"
                 )
             }
         }
@@ -85,7 +90,7 @@ class MailgunEmailService: EmailService {
 
         httpClient.newCall("$mailgunUrl/$domain/messages".postRequest(form.build()).build()).execute().use { resp ->
             if (!resp.isSuccessful) {
-                throw Exception("Failed to send an email: ${ resp.body()?.string()}")
+                throw Exception("Failed to send an email: ${ resp.body?.string()}")
             }
         }
     }
