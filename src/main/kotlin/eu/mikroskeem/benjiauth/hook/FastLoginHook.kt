@@ -38,40 +38,40 @@ import net.md_5.bungee.api.connection.ProxiedPlayer
 /**
  * @author Mark Vainomaa
  */
-class FastLoginHook: AuthPlugin<ProxiedPlayer> {
-    override fun isRegistered(player: String): Boolean {
-        return userManager.isRegistered(player)
+object FastLoginHook {
+    var isHooked = false
+        private set
+
+    // Hooks BenjiAuth to FastLogin
+    fun hook() {
+        val fastLogin = pluginManager.getPlugin("FastLogin") ?: return
+        plugin.pluginLogger.info("FastLogin found, hooking...")
+        (fastLogin as FastLoginBungee).core.authPluginHook = ActualFastLoginHook
+        plugin.pluginLogger.info("Hooked into FastLogin!")
+        isHooked = true
     }
 
-    override fun forceLogin(player: ProxiedPlayer): Boolean {
-        return if (player.isRegistered) {
-            player.loginWithoutPassword(forceful = true)
-            true
-        } else {
-            false
+    object ActualFastLoginHook: AuthPlugin<ProxiedPlayer> {
+        override fun isRegistered(player: String): Boolean {
+            return userManager.isRegistered(player)
         }
-    }
 
-    override fun forceRegister(player: ProxiedPlayer, password: String): Boolean {
-        return if (!player.isRegistered) {
-            player.register(password)
-            true
-        } else {
-            false
+        override fun forceLogin(player: ProxiedPlayer): Boolean {
+            return if (player.isRegistered) {
+                player.loginWithoutPassword(forceful = true)
+                true
+            } else {
+                false
+            }
         }
-    }
 
-    companion object {
-        var isHooked = false
-            private set
-
-        // Hooks BenjiAuth to FastLogin
-        fun hook() {
-            val fastLogin = pluginManager.getPlugin("FastLogin") ?: return
-            plugin.pluginLogger.info("FastLogin found, hooking...")
-            (fastLogin as FastLoginBungee).core.authPluginHook = FastLoginHook()
-            plugin.pluginLogger.info("Hooked into FastLogin!")
-            isHooked = true
+        override fun forceRegister(player: ProxiedPlayer, password: String): Boolean {
+            return if (!player.isRegistered) {
+                player.register(password)
+                true
+            } else {
+                false
+            }
         }
     }
 }
