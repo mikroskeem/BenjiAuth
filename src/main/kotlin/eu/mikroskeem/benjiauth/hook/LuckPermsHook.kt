@@ -28,10 +28,10 @@ package eu.mikroskeem.benjiauth.hook
 import eu.mikroskeem.benjiauth.isLoggedIn
 import eu.mikroskeem.benjiauth.plugin
 import eu.mikroskeem.benjiauth.pluginManager
-import me.lucko.luckperms.LuckPerms
-import me.lucko.luckperms.api.LuckPermsApi
-import me.lucko.luckperms.api.context.ContextCalculator
-import me.lucko.luckperms.api.context.MutableContextSet
+import net.luckperms.api.LuckPerms
+import net.luckperms.api.LuckPermsProvider
+import net.luckperms.api.context.ContextCalculator
+import net.luckperms.api.context.ContextConsumer
 import net.md_5.bungee.api.connection.ProxiedPlayer
 
 /**
@@ -39,34 +39,25 @@ import net.md_5.bungee.api.connection.ProxiedPlayer
  */
 private const val AUTHENTICATED_CONTEXT_NAME = "authenticated"
 
-private var luckPermsApi: LuckPermsApi? = null
+private var luckPermsApi: LuckPerms? = null
 
 object LuckPermsHook {
     var isHooked = false
         private set
 
     class BenjiAuthContextCalculator internal constructor(): ContextCalculator<ProxiedPlayer> {
-        override fun giveApplicableContext(subject: ProxiedPlayer, accumulator: MutableContextSet): MutableContextSet {
-            if (accumulator.containsKey(AUTHENTICATED_CONTEXT_NAME)) {
-                accumulator.removeAll(AUTHENTICATED_CONTEXT_NAME)
-            }
-
-            accumulator.add(AUTHENTICATED_CONTEXT_NAME, "${subject.isLoggedIn}")
-
-            return accumulator
+        override fun calculate(target: ProxiedPlayer, consumer: ContextConsumer) {
+            consumer.accept(AUTHENTICATED_CONTEXT_NAME, "${target.isLoggedIn}")
         }
     }
 
     fun hook() {
         pluginManager.getPlugin("LuckPerms") ?: return
         plugin.pluginLogger.info("LuckPerms found, hooking...")
-        luckPermsApi = LuckPerms.getApiSafe().orElseGet {
-            plugin.pluginLogger.warning("Failed to hook into LuckPerms: Couldn't get API interface instance")
-            return@orElseGet null
-        } ?: return
+        luckPermsApi = LuckPermsProvider.get()
 
         plugin.pluginLogger.info("Registering 'authenticated' context provider in LuckPerms...")
-        luckPermsApi!!.registerContextCalculator(BenjiAuthContextCalculator())
+        luckPermsApi!!.contextManager.registerCalculator(BenjiAuthContextCalculator())
 
         plugin.pluginLogger.info("Hooked into LuckPerms!")
         isHooked = true

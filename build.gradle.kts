@@ -17,7 +17,7 @@ val configurateVersion = "3.7-SNAPSHOT"
 val hikariVersion = "3.4.2"
 val ormliteVersion = "5.1"
 val bcryptVersion = "0.9.0"
-val luckpermsApiVersion = "4.3"
+val luckpermsApiVersion = "5.0"
 val bstatsVersion = "1.4"
 val okHttpVersion = "4.3.1"
 val expiringMapVersion = "0.5.9"
@@ -35,7 +35,7 @@ repositories {
 dependencies {
     compileOnly("io.github.waterfallmc:waterfall-api:$waterfallApiVersion")
     compileOnly(rootProject.files("lib/FastLogin.jar"))
-    compileOnly("me.lucko.luckperms:luckperms-api:$luckpermsApiVersion")
+    compileOnly("net.luckperms:api:$luckpermsApiVersion")
     compileOnly("eu.mikroskeem.geoipapi:api:$geoIpApiVersion")
 
     implementation(kotlin("stdlib-jdk8"))
