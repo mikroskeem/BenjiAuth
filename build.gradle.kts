@@ -26,6 +26,7 @@ repositories {
     mavenLocal()
     mavenCentral()
 
+    maven("https://repo.wut.ee/repository/mikroskeem-repo")
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.codemc.org/repository/maven-public")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
